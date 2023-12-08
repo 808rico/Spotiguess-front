@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Le premier blindtest basé sur vous goûts musicaux grâce au catalogue Spotify.
+      Jouez entre amis en devinant les musiques de vos artistes préférés ou découvrez-en des nouvelles!"
+    />
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <title>SpotiGuess - Blindtest sur Spotify</title>
+  </head>
+  <body>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        window.Spotify = Spotify;
+      }
+    </script>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root" ></div>
+   
+  </body>
+</html>
