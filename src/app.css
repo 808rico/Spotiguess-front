@@ -2,10 +2,19 @@ body {
     font-family: 'Poppins', sans-serif;
     background-color: black;
   }
-  
+  .ant-btn, .ant-input, .ant-menu, .ant-card {
+    font-family: 'Poppins', sans-serif;
+}
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
+h1{
+  color: white;
+}
+
+h2{
+  color: white;
+}

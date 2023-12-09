@@ -1,0 +1,56 @@
+.option-card {
+    width: 300px;
+    height: 160px;
+    cursor: pointer;
+    background-color: #111111;
+    margin: 15px;
+    margin-left: 0;
+    border-color: #5f5f5f;
+
+  }
+  .option-card:hover{
+    background-color: rgba(30, 215, 96, 0.2) !important;
+    border-color: rgba(30, 215, 96, 0.4) !important;
+  }
+  .options-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    max-width: 800px;
+    margin: auto;
+    margin-top: 20px;/* Centre le conteneur si la largeur de la vue est supérieure à 800px */
+  }
+
+  .card-container {
+    position: relative; /* Cela permet au ruban de se positionner correctement */
+    display: inline-block; /* Ou 'block' selon la disposition souhaitée */
+    margin: 15px; /* Ajustez selon votre layout */
+  }
+  
+  .ant-ribbon-text {
+    font-weight: bold; /* Mettez le texte en gras si vous le souhaitez */
+    color: #fff; /* Changez la couleur du texte si nécessaire */
+  }
+
+
+  .option-card .ant-card-meta-avatar .anticon,
+  .option-icon {
+    margin-top: 7px;
+    color: white;
+    font-size: 17px;
+    
+
+}
+    
+    
+  .option-card .ant-card-meta-title,
+  .option-title {
+    color: white;
+    font-size: larger;
+  }
+  
+  .option-card .ant-card-meta-description,
+  .option-description {
+    color: white;
+  }
+  
