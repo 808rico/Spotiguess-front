@@ -1,0 +1,40 @@
+/* Styles pour le Drawer */
+.ant-menu-dark {
+    background-color: #111111;
+  }
+.ant-drawer .ant-drawer-body {
+    background: #111111;
+    padding: 20px;
+    padding-left: 10px;
+  }
+
+  .ant-drawer-header {
+    background: #111111;
+  }
+  /* Styles pour les items du Drawer */
+  .ant-drawner-dark .ant-drawner-item {
+    color: white;
+    font-weight: bold;
+  }
+  
+  /* Styles pour l'item sélectionné */
+  .ant-menu-dark .ant-menu-item-active {
+    color: #d85322 !important;
+    background-color: #111111;
+    
+  }
+  
+  /* Styles pour l'item survolé */
+  .ant-menu-dark .ant-menu-item:hover {
+    color: #1ED760 !important;
+    /*background-color: rgba(30,
+     215, 96, 0.2) !important;*/
+  }
+
+.ant-drawer-close {
+    color: white !important; /* Couleur de la croix */
+}
+
+.ant-drawer .ant-drawer-title {
+    display: none; /* Exemple pour masquer le titre */
+  }

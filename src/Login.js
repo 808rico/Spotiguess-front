@@ -15,11 +15,11 @@ console.log('url',AUTH_URL)
 function Login() {
     return (
         <div className='login'>
-            <h1 className="titre-login">Le premier blindtest basé sur vos goûts musicaux.</h1>
+            
 
             <a href={AUTH_URL}><button className="btn-login">Se connecter avec Spotify</button></a>
 
-        <footer> Made by <a className='link' target="_blank" href='https://github.com/Ricothefish'>Aymeric GRANIER</a></footer>
+        
         </div>
 
 

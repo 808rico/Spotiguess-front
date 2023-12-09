@@ -1,0 +1,29 @@
+/* Styles globaux pour le menu */
+.ant-menu-dark {
+    background-color: #111111;
+  }
+  
+  /* Styles pour les items du menu */
+  .ant-menu-dark .ant-menu-item {
+    font-weight: bold; /* Texte en gras */
+    color: white; /* Couleur du texte pour les items non sélectionnés */
+  }
+  
+  /* Styles pour l'item sélectionné */
+  .ant-menu-dark .ant-menu-item-selected {
+    color: #1ED760 !important;
+    background-color: #111111; /* Couleur de fond de l'item sélectionné */
+     /* Couleur du texte pour l'item sélectionné */
+  }
+  
+  /* Styles pour l'item survolé */
+  .ant-menu-dark .ant-menu-item:hover {
+    color: #1ED760 !important; /* Couleur du texte pour l'item survolé */
+    background-color: rgba(30, 215, 96, 0.2) !important; /* Couleur de fond pour l'item survolé */
+  }
+  
+  /* Styles pour l'icône du menu */
+  .ant-menu-dark .ant-menu-item-icon {
+    color: inherit; /* L'icône prend la même couleur que le texte */
+  }
+  

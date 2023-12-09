@@ -1,0 +1,35 @@
+.header {
+    height: 75px;
+    width: 100%;
+    background-color: #111111; /* Choisissez la couleur de fond de votre choix */
+    display: flex;
+    justify-content: space-between; /* Aligner le contenu à droite */
+    align-items: center; /* Centrer verticalement le contenu */
+    padding-right: 20px; /* Espace à droite */
+  }
+  
+  .profile-picture {
+    width: 40px; /* Taille de la photo de profil */
+    height: 40px;
+    border-radius: 50%; /* Rendre la photo de profil arrondie */
+    object-fit: cover; /* Assurez-vous que la photo est bien cadrée */
+  }
+  
+
+  .menu-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 25px; /* Taille de l'icône */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 30px;
+  }
+  
+  .menu-icon svg {
+    width: 25px;
+    height: 25px;
+  }
+  
