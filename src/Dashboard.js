@@ -7,19 +7,19 @@ import AIGenerated from './pages/AIGenerated';
 //import Artist from './pages/Artist';
 //import GamePage from './pages/GamePage';
 /*
-
+<Route path="/liked-songs" component={YourLikedSongs} />
+          <Route path="/playlist" component={Playlist} />
+          <Route path="/artist" component={Artist} />
+          <Route path="/game" component={GamePage} />
 */
-function Dashboard() {
+function Dashboard({ code }) {
     const navigate = useNavigate();
     return (
       
         <Routes>
-          <Route path="/ai-generated" element={<Home />} />
-          <Route path="/" element={<AIGenerated/>} />
-          <Route path="/liked-songs" component={YourLikedSongs} />
-          <Route path="/playlist" component={Playlist} />
-          <Route path="/artist" component={Artist} />
-          <Route path="/game" component={GamePage} />
+          <Route path="/ai-generated" element={<AIGenerated/>} />
+          <Route path="/" element={<Home />} />
+          
         </Routes>
       
     );

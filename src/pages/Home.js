@@ -30,8 +30,7 @@ function Home({ code }) {
   }, [accessToken])
 
 
-  const isDesktopOrLaptop = useMediaQuery({ minWidth: 500 });
-  console.log(isDesktopOrLaptop)
+
 
   const handleNavigate = (path) => {
     navigate(path);

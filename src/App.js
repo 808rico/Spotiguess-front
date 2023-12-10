@@ -1,20 +1,21 @@
 import Login from './Login.js'
-import Dashboard from './pages/Home.js'
+import Dashboard from './Dashboard.js'
+import useAuth from './UseAuth.js';
 import './app.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 
-const code = new URLSearchParams(window.location.search).get('code')
+function App() {
+  const code = new URLSearchParams(window.location.search).get('code');
+  const accessToken = useAuth(code);
 
-
-function App() { 
-  
   return (
     <Router>
-    {code ? <Dashboard code={code}/> : < Login />}
-  </Router>
+      {accessToken ? <Dashboard /> : <Login />}
+    </Router>
   );
-  
 }
+
 
 export default App;
