@@ -8,17 +8,14 @@ import AIGenerated from './pages/AIGenerated';
 //import GamePage from './pages/GamePage';
 /*
 
-        
-        
-
 */
 function Dashboard() {
     const navigate = useNavigate();
     return (
       
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/ai-generated" component={<AIGenerated/>} />
+          <Route path="/ai-generated" element={<Home />} />
+          <Route path="/" element={<AIGenerated/>} />
           <Route path="/liked-songs" component={YourLikedSongs} />
           <Route path="/playlist" component={Playlist} />
           <Route path="/artist" component={Artist} />
