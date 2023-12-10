@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Menu } from 'antd';
 import { PieChartOutlined, DesktopOutlined, ContainerOutlined } from '@ant-design/icons';
 import './DesktopMenu.css'
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   HomeOutlined,
   BulbOutlined,
@@ -13,12 +14,46 @@ import {
 const { Sider } = Layout;
 
 const DesktopMenu = ({ menuOpen }) => {
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const getSelectedKeys = () => {
+    const path = location.pathname;
+    switch (path) {
+      case '/': return ['1'];
+      case '/ai-generated': return ['2'];
+      case '/liked-songs': return ['3'];
+      case '/playlist': return ['4'];
+      case '/artist': return ['5'];
+      default: return [];
+    }
+  };
+
+  // Navigue vers l'URL correspondant à la clé de l'élément du menu
+  const handleMenuClick = (e) => {
+    switch (e.key) {
+      case '1': navigate('/'); break;
+      case '2': navigate('/ai-generated'); break;
+      case '3': navigate('/liked-songs'); break;
+      case '4': navigate('/playlist'); break;
+      case '5': navigate('/artist'); break;
+      default: break;
+    }
+  };
+
   return (
     <Sider 
     collapsible={false}
      collapsed={!menuOpen}
      style={{ minHeight: '100vh', backgroundColor: '#111111' }}>
-      <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+      <Menu
+        theme="dark"
+        mode="inline"
+        defaultSelectedKeys={['1']}
+        selectedKeys={getSelectedKeys()}
+        onClick={handleMenuClick}
+      >
         <Menu.Item key="1" icon={<HomeOutlined />}>
           Home
         </Menu.Item>
