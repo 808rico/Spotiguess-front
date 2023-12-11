@@ -5,12 +5,12 @@ import AIGenerated from './pages/AIGenerated';
 //import YourLikedSongs from './pages/YourLikedSongs';
 //import Playlist from './pages/Playlist';
 //import Artist from './pages/Artist';
-//import GamePage from './pages/GamePage';
+import Game from './pages/Game';
 /*
 <Route path="/liked-songs" component={YourLikedSongs} />
           <Route path="/playlist" component={Playlist} />
           <Route path="/artist" component={Artist} />
-          <Route path="/game" component={GamePage} />
+          
 */
 function Dashboard({ code }) {
     const navigate = useNavigate();
@@ -19,6 +19,7 @@ function Dashboard({ code }) {
         <Routes>
           <Route path="/ai-generated" element={<AIGenerated/>} />
           <Route path="/" element={<Home />} />
+          <Route path="/game" element={<Game/>} />
           
         </Routes>
       

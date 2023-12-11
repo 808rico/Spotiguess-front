@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
 import { useMediaQuery } from 'react-responsive';
 import { Divider, Input } from "antd";
-import { PlayCircleOutlined, BulbOutlined  } from '@ant-design/icons';
+import { PlayCircleOutlined, BulbOutlined,LoadingOutlined } from '@ant-design/icons';
 import './AIGenerated.css'
 
 const spotifyApi = new SpotifyWebApi({
@@ -13,10 +14,14 @@ const spotifyApi = new SpotifyWebApi({
 
 const { Search } = Input;
 
-const onSearch = value => console.log(value);
+
+const urlServer = 'http://localhost:3001'; // Ou 'https://blindtest-spotify-v1.herokuapp.com'
+
+
 
 
 function AIGenerated() {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('access_token')
   spotifyApi.setAccessToken(accessToken);
@@ -28,19 +33,34 @@ function AIGenerated() {
   }, [accessToken])
 
 
-
-
-
-  const handleNavigate = (path) => {
-    navigate(path);
+  const onSearch = (value) => {
+    setLoading(true); // Active le loader
+    axios.post(`${urlServer}/generate`, { preferences: value })
+      .then(response => {
+        console.log(response)
+        navigate('/game', { state: { type: 'AI Generated', input: value, songIds: response.data.songIds } });
+        // Traitez la réponse ici, par exemple en mettant à jour l'état avec les données reçues
+      })
+      .catch(error => {
+        // Gérez l'erreur ici
+        console.error('Erreur lors de la requête:', error);
+      })
+      .finally(() => {
+        setLoading(false);
+         // Désactive le loader une fois la requête terminée
+      });
   };
+
+
+
+  
 
   return (
 
 
     <MainLayout>
       <div style={{ background: '#000000', padding: 24, minHeight: 280, height: '100%' }}>
-        <h1><BulbOutlined style={{fontSize:'25px', marginRight:'10px'}}/>AI Generated</h1>
+        <h1><BulbOutlined style={{ fontSize: '25px', marginRight: '10px' }} />AI Generated</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
         <h2>How it works?</h2>
         <p>
@@ -54,11 +74,18 @@ function AIGenerated() {
           Alone or with your friends and family, try to guess the song and yell when you got it.
         </p>
         <div className="search-container" >
-        <Search
+          <Search
             placeholder="Top 80s songs in the US..."
-            enterButton={isDesktopOrLaptop ? <><PlayCircleOutlined /> <b>Generate songs</b></> : <PlayCircleOutlined />}
+            enterButton={
+              loading ?
+                <LoadingOutlined /> :
+                isDesktopOrLaptop ?
+                  <><PlayCircleOutlined /> <b>Generate songs</b></> :
+                  <PlayCircleOutlined />
+            }
             size="large"
             onSearch={onSearch}
+            loading={loading}
           />
         </div>
       </div>
