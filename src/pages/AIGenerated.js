@@ -38,7 +38,7 @@ function AIGenerated() {
     axios.post(`${urlServer}/generate`, { preferences: value })
       .then(response => {
         console.log(response)
-        navigate('/game', { state: { type: 'AI Generated', input: value, songIds: response.data.songIds } });
+        navigate('/game', { state: { type: 'AI Generated', input: value, songUris: response.data.songUris } });
         // Traitez la réponse ici, par exemple en mettant à jour l'état avec les données reçues
       })
       .catch(error => {
