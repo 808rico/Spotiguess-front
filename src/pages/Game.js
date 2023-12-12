@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
+import PopUpResult from '../components/PopUpResult'
 import { useMediaQuery } from 'react-responsive';
 import { Divider, Input } from "antd";
 import { useLocation } from 'react-router-dom';
@@ -32,6 +33,15 @@ function Game() {
     const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
     const [isFirstPlayClicked, setIsFirstPlayClicked] = useState(false);
     const [currentTrack, setCurrentTrack] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
+
+    const handleNextTrack = () => {
+        player && player.nextTrack();
+    };
+
+    const togglePopup = () => {
+        setShowPopup(!showPopup);
+    };
 
     const handlePlayClick = () => {
         setIsFirstPlayClicked(true);
@@ -65,7 +75,8 @@ function Game() {
             .catch(error => console.error('Error transferring playback', error));
     }
 
-    
+
+
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -94,17 +105,16 @@ function Game() {
             player.addListener('player_state_changed', ({ device_id }) => {
                 player.getCurrentState().then(state => {
                     if (!state) {
-                      console.error('User is not playing music through the Web Playback SDK');
-                      return;
+                        console.error('User is not playing music through the Web Playback SDK');
+                        return;
                     }
-                  
+
                     var current_track = state.track_window.current_track;
-                    var next_track = state.track_window.next_tracks[0];
+                    //var next_track = state.track_window.next_tracks[0];
                     setCurrentTrack(current_track)
-                    console.log('Currently Playing', current_track);
-                    console.log('Playing Next', next_track);
-                  });
-                
+
+                });
+
                 console.log('player_state_changed', device_id);
             });
 
@@ -156,6 +166,21 @@ function Game() {
                         onClick={() => { player && player.nextTrack() }}>
                         Next
                     </Button>
+
+                    <Button
+                        type="default"
+                        onClick={togglePopup}>
+                        Show Current Track
+                    </Button>
+
+                    {currentTrack && (
+                        <PopUpResult
+                            isVisible={showPopup}
+                            onClose={togglePopup}
+                            currentTrack={currentTrack}
+                            onNextTrack={handleNextTrack}
+                        />
+                    )}
                 </div>
 
             </div>
