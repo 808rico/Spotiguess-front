@@ -8,7 +8,7 @@ import MobileMenu from './MobileMenu';
 
 const { Content } = Layout;
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({ children}) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const isDesktopOrLaptop = useMediaQuery({ minWidth: 500 });
 

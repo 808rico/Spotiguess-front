@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import SpotifyWebApi from 'spotify-web-api-node';
 import { MenuOutlined } from '@ant-design/icons';
 import './Header.css'; // Assurez-vous de créer ce fichier pour les styles
-
+import useAuth from "../../UseAuth"
 
 
 
@@ -10,11 +10,12 @@ const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
 });
 
-function Header({ toggleMenu }) {
+function Header({ toggleMenu, code }) {
+  
   const [profileImageUrl, setProfileImageUrl] = useState('');
 
   useEffect(() => {
-    spotifyApi.setAccessToken(localStorage.getItem('access_token'));
+    //spotifyApi.setAccessToken(accessToken);
 
     spotifyApi.getMe()
       .then(function(data) {

@@ -19,17 +19,8 @@ const spotifyApi = new SpotifyWebApi({
 
 
 
-function Home({ code }) {
+function Home() {
   const navigate = useNavigate();
-  const accessToken = UseAuth(code)
-  spotifyApi.setAccessToken(accessToken)
-
-  useEffect(() => {
-    if (!accessToken) return
-    spotifyApi.setAccessToken(accessToken)
-  }, [accessToken])
-
-
 
 
   const handleNavigate = (path) => {
