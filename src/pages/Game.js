@@ -25,16 +25,21 @@ const urlServer = 'http://localhost:3001'; // Ou 'https://blindtest-spotify-v1.h
 function Game() {
     const location = useLocation();
     const { type, input, songUris } = location.state;
-    console.log(songUris);
+    console.log("game");
     const [accessToken, setAccessToken] = useState(localStorage.getItem('access_token'))
     const [isFirstPlayClicked, setIsFirstPlayClicked] = useState(false);
     const [currentTrack, setCurrentTrack] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
-    const [player, setPlayer] = useState(null);
-    console.log(accessToken);
+    const [player, setPlayer] = useState(undefined);
+    const [deviceId, setDeviceId] = useState(undefined);
+    console.log(deviceId);
+
+    
+    
 
     const handleNextTrack = () => {
         player && player.nextTrack();
+        setCurrentTrack(SpotifyWebApi.getMyCurrentPlayingTrack());
     };
 
     const togglePopup = () => {
@@ -43,38 +48,55 @@ function Game() {
 
     const handlePlayClick = () => {
         setIsFirstPlayClicked(true);
-        //playTracks(songUris);
+        spotifyApi.play({ uris: songUris });
+        
     };
 
-
-
     useEffect(() => {
-        if (accessToken && !player) {
-            const script = document.createElement('script');
-            script.src = 'https://sdk.scdn.co/spotify-player.js';
-            script.async = true;
-            document.body.appendChild(script);
-
-            window.onSpotifyWebPlaybackSDKReady = () => {
-
-                const player = new window.Spotify.Player({
-                    name: 'Your Web Player',
-                    getOAuthToken: cb => { cb(accessToken); }
-                });
-
-                // Connect to the player!
-                player.connect();
-                setPlayer(player);
-
-                // Event listeners can be set here
-                player.addListener('ready', ({ device_id }) => {
-                    console.log('Ready with Device ID', device_id);
-                });
-
-                // Handle player state changes, etc.
-            };
+        if (deviceId && player){
+            spotifyApi.transferMyPlayback([deviceId], { play: false });
+            console.log("transfer");
         }
-    }, [accessToken, player]);
+    } ,
+         [deviceId]);
+
+         useEffect(() => {
+            if (accessToken) {
+                spotifyApi.setAccessToken(accessToken);
+        
+                const script = document.createElement('script');
+                script.src = 'https://sdk.scdn.co/spotify-player.js';
+                script.async = true;
+                document.body.appendChild(script);
+        
+                let player; // Déclaration locale du player
+        
+                window.onSpotifyWebPlaybackSDKReady = () => {
+                    player = new window.Spotify.Player({
+                        name: 'Your Web Player',
+                        getOAuthToken: cb => { cb(accessToken); }
+                    });
+        
+                    setPlayer(player);
+        
+                    player.addListener('ready', ({ device_id }) => {
+                        setDeviceId(device_id);
+                        console.log('Ready with Device ID', device_id);
+                    });
+        
+                    player.connect();
+                };
+        
+                // Fonction de nettoyage
+                return () => {
+                    if (player) {
+                        player.disconnect();
+                        console.log('Player disconnected');
+                    }
+                };
+            }
+        }, [accessToken]);
+        
 
 
 

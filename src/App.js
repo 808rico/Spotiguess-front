@@ -10,7 +10,10 @@ function App() {
 
   const code = new URLSearchParams(window.location.search).get('code');
   const accessToken =  useAuth(code);
-
+  const script = document.createElement('script');
+  script.src = 'https://sdk.scdn.co/spotify-player.js';
+  script.async = true;
+  document.body.appendChild(script);
   
   
 
