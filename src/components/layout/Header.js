@@ -15,7 +15,8 @@ function Header({ toggleMenu, code }) {
   const [profileImageUrl, setProfileImageUrl] = useState('');
 
   useEffect(() => {
-    //spotifyApi.setAccessToken(accessToken);
+    const accessToken = localStorage.getItem("access_token")
+    spotifyApi.setAccessToken(accessToken);
 
     spotifyApi.getMe()
       .then(function(data) {
