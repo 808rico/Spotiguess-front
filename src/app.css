@@ -1,5 +1,5 @@
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif ;
     background-color: black;
   }
   .ant-btn, .ant-input, .ant-menu, .ant-card {
@@ -13,12 +13,20 @@ body {
   
 h1{
   color: white;
+  font-family: 'Poppins', sans-serif ;
 }
 
 h2{
   color: white;
+  font-family: 'Poppins', sans-serif ;
+}
+
+h3{
+  color: white;
+  font-family: 'Poppins', sans-serif ;
 }
 
 p{
   color: white;
+  font-family: 'Poppins', sans-serif ;
 }

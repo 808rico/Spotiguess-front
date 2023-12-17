@@ -4,13 +4,20 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
 import PopUpResult from '../components/PopUpResult'
 import PopUpFinish from '../components/PopUpFinish'
+import Equalizer from "../components/Equalizer";
 import { useMediaQuery } from 'react-responsive';
 import { Divider, Input } from "antd";
 import { useLocation } from 'react-router-dom';
 import { Button } from 'antd';
-import { PlayCircleOutlined, ForwardOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, ForwardOutlined, BulbOutlined, EyeOutlined } from '@ant-design/icons';
 //import { PlayCircleOutlined, BulbOutlined,LoadingOutlined } from '@ant-design/icons';
-//import './AIGenerated.css'
+import './Game.css'
+
+
+const iconMap = {
+    BulbOutlined: BulbOutlined,
+    // Ajoutez d'autres icônes ici si nécessaire
+};
 
 const spotifyApi = new SpotifyWebApi({
     clientId: '80256b057e324c5f952f3577ff843c29',
@@ -26,7 +33,7 @@ const urlServer = 'http://localhost:3001'; // Ou 'https://blindtest-spotify-v1.h
 function Game() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { type, input, songUris } = location.state;
+    const { type, iconName, input, songUris } = location.state;
     console.log("game");
     const [accessToken, setAccessToken] = useState(localStorage.getItem('access_token'))
     const [isFirstPlayClicked, setIsFirstPlayClicked] = useState(false);
@@ -37,7 +44,8 @@ function Game() {
     const [showPopupFinish, setShowPopupFinish] = useState(false);
     const [player, setPlayer] = useState(undefined);
     const [deviceId, setDeviceId] = useState(undefined);
-    
+
+    const Icon = iconMap[iconName];
 
     const togglePopupResult = () => {
         setShowPopupResult(!showPopupResult);
@@ -54,18 +62,18 @@ function Game() {
             spotifyApi.play({ uris: [songUris[nextIndex]] });
 
             spotifyApi.getTrack(songUris[nextIndex].substring(songUris[nextIndex].lastIndexOf(":") + 1))
-            .then(function (data) {
-                setCurrentTrack(data.body);
-                
-            }, function (err) {
-                console.error(err);
-            });
+                .then(function (data) {
+                    setCurrentTrack(data.body);
+
+                }, function (err) {
+                    console.error(err);
+                });
 
 
             setCurrentSongIndex(nextIndex);
-            
+
         } else {
-            
+
             setIsPlaylistFinished(true);
             togglePopupFinish(); // Toutes les chansons ont été jouées
         }
@@ -102,7 +110,7 @@ function Game() {
     useEffect(() => {
         if (accessToken && songUris[currentSongIndex]) {
             spotifyApi.setAccessToken(accessToken);
-    
+
             // Demander à l'API de Spotify de jouer la chanson
             spotifyApi.play({
                 uris: [songUris[currentSongIndex]],
@@ -167,43 +175,60 @@ function Game() {
 
 
 
-
-
-
-
-
-
     return (
 
 
         <MainLayout>
-            <div style={{ background: '#000000', padding: 24, minHeight: 280, height: '100%' }}>
-                <h1>Game</h1>
-                <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
-                <h2>{input}</h2>
+            <div className="layoutWrapper" >
+
+                <h1 className="title"> {Icon && <Icon />} {type}</h1>
+                <Divider
+                    className="divider"
+                    style={{ borderColor: 'white', width: '400px', margin: '12px 0' }} />
+                <h3 className="subTitle"> <i>Your input:  </i> {input}</h3>
 
                 <div className="main-wrapper">
                     {!isFirstPlayClicked && (
                         <Button
+                            className="play-button"
                             type="primary"
                             icon={<PlayCircleOutlined />}
-                            onClick={handlePlayClick}>
+                            onClick={handlePlayClick}
+                            size="large">
+
                             Play
                         </Button>
                     )}
+                    {isFirstPlayClicked && (
+                        <div className="current-track-wrapper">
+                            <div className="equalizer-wrapper">
+                                <Equalizer />
+                            </div>
 
-                    <Button
-                        type="default"
-                        icon={<ForwardOutlined />}
-                        onClick={() => { handleNextTrack() }}>
-                        Next
-                    </Button>
+                            <div className="next-show-button">
 
-                    <Button
-                        type="default"
-                        onClick={togglePopupResult}>
-                        Show Current Track
-                    </Button>
+                                <Button
+                                    className="next-button"
+                                    type="default"
+                                    icon={<ForwardOutlined />}
+                                    onClick={() => { handleNextTrack() }}>
+                                    Next song
+                                </Button>
+
+
+                                <Button
+                                    className="show-button"
+                                    type="default"
+                                    onClick={togglePopupResult}
+                                    icon={<EyeOutlined />}
+                                >
+                                    Show Track
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+
+
 
                     {currentTrack && (
                         <PopUpResult
