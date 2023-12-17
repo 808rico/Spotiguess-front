@@ -1,0 +1,96 @@
+.pop-up-result .ant-modal-content {
+    background-color: #121212;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.modal-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    background-color: #121212;
+    
+}
+
+.modal-title-text {
+    margin-left: 16px;
+}
+
+.close-icon {
+    color: #fff;
+    cursor: pointer;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+}
+
+.result-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+    padding: 24px;
+}
+
+.img-album {
+    border-radius: 12px;
+    width: 100%;
+    max-width: 200px;
+    margin-bottom: 24px;
+}
+
+.track-details {
+    margin-left: 10px;
+    color: #fff;
+    text-align: left;
+    margin-bottom: 24px;
+}
+
+.track-name {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.track-artist {
+    color: #aaa;
+}
+
+.track-album {
+    color: #aaa;
+    font-style: italic;
+}
+
+.music-note{
+    width: 20px;
+    height: 20px;
+    color: #1DB954;
+    font-size: 24px;
+    margin-right: 8px;
+}
+.next-song-button {
+    width: 135px;
+    margin-left: 5px;
+    font-weight: bold;
+    background-color: #1ED760;
+    border: none;
+    height: 40px;
+}
+
+.next-song-button:hover {
+    background-color: #1ED760;
+    font-weight: 900!important;
+    color: black!important;
+  
+    
+    height: 40px;
+}
+
+
+
+/* You might need to adjust styles for the ant modal overrides */

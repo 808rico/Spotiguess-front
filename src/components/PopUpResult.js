@@ -1,6 +1,8 @@
 import React from 'react';
 import { Modal, Button } from 'antd';
-import { ForwardOutlined } from '@ant-design/icons';
+import { ForwardOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import MusicNote from '../assets/MusicNote';
+import './PopUpResult.css';
 
 function PopUpResult({ isVisible, onClose, currentTrack, onNextTrack }) {
     const handleNextAndClose = () => {
@@ -10,21 +12,33 @@ function PopUpResult({ isVisible, onClose, currentTrack, onNextTrack }) {
 
     return (
         <Modal
-            title="Current Track"
+            className="pop-up-result"
+            title={<div className="modal-title">
+
+                
+                <MusicNote />
+                <span className="modal-title-text">Result</span>
+                <CloseCircleOutlined className="close-icon" onClick={onClose} /></div>}
             open={isVisible}
             onCancel={onClose}
-            footer={[
-                <Button key="next" icon={<ForwardOutlined />} onClick={handleNextAndClose}>
-                    Next
-                </Button>
-            ]}
+            footer={null}
+            closable={false}
         >
-            <p>{currentTrack.name} by {currentTrack.artists.map(artist => artist.name).join(", ")}</p>
-            <img src={currentTrack.album.images[0].url} alt={currentTrack.name} />
-            {/* Autres détails de la piste si nécessaire */}
+            <div className="content-container">
+                <div className="result-container">
+                    <img className='img-album' src={currentTrack.album.images[0].url} alt={currentTrack.name} />
+                    <div className="track-details">
+                        <p className="track-name">{currentTrack.name}</p>
+                        <p className="track-artist">{currentTrack.artists.map(artist => artist.name).join(", ")}</p>
+                        <p className="track-album">{currentTrack.album.name}</p>
+                    </div>
+                </div>
+                <Button className="next-song-button" onClick={handleNextAndClose}>
+                    Next song
+                </Button>
+            </div>
         </Modal>
     );
 }
 
 export default PopUpResult;
-
