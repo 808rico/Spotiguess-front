@@ -1,20 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from 'react-router-dom';
-import { Layout } from 'antd';
-import { useMediaQuery } from 'react-responsive';
 import MainLayout from '../components/layout/MainLayout';
 import OptionCard from '../components/optionCard';
 import { BulbOutlined, HeartOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
-import UseAuth from "../UseAuth";
-import SpotifyWebApi from "spotify-web-api-node"
 
 
-
-const { Content } = Layout;
-
-const spotifyApi = new SpotifyWebApi({
-  clientId: '80256b057e324c5f952f3577ff843c29',
-})
 
 
 
