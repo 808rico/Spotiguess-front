@@ -1,10 +1,10 @@
 import Login from './Login.js'
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Dashboard from './Dashboard.js'
 import useAuth from './UseAuth.js';
 import './app.css'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { AuthProvider, AuthContext } from './AuthContext';
+import { BrowserRouter as Router } from 'react-router-dom';
+
 
 function App() {
 

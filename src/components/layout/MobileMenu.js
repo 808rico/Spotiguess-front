@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Menu, Drawer } from 'antd';
-import { MenuOutlined } from '@ant-design/icons';
+
 import { useNavigate, useLocation } from 'react-router-dom';
 import './MobileMenu.css'
 import {
-  PieChartOutlined,
-  DesktopOutlined,
-  ContainerOutlined,
+
   HomeOutlined,
   BulbOutlined,
   HeartOutlined,

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Card, Divider, Space } from 'antd';
-import { BulbOutlined, HeartOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
+import { Card, Divider } from 'antd';
 import './optionCard.css'; // Assurez-vous que le chemin d'importation est correct
 
 function OptionCard({ title, Icon, description, onClick, isPopular }) {

@@ -1,8 +1,7 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as  Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
-import { useNavigate } from 'react-router-dom';
 import AIGenerated from './pages/AIGenerated';
-import spotifyApi from "spotify-web-api-node"
+
 //import YourLikedSongs from './pages/YourLikedSongs';
 //import Playlist from './pages/Playlist';
 //import Artist from './pages/Artist';
@@ -18,7 +17,6 @@ function Dashboard({ code }) {
  
 
 
-    const navigate = useNavigate();
 
     return (
       

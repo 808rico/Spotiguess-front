@@ -1,8 +1,8 @@
-import React, { useEffect, useState,useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import SpotifyWebApi from 'spotify-web-api-node';
 import { MenuOutlined } from '@ant-design/icons';
 import './Header.css'; // Assurez-vous de créer ce fichier pour les styles
-import useAuth from "../../UseAuth"
+
 
 
 
@@ -34,7 +34,7 @@ function Header({ toggleMenu, code }) {
         <MenuOutlined />
       </button>
       
-      {profileImageUrl && <img src={profileImageUrl} alt="Photo de profil" className="profile-picture"/>}
+      {profileImageUrl && <img src={profileImageUrl} alt="profil" className="profile-picture"/>}
     </header>
   );
 }

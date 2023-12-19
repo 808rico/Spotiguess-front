@@ -3,7 +3,7 @@ import React from 'react'
 
 
 const urlClientLocal = 'http://localhost:3000/'
-const urlClientOnline= 'https://spotiguess.com'
+//const urlClientOnline= 'https://spotiguess.com'
 
 const urlClient = urlClientLocal
 

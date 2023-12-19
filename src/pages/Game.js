@@ -5,8 +5,7 @@ import MainLayout from '../components/layout/MainLayout';
 import PopUpResult from '../components/PopUpResult'
 import PopUpFinish from '../components/PopUpFinish'
 import Equalizer from "../components/Equalizer";
-import { useMediaQuery } from 'react-responsive';
-import { Divider, Input } from "antd";
+import { Divider } from "antd";
 import { useLocation } from 'react-router-dom';
 import { Button } from 'antd';
 import { PlayCircleOutlined, ForwardOutlined, BulbOutlined, EyeOutlined } from '@ant-design/icons';
@@ -25,7 +24,7 @@ const spotifyApi = new SpotifyWebApi({
 
 
 
-const urlServer = 'http://localhost:3001'; // Ou 'https://blindtest-spotify-v1.herokuapp.com'
+
 
 
 
@@ -35,6 +34,7 @@ function Game() {
     const navigate = useNavigate();
     const { type, iconName, input, songUris } = location.state;
     console.log("game");
+    // eslint-disable-next-line
     const [accessToken, setAccessToken] = useState(localStorage.getItem('access_token'))
     const [isFirstPlayClicked, setIsFirstPlayClicked] = useState(false);
     const [currentSongIndex, setCurrentSongIndex] = useState(null);
@@ -42,6 +42,7 @@ function Game() {
     const [currentTrack, setCurrentTrack] = useState(null);
     const [showPopupResult, setShowPopupResult] = useState(false);
     const [showPopupFinish, setShowPopupFinish] = useState(false);
+    // eslint-disable-next-line
     const [player, setPlayer] = useState(undefined);
     const [deviceId, setDeviceId] = useState(undefined);
 
@@ -124,7 +125,7 @@ function Game() {
     }, [currentSongIndex, accessToken, songUris]);
 
     useEffect(() => {
-        if (deviceId && player) {
+        if (deviceId ) {
             spotifyApi.transferMyPlayback([deviceId], { play: false })
                 .then(() => console.log("Playback transferred"))
                 .catch(err => console.error("Error in transferring playback", err));

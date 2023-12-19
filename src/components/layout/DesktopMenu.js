@@ -1,6 +1,5 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { PieChartOutlined, DesktopOutlined, ContainerOutlined } from '@ant-design/icons';
 import './DesktopMenu.css'
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
