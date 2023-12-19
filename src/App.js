@@ -15,7 +15,7 @@ function App() {
   script.async = true;
   document.body.appendChild(script);
   
-  
+  console.log('app')
 
   return (
 

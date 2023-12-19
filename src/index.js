@@ -5,8 +5,10 @@ import App from './App'; // Assurez-vous que le chemin d'importation est correct
 // Obtenez la div root de votre fichier index.html
 const container = document.getElementById('root');
 
+
 // Créez une racine
 const root = createRoot(container);
 
+console.log('index')
 // Lancez votre application en utilisant la méthode render de la racine
 root.render(<App />);
