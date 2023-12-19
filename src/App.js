@@ -17,17 +17,18 @@ function App() {
   
   console.log('app')
 
-  return (
+  if (accessToken) {
+    return(
+      <Router>
+        <Dashboard accessToken={accessToken}/>
+      </Router>)
+  }
 
-    <Router>
-
-        {accessToken ? <Dashboard accessToken={accessToken}/> : <Login />
-        }
-
-    </Router>
-
-
-  );
+  else{
+    return(
+        <Login />
+)
+  }
 }
 
 
