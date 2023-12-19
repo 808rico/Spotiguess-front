@@ -1,8 +1,10 @@
 .pop-up-result .ant-modal-content {
     background-color: #121212;
     border-radius: 20px;
-    width: 100%;
-    max-width: 500px;
+    width: 95%;
+    max-width: 500px!important;
+    min-width: 350px;
+    overflow: hidden;
 }
 
 .modal-title {
@@ -12,36 +14,66 @@
     color: white;
     background-color: #121212;
     
+    
 }
 
 .modal-title-text {
-    margin-left: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    
+}
+
+.close-icon-container{
+    display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%; /* Rend le conteneur rond */
+  width: 45px; /* Taille du conteneur */
+  height: 45px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+   /* Effet de transition pour le survol */
+}
+
+.close-icon-container:hover {
+    background-color: #060606;
 }
 
 .close-icon {
     color: #fff;
     cursor: pointer;
+    font-size: 20px;
+}
+
+.close-icon:hover {
+
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 20px;
 }
 
 .content-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px;
+    padding-top: 15px;
+    max-width: 100%;
+    
 }
 
 .result-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content:space-around;
+    max-width: 100%;
+    word-wrap: break-word;
+    width: 100%;
     
-    padding: 24px;
 }
 
 .img-album {
     border-radius: 12px;
-    width: 100%;
-    max-width: 200px;
+    max-width: 180px;
     margin-bottom: 24px;
 }
 
@@ -53,17 +85,34 @@
 }
 
 .track-name {
+    position: relative;
     font-weight: bold;
     font-size: 18px;
+    overflow: hidden;
+    white-space: wrap;
+    margin-top: 10px;
+    
+    line-height: 20px;
+    max-width: 200px;
+    max-height: 80px;
 }
+
 
 .track-artist {
     color: #aaa;
+    max-width: 200px;
+    max-height: 42px;
+    overflow: hidden;
+    margin-top: 10px;
 }
 
 .track-album {
     color: #aaa;
     font-style: italic;
+    max-width: 200px;
+    max-height: 42px;
+    overflow: hidden;
+    margin-top: 10px;
 }
 
 .music-note{

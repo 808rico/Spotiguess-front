@@ -18,7 +18,10 @@ function PopUpResult({ isVisible, onClose, currentTrack, onNextTrack }) {
                 
                 <MusicNote />
                 <span className="modal-title-text">Result</span>
-                <CloseCircleOutlined className="close-icon" onClick={onClose} /></div>}
+                <div className='close-icon-container' onClick={onClose}>
+                    <CloseCircleOutlined className="close-icon"  /></div>
+                </div>
+                }
             open={isVisible}
             onCancel={onClose}
             footer={null}
@@ -33,7 +36,7 @@ function PopUpResult({ isVisible, onClose, currentTrack, onNextTrack }) {
                         <p className="track-album">{currentTrack.album.name}</p>
                     </div>
                 </div>
-                <Button className="next-song-button" onClick={handleNextAndClose}>
+                <Button autoFocus  className="next-song-button" onClick={handleNextAndClose}>
                     Next song
                 </Button>
             </div>
