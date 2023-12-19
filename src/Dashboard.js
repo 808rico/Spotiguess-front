@@ -20,13 +20,14 @@ function Dashboard() {
 
 
     return (
-      
+      <div>
       <Routes>
           <Route path="/ai-generated" element={<AIGenerated/>} />
           <Route path="/" element={<Home/>} />
           <Route path="/game" element={<Game/>} />
           
-        </Routes>   
+        </Routes>
+      </div>
       
     );
   }
