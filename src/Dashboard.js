@@ -14,6 +14,7 @@ import Game from './pages/Game';
                
 */
 function Dashboard({ code }) {
+  console.log('dashboard')
  
 
 
