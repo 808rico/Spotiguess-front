@@ -11,7 +11,7 @@ import { BulbOutlined, HeartOutlined, UnorderedListOutlined, UserOutlined } from
 
 function Home() {
   const navigate = useNavigate();
-
+  console.log("home");
 
   const handleNavigate = (path) => {
     navigate(path);

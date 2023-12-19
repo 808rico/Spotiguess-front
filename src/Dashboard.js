@@ -13,7 +13,7 @@ import Game from './pages/Game';
           <Route path="/artist" component={Artist} />
                
 */
-function Dashboard({ code }) {
+function Dashboard() {
   console.log('dashboard')
  
 
