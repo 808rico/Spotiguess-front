@@ -4,7 +4,7 @@ import React from 'react'
 
 //const urlClientLocal = 'http://localhost:3000/'
 //const urlClientOnline= 'https://spotiguess.com'
-const urlClientOnline = 'https://scintillating-cucurucho-f3d460.netlify.app/'
+const urlClientOnline = 'https://scintillating-cucurucho-f3d460.netlify.app'
 const urlClient = urlClientOnline
 
 
