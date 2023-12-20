@@ -5,7 +5,7 @@ import MainLayout from '../components/layout/MainLayout';
 import PopUpResult from '../components/PopUpResult'
 import PopUpFinish from '../components/PopUpFinish'
 import Equalizer from "../components/Equalizer";
-import { Divider } from "antd";
+import { Divider, message } from "antd";
 import { useLocation } from 'react-router-dom';
 import { Button } from 'antd';
 import { PlayCircleOutlined, ForwardOutlined, BulbOutlined, EyeOutlined } from '@ant-design/icons';
@@ -30,6 +30,12 @@ const spotifyApi = new SpotifyWebApi({
 
 
 function Game() {
+
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const info = () => {
+      messageApi.info('Hello, Ant Design!');
+    };
     const location = useLocation();
     const navigate = useNavigate();
     const { type, iconName, input, songUris } = location.state;
@@ -127,8 +133,8 @@ function Game() {
     useEffect(() => {
         if (deviceId ) {
             spotifyApi.transferMyPlayback([deviceId], { play: false })
-                .then(() => console.log("Playback transferred"))
-                .catch(err => console.error("Error in transferring playback", err));
+                .then(() => messageApi.info("Playback transferred"))
+                .catch(err => messageApi.error("Error in transferring playback", err));
 
         }
     },
@@ -156,6 +162,7 @@ function Game() {
                 player.addListener('ready', ({ device_id }) => {
                     setDeviceId(device_id);
                     console.log('Ready with Device ID', device_id);
+                    messageApi.info("Ready with Device ID", device_id);
                 });
 
                 player.connect();
@@ -177,6 +184,8 @@ function Game() {
 
 
     return (
+        <>
+        {contextHolder}
 
 
         <MainLayout>
@@ -250,7 +259,8 @@ function Game() {
 
             </div>
         </MainLayout>
-    );
+    
+        </>);
 };
 
 
