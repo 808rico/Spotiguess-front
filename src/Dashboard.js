@@ -1,8 +1,8 @@
-import { BrowserRouter as  Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import AIGenerated from './pages/AIGenerated';
 
-import { Router } from "react-router-dom";
+
 
 //import YourLikedSongs from './pages/YourLikedSongs';
 //import Playlist from './pages/Playlist';
@@ -30,14 +30,14 @@ function Dashboard() {
 
   return (
 
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route path="/ai-generated" element={<AIGenerated />} />
         <Route path="/" element={<Home />} />
         <Route path="/game" element={<Game />} />
 
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
