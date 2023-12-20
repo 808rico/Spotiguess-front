@@ -12,6 +12,13 @@ import Game from './pages/Game';
           <Route path="/playlist" component={Playlist} />
           <Route path="/artist" component={Artist} />
                
+
+                <Routes>
+          <Route path="/ai-generated" element={<AIGenerated/>} />
+          <Route path="/" element={<Home/>} />
+          <Route path="/game" element={<Game/>} />
+          
+        </Routes>
 */
 function Dashboard() {
   console.log('dashboard')
@@ -21,12 +28,7 @@ function Dashboard() {
 
     return (
       <div>
-      <Routes>
-          <Route path="/ai-generated" element={<AIGenerated/>} />
-          <Route path="/" element={<Home/>} />
-          <Route path="/game" element={<Game/>} />
-          
-        </Routes>
+        <p>SKURT</p>
       </div>
       
     );
