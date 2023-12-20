@@ -1,11 +1,13 @@
-//import { BrowserRouter as  Route, Routes } from 'react-router-dom';
-//import Home from './pages/Home';
-//import AIGenerated from './pages/AIGenerated';
+import { BrowserRouter as  Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import AIGenerated from './pages/AIGenerated';
+
+import { Router } from "react-router-dom";
 
 //import YourLikedSongs from './pages/YourLikedSongs';
 //import Playlist from './pages/Playlist';
 //import Artist from './pages/Artist';
-//import Game from './pages/Game';
+import Game from './pages/Game';
 
 /*
 <Route path="/liked-songs" component={YourLikedSongs} />
@@ -22,16 +24,21 @@
 */
 function Dashboard() {
   console.log('dashboard')
- 
 
 
 
-    return (
-      <div>
-        <p>SKURT</p>
-      </div>
-      
-    );
-  }
+
+  return (
+
+    <Router>
+      <Routes>
+        <Route path="/ai-generated" element={<AIGenerated />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/game" element={<Game />} />
+
+      </Routes>
+    </Router>
+  );
+}
 
 export default Dashboard;

@@ -19,9 +19,9 @@ function App() {
 
   if (accessToken) {
     return(
-      <Router>
+
         <Dashboard accessToken={accessToken}/>
-      </Router>)
+      )
   }
 
   else{
