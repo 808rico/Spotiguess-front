@@ -98,8 +98,7 @@ function Game() {
                     }, function (err) {
                         console.error(err);
                     });
-                setCurrentTrack(data.body);
-                console.log("Track information", data.body);
+
             })
                 .catch(err => console.error("Error starting playback", err));
         };
