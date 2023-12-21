@@ -31,11 +31,8 @@ const spotifyApi = new SpotifyWebApi({
 
 function Game() {
 
-    const [messageApi, contextHolder] = message.useMessage();
 
-    const info = () => {
-      messageApi.info('Hello, Ant Design!');
-    };
+
     const location = useLocation();
     const navigate = useNavigate();
     const { type, iconName, input, songUris } = location.state;
@@ -133,8 +130,8 @@ function Game() {
     useEffect(() => {
         if (deviceId ) {
             spotifyApi.transferMyPlayback([deviceId], { play: false })
-                .then(() => messageApi.info("Playback transferred"))
-                .catch(err => messageApi.error("Error in transferring playback", err));
+                .then(() => message.success("Playback transferred") )
+                .catch(err => message.error("Error in transferring playback", err));
 
         }
     },
@@ -162,7 +159,7 @@ function Game() {
                 player.addListener('ready', ({ device_id }) => {
                     setDeviceId(device_id);
                     console.log('Ready with Device ID', device_id);
-                    messageApi.info("Ready with Device ID", device_id);
+                    message.info("Ready with Device ID", device_id);
                 });
 
                 player.connect();
@@ -185,7 +182,7 @@ function Game() {
 
     return (
         <>
-        {contextHolder}
+        
 
 
         <MainLayout>
