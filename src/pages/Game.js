@@ -48,6 +48,7 @@ function Game() {
     // eslint-disable-next-line
     const [player, setPlayer] = useState(undefined);
     const [deviceId, setDeviceId] = useState(undefined);
+    const [isLoadingPlay, setIsLoadingPlay] = useState(false);
 
     const Icon = iconMap[iconName];
 
@@ -86,24 +87,37 @@ function Game() {
 
 
     const handlePlayClick = () => {
-        setIsFirstPlayClicked(true);
-
+        setIsLoadingPlay(true); // Commencer le chargement
+    
         if (player) {
             player.activateElement().then(() => {
                 message.info("activate element");
                 spotifyApi.getTrack(songUris[0].substring(songUris[0].lastIndexOf(":") + 1))
                     .then(function (data) {
+                        spotifyApi.play({ uris: [songUris[0]] });
                         setCurrentTrack(data.body);
+                        setIsFirstPlayClicked(true);
                         console.log("Track information", data.body);
                     }, function (err) {
                         console.error(err);
+                        message.error("Error retrieving track information");
+                    })
+                    .finally(() => {
+                        setIsLoadingPlay(false); // Arrêter le chargement une fois la lecture commencée ou en cas d'erreur
                     });
-
+    
             })
-                .catch(err => console.error("Error starting playback", err));
-        };
+            .catch(err => {
+                console.error("Error starting playback", err);
+                message.error("Error starting playback");
+                setIsLoadingPlay(false);
+            });
+        } else {
+            setIsLoadingPlay(false); // Assurez-vous d'arrêter le chargement si le player n'est pas défini
+        }
         setCurrentSongIndex(0);
     }
+    
 
 
     
@@ -212,7 +226,8 @@ return (
                             type="primary"
                             icon={<PlayCircleOutlined />}
                             onClick={handlePlayClick}
-                            size="large">
+                            size="large"
+                            loading={isLoadingPlay}>
 
                             Play
                         </Button>
