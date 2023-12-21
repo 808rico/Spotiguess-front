@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
 import { useMediaQuery } from 'react-responsive';
-import { Divider, Input } from "antd";
+import { Divider, Input, message } from "antd";
 import { PlayCircleOutlined, BulbOutlined,LoadingOutlined } from '@ant-design/icons';
 import './AIGenerated.css'
 
@@ -43,6 +43,7 @@ function AIGenerated() {
       })
       .catch(error => {
         // Gérez l'erreur ici
+        message.error('Error:' + error.message)
         console.error('Erreur lors de la requête:', error);
       })
       .finally(() => {

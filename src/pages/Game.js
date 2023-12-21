@@ -71,6 +71,7 @@ function Game() {
                     setCurrentTrack(data.body);
 
                 }, function (err) {
+                    message.error("Error retrieving track information: " + err.message);
                     console.error(err);
                 });
 
@@ -99,7 +100,7 @@ function Game() {
                         console.log("Track information", data.body);
                     }, function (err) {
                         console.error(err);
-                        message.error("Error retrieving track information");
+                        message.error("Error retrieving track information: " + err.message);
                     })
                     .finally(() => {
                         setIsLoadingPlay(false); // Arrêter le chargement une fois la lecture commencée ou en cas d'erreur
@@ -108,7 +109,7 @@ function Game() {
             })
             .catch(err => {
                 console.error("Error starting playback", err);
-                message.error("Error starting playback");
+                message.error("Error starting playback: " + err.message);
                 setIsLoadingPlay(false);
             });
         } else {
@@ -146,6 +147,7 @@ useEffect(() => {
         }).then(() => {
             console.log("Playback started");
         }).catch(err => {
+            message.error("Error in starting playback: " + err.message);
             console.error("Error in starting playback", err);
         });
     }
