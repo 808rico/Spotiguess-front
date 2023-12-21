@@ -91,7 +91,6 @@ function Game() {
     
         if (player) {
             player.activateElement().then(() => {
-                message.info("activate element");
                 spotifyApi.getTrack(songUris[0].substring(songUris[0].lastIndexOf(":") + 1))
                     .then(function (data) {
                         spotifyApi.play({ uris: [songUris[0]] });
@@ -187,7 +186,7 @@ useEffect(() => {
             player.addListener('ready', ({ device_id }) => {
                 setDeviceId(device_id);
                 console.log('Ready with Device ID', device_id);
-                message.info("Ready with Device ID", device_id);
+                message.success("Ready");
             });
 
             player.connect();
