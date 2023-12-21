@@ -48,7 +48,7 @@ function Game() {
     // eslint-disable-next-line
     const [player, setPlayer] = useState(undefined);
     const [deviceId, setDeviceId] = useState(undefined);
-    const [isLoadingPlay, setIsLoadingPlay] = useState(false);
+    const [isLoadingPlay, setIsLoadingPlay] = useState(true);
 
     const Icon = iconMap[iconName];
 
@@ -156,7 +156,10 @@ useEffect(() => {
     if (deviceId) {
         spotifyApi.transferMyPlayback([deviceId], { play: false })
             .then(() => message.success("Playback transferred"))
-            .catch(err => message.error("Error in transferring playback", err));
+            .catch(err => message.error("Error in transferring playback", err))
+            .finally(() => {
+                setIsLoadingPlay(false); // Arrêter le chargement une fois la lecture commencée ou en cas d'erreur
+            });
 
     }
 },
