@@ -87,102 +87,114 @@ function Game() {
 
     const handlePlayClick = () => {
         setIsFirstPlayClicked(true);
-        spotifyApi.getTrack(songUris[0].substring(songUris[0].lastIndexOf(":") + 1))
-            .then(function (data) {
+
+        if (player) {
+            player.activateElement().then(() => {
+                message.info("activate element");
+                spotifyApi.getTrack(songUris[0].substring(songUris[0].lastIndexOf(":") + 1))
+                    .then(function (data) {
+                        setCurrentTrack(data.body);
+                        console.log("Track information", data.body);
+                    }, function (err) {
+                        console.error(err);
+                    });
                 setCurrentTrack(data.body);
                 console.log("Track information", data.body);
-            }, function (err) {
-                console.error(err);
-            });
-
+            })
+                .catch(err => console.error("Error starting playback", err));
+        };
         setCurrentSongIndex(0);
-
-    };
-
-    const onGoToHome = () => {
-        navigate('/');
-    };
-
-    // Fonction pour rejouer le blindtest
-    const onReplay = () => {
-        // Vous pouvez remettre à zéro l'état du jeu ou effectuer toute autre logique nécessaire pour recommencer
-        setShowPopupFinish(false);
-        // Ajoutez ici la logique pour redémarrer le jeu
-    };
+    }
 
 
-    useEffect(() => {
-        if (accessToken && songUris[currentSongIndex]) {
-            spotifyApi.setAccessToken(accessToken);
+    
 
-            // Demander à l'API de Spotify de jouer la chanson
-            spotifyApi.play({
-                uris: [songUris[currentSongIndex]],
-                position_ms: 0  // Commencer la lecture au début de la chanson
-            }).then(() => {
-                console.log("Playback started");
-            }).catch(err => {
-                console.error("Error in starting playback", err);
+
+
+const onGoToHome = () => {
+    navigate('/');
+};
+
+// Fonction pour rejouer le blindtest
+const onReplay = () => {
+    // Vous pouvez remettre à zéro l'état du jeu ou effectuer toute autre logique nécessaire pour recommencer
+    setShowPopupFinish(false);
+    // Ajoutez ici la logique pour redémarrer le jeu
+};
+
+
+useEffect(() => {
+    if (accessToken && songUris[currentSongIndex]) {
+        spotifyApi.setAccessToken(accessToken);
+
+        // Demander à l'API de Spotify de jouer la chanson
+        spotifyApi.play({
+            uris: [songUris[currentSongIndex]],
+            position_ms: 0  // Commencer la lecture au début de la chanson
+        }).then(() => {
+            console.log("Playback started");
+        }).catch(err => {
+            console.error("Error in starting playback", err);
+        });
+    }
+}, [currentSongIndex, accessToken, songUris]);
+
+useEffect(() => {
+    if (deviceId) {
+        spotifyApi.transferMyPlayback([deviceId], { play: false })
+            .then(() => message.success("Playback transferred"))
+            .catch(err => message.error("Error in transferring playback", err));
+
+    }
+},
+    [deviceId]);
+
+useEffect(() => {
+    if (accessToken) {
+        spotifyApi.setAccessToken(accessToken);
+
+        const script = document.createElement('script');
+        script.src = 'https://sdk.scdn.co/spotify-player.js';
+        script.async = true;
+        document.body.appendChild(script);
+
+        let player; // Déclaration locale du player
+
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            player = new window.Spotify.Player({
+                name: 'Spotiguess',
+                getOAuthToken: cb => { cb(accessToken); }
             });
-        }
-    }, [currentSongIndex, accessToken, songUris]);
 
-    useEffect(() => {
-        if (deviceId ) {
-            spotifyApi.transferMyPlayback([deviceId], { play: false })
-                .then(() => message.success("Playback transferred") )
-                .catch(err => message.error("Error in transferring playback", err));
+            setPlayer(player);
 
-        }
-    },
-        [deviceId]);
+            player.addListener('ready', ({ device_id }) => {
+                setDeviceId(device_id);
+                console.log('Ready with Device ID', device_id);
+                message.info("Ready with Device ID", device_id);
+            });
 
-    useEffect(() => {
-        if (accessToken) {
-            spotifyApi.setAccessToken(accessToken);
+            player.connect();
+        };
 
-            const script = document.createElement('script');
-            script.src = 'https://sdk.scdn.co/spotify-player.js';
-            script.async = true;
-            document.body.appendChild(script);
-
-            let player; // Déclaration locale du player
-
-            window.onSpotifyWebPlaybackSDKReady = () => {
-                player = new window.Spotify.Player({
-                    name: 'Spotiguess',
-                    getOAuthToken: cb => { cb(accessToken); }
-                });
-
-                setPlayer(player);
-
-                player.addListener('ready', ({ device_id }) => {
-                    setDeviceId(device_id);
-                    console.log('Ready with Device ID', device_id);
-                    message.info("Ready with Device ID", device_id);
-                });
-
-                player.connect();
-            };
-
-            // Fonction de nettoyage
-            return () => {
-                if (player) {
-                    player.disconnect();
-                    console.log('Player disconnected');
-                }
-            };
-        }
-    }, [accessToken]);
+        // Fonction de nettoyage
+        return () => {
+            if (player) {
+                player.disconnect();
+                console.log('Player disconnected');
+            }
+        };
+    }
+}, [accessToken]);
 
 
 
 
 
 
-    return (
-        <>
-        
+return (
+    <>
+
 
 
         <MainLayout>
@@ -256,8 +268,8 @@ function Game() {
 
             </div>
         </MainLayout>
-    
-        </>);
+
+    </>);
 };
 
 
