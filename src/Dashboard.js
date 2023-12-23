@@ -4,7 +4,7 @@ import AIGenerated from './pages/AIGenerated';
 
 
 
-//import YourLikedSongs from './pages/YourLikedSongs';
+import LikedSongs from './pages/LikedSongs';
 //import Playlist from './pages/Playlist';
 //import Artist from './pages/Artist';
 import Game from './pages/Game';
@@ -33,6 +33,7 @@ function Dashboard() {
     <BrowserRouter>
       <Routes>
         <Route path="/ai-generated" element={<AIGenerated />} />
+        <Route path="/liked-songs" element={<LikedSongs />} />
         <Route path="/" element={<Home />} />
         <Route path="/game" element={<Game />} />
 

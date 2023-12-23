@@ -92,6 +92,7 @@ function Game() {
     
         if (player) {
             player.activateElement().then(() => {
+                console.log(songUris[0]);
                 spotifyApi.getTrack(songUris[0].substring(songUris[0].lastIndexOf(":") + 1))
                     .then(function (data) {
                         spotifyApi.play({ uris: [songUris[0]] });
