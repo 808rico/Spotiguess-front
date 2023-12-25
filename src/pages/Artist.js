@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
-import { useMediaQuery } from 'react-responsive';
-import { Divider, message, Input, AutoComplete, Button } from "antd";
-import { PlayCircleOutlined, LoadingOutlined, RightOutlined, UserOutlined, SettingOutlined } from '@ant-design/icons';
+//import { useMediaQuery } from 'react-responsive';
+import { Divider, message, Input, AutoComplete } from "antd";
+import {  RightOutlined, UserOutlined } from '@ant-design/icons';
 import './Artist.css'
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
 });
 
-
-const { Search } = Input;
 
 //const urlServer = 'http://localhost:3001'; // Ou 'https://spotiguess-server-4a46bc45d48c.herokuapp.com'
 
@@ -22,7 +20,7 @@ function Artist() {
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('access_token')
   spotifyApi.setAccessToken(accessToken);
-  const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
+  //const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = value => {
@@ -36,18 +34,9 @@ function Artist() {
   }, [accessToken])
 
 
-  const onSearch = (value) => {
-    setLoading(true); // Active le loader
+  
 
-    //navigate('/game', { state: { type: 'AI Generated', iconName: 'BulbOutlined', input: value, songUris: response.data.songUris } });
-    // Traitez la réponse ici, par exemple en mettant à jour l'état avec les données reçues
-
-  };
-
-  const onPlayLikedSongs = () => {
-    setLoading(true); // Active le loader
-
-  };
+  
 
 
   const [options, setOptions] = useState([]);
@@ -175,8 +164,9 @@ function Artist() {
             onSearch={handleSearch}
             onChange={handleInputChange}
             value={inputValue}
+            
           >
-            <Input.Search size="large" placeholder="Search for an artist" enterButton />
+            <Input.Search loading={loading} size="large" placeholder="Search for an artist" enterButton />
           </AutoComplete>
         </div>
 

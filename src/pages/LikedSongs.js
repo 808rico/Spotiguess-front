@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
-import { useMediaQuery } from 'react-responsive';
+//import { useMediaQuery } from 'react-responsive';
 import { Divider, message, Button } from "antd";
 import { PlayCircleOutlined, HeartOutlined } from '@ant-design/icons';
 import './LikedSongs.css'
