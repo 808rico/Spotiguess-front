@@ -11,10 +11,6 @@ h2{
     margin-top: 25px;
 }
 
-.play-button-liked{
-    margin-top: 20px;
-    width: 150px;
-}
 .ant-input-affix-wrapper {
     border-radius: 100px; /* Bord arrondi */
     padding-right: 1px; /* Ajustez le padding si nécessaire pour l'icône */

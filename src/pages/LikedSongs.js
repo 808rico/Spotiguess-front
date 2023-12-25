@@ -112,7 +112,7 @@ function LikedSongs() {
 
 
           <Button
-            className="play-button"
+            className="play-button-liked"
             type="primary"
             icon={<PlayCircleOutlined />}
             onClick={onPlayLikedSongs}

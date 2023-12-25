@@ -78,15 +78,19 @@ function AIGenerated() {
           <Search
             placeholder="Top 80s songs in the US..."
             enterButton={
-              loading ?
-                <LoadingOutlined /> :
-                isDesktopOrLaptop ?
-                  <><PlayCircleOutlined /> <b>Generate songs</b></> :
-                  <PlayCircleOutlined />
+              loading ? (
+                <LoadingOutlined />
+              ) : isDesktopOrLaptop ? (
+                <>
+                  <PlayCircleOutlined /> <b>Generate songs</b>
+                </>
+              ) : (
+                <PlayCircleOutlined />
+              )
             }
             size="large"
             onSearch={onSearch}
-            loading={loading}
+            
           />
         </div>
       </div>
