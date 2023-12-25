@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 
 //const urlServer = 'http://localhost:3001'; // Ou 'https://spotiguess-server-4a46bc45d48c.herokuapp.com'
-const urlServer = 'http://localhost:3001'
+const urlServer = 'https://spotiguess-server-4a46bc45d48c.herokuapp.com'
 
 
 export default function useAuth(code) {
