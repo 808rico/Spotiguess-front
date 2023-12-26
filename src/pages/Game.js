@@ -25,10 +25,6 @@ const spotifyApi = new SpotifyWebApi({
 
 
 
-
-
-
-
 function Game() {
 
 
@@ -93,20 +89,19 @@ function Game() {
         if (player) {
             player.activateElement().then(() => {
                 console.log(songUris[0]);
-                spotifyApi.getTrack(songUris[0].substring(songUris[0].lastIndexOf(":") + 1))
-                    .then(function (data) {
-                        const random_position_ms = Math.floor(Math.random() * 30001);
-                        spotifyApi.play({ uris: [songUris[0]], position_ms: random_position_ms });
-                        setCurrentTrack(data.body);
-                        setIsFirstPlayClicked(true);
-                        console.log("Track information", data.body);
-                    }, function (err) {
-                        console.error(err);
-                        message.error("Error retrieving track information: " + err.message);
-                    })
-                    .finally(() => {
-                        setIsLoadingPlay(false); // Arrêter le chargement une fois la lecture commencée ou en cas d'erreur
-                    });
+                const random_position_ms = Math.floor(Math.random() * 30001);
+                spotifyApi.play({ uris: [songUris[0]], position_ms: random_position_ms }).then(() => {
+
+                    //setCurrentTrack(data.body);
+                    setIsFirstPlayClicked(true);
+                        
+                }).catch(err => {
+                    message.error("Error in starting playback: " + err.message);
+                    console.error("Error in starting playback", err);
+                })
+                .finally(() => {
+                    setIsLoadingPlay(false); // Arrêter le chargement une fois la lecture commencée ou en cas d'erreur
+                });
 
             })
                 .catch(err => {
