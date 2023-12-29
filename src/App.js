@@ -35,6 +35,7 @@ function App() {
   if (accessToken) {
     return <Dashboard accessToken={accessToken} />;
   } else {
+    //return <Login />;
     window.location.assign('https://spotiguess.com')
     
   }

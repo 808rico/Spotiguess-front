@@ -92,8 +92,14 @@ function Game() {
                 const random_position_ms = Math.floor(Math.random() * 30001);
                 spotifyApi.play({ uris: [songUris[0]], position_ms: random_position_ms }).then(() => {
 
-                    //setCurrentTrack(data.body);
-                    setIsFirstPlayClicked(true);
+                    spotifyApi.getTrack(songUris[0].substring(songUris[0].lastIndexOf(":") + 1))
+                    .then(function (data) {
+                        setCurrentTrack(data.body);
+                        setIsFirstPlayClicked(true);
+                    }, function (err) {
+                        message.error("Error retrieving track information: " + err.message);
+                        console.error(err);
+                    });
                         
                 }).catch(err => {
                     message.error("Error in starting playback: " + err.message);
@@ -154,7 +160,7 @@ function Game() {
     useEffect(() => {
         if (deviceId) {
             spotifyApi.transferMyPlayback([deviceId], { play: false })
-                .then(() => message.success("Playback transferred"))
+                .then(() => message.success("Ready"))
                 .catch(err => message.error("Error in transferring playback", err))
                 .finally(() => {
                     setIsLoadingPlay(false); // Arrêter le chargement une fois la lecture commencée ou en cas d'erreur
@@ -186,7 +192,7 @@ function Game() {
                 player.addListener('ready', ({ device_id }) => {
                     setDeviceId(device_id);
                     console.log('Ready with Device ID', device_id);
-                    message.success("Ready");
+                    
                 });
 
                 player.connect();
