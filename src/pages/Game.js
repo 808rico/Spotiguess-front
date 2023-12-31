@@ -96,6 +96,8 @@ function Game() {
 
         console.log("isPlayerReady", isPlayerReady);
         console.log("deviceId", deviceId); 
+        setIsFirstPlayClicked(true)
+        /*
         if (isPlayerReady && deviceId) {
             setIsLoadingPlay(true);
             setCurrentSongIndex(0); // Commencer le chargement
@@ -117,6 +119,7 @@ function Game() {
         } else {
             console.log('Player not ready or no device ID');
         }
+        */
     };
 
 
@@ -171,7 +174,8 @@ return (
                 <Player
                     accessToken={accessToken}
                     callback={handlePlayerStateChange}
-                    trackUri={songUris[0]} />
+                    trackUri={songUris[0]} 
+                    play={isFirstPlayClicked}/>
 
                 <h1 className="title"> {Icon && <Icon />} {type}</h1>
                 <Divider
