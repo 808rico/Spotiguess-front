@@ -175,6 +175,7 @@ return (
                     accessToken={accessToken}
                     callback={handlePlayerStateChange}
                     trackUri={songUris[0]} 
+                    //offset={}
                     play={isFirstPlayClicked}/>
 
                 <h1 className="title"> {Icon && <Icon />} {type}</h1>
