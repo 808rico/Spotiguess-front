@@ -13,7 +13,7 @@ function Player({ accessToken, trackUri, callback, play}) {
         uris={trackUri}
         name="SpotiGuess"
         callback={callback}
-        play={true}
+        play={play}
       />
     </div>
   );
