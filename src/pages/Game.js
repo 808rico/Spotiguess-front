@@ -170,7 +170,8 @@ return (
 
                 <Player
                     accessToken={accessToken}
-                    callback={handlePlayerStateChange} />
+                    callback={handlePlayerStateChange}
+                    trackUri={songUris[0]} />
 
                 <h1 className="title"> {Icon && <Icon />} {type}</h1>
                 <Divider
