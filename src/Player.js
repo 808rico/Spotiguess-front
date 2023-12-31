@@ -1,9 +1,9 @@
 import React from "react";
 import SpotifyPlayer from "react-spotify-web-playback";
 
-function Player({ accessToken, trackUri, callback, play, offset}) {
+function Player({ accessToken, trackUri, callback, play}) {
   
-  console.log("Player", trackUri);
+
 
   return (
     //<div style={{display:'none'}}>
@@ -14,8 +14,7 @@ function Player({ accessToken, trackUri, callback, play, offset}) {
         name="SpotiGuess"
         callback={callback}
         play={play}
-        offset={offset}
-      />
+          />
     </div>
   );
 }

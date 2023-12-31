@@ -46,6 +46,7 @@ function Game() {
     const [isLoadingPlay, setIsLoadingPlay] = useState(true);
     const [deviceId, setDeviceId] = useState('');
     const [isPlayerReady, setIsPlayerReady] = useState(false);
+    const [offset, setOffset] = useState(0);
 
     const Icon = iconMap[iconName];
 
@@ -60,20 +61,27 @@ function Game() {
     const handleNextTrack = () => {
         const nextIndex = currentSongIndex + 1;
 
+
         if (nextIndex < songUris.length) {
-            spotifyApi.play({ uris: [songUris[nextIndex]] });
 
-            spotifyApi.getTrack(songUris[nextIndex].substring(songUris[nextIndex].lastIndexOf(":") + 1))
-                .then(function (data) {
-                    setCurrentTrack(data.body);
-
-                }, function (err) {
-                    message.error("Error retrieving track information: " + err.message);
-                    console.error(err);
-                });
+            //setOffset(random_position_ms);
 
 
-            setCurrentSongIndex(nextIndex);
+            spotifyApi.setAccessToken(accessToken);
+            const random_position_ms = Math.floor(Math.random() * 30001);
+            // Demander à l'API de Spotify de jouer la chanson
+            spotifyApi.play({
+
+                uris: [songUris[nextIndex]],
+                position_ms: random_position_ms
+            }).then(() => {
+                console.log("Playback started");
+                setCurrentSongIndex(nextIndex);
+            }).catch(err => {
+                message.error("Error in starting playback: " + err.message);
+                console.error("Error in starting playback", err);
+            });
+            
 
         } else {
 
@@ -95,161 +103,143 @@ function Game() {
     const handlePlayClick = () => {
 
         console.log("isPlayerReady", isPlayerReady);
-        console.log("deviceId", deviceId); 
+        console.log("deviceId", deviceId);
         setIsFirstPlayClicked(true)
-        /*
-        if (isPlayerReady && deviceId) {
-            setIsLoadingPlay(true);
-            setCurrentSongIndex(0); // Commencer le chargement
-            spotifyApi.setAccessToken(accessToken);
-            //position_ms: random_position_ms
+        setCurrentSongIndex(0);
 
-            spotifyApi.play({ uris: [songUris[0]], device_id:deviceId }).then(() => {
-                console.log("Playback started");
-
-            }).catch(err => {
-                message.error("Error in starting playback: " + err.message);
-                console.error("Error in starting playback", err);
-            })
-                .finally(() => {
-                    setIsLoadingPlay(false);
-                    setIsFirstPlayClicked(true) // Arrêter le chargement une fois la lecture commencée ou en cas d'erreur
-                });
-            console.log('Playing:', songUris[0]);
-        } else {
-            console.log('Player not ready or no device ID');
-        }
-        */
     };
 
 
 
 
 
-const onGoToHome = () => {
-    navigate('/');
-};
+    const onGoToHome = () => {
+        navigate('/');
+    };
 
-// Fonction pour rejouer le blindtest
-const onReplay = () => {
-    // Vous pouvez remettre à zéro l'état du jeu ou effectuer toute autre logique nécessaire pour recommencer
-    setShowPopupFinish(false);
-    // Ajoutez ici la logique pour redémarrer le jeu
-};
-
-
-useEffect(() => {
-    if (currentSongIndex !== 0 && accessToken && songUris[currentSongIndex]) {
-        spotifyApi.setAccessToken(accessToken);
-        const random_position_ms = Math.floor(Math.random() * 30001);
-        // Demander à l'API de Spotify de jouer la chanson
-        spotifyApi.play({
-
-            uris: [songUris[currentSongIndex]],
-            position_ms: random_position_ms
-        }).then(() => {
-            console.log("Playback started");
-        }).catch(err => {
-            message.error("Error in starting playback: " + err.message);
-            console.error("Error in starting playback", err);
-        });
-    }
-}, [currentSongIndex, accessToken, songUris]);
+    // Fonction pour rejouer le blindtest
+    const onReplay = () => {
+        // Vous pouvez remettre à zéro l'état du jeu ou effectuer toute autre logique nécessaire pour recommencer
+        setShowPopupFinish(false);
+        // Ajoutez ici la logique pour redémarrer le jeu
+    };
 
 
+    useEffect(() => {
+        console.log("useEffect");
+        console.log(currentSongIndex)
+
+        if ( accessToken && songUris[currentSongIndex]) {
 
 
+            
+            spotifyApi.setAccessToken(accessToken);
+            
+            // Demander à l'API de Spotify de jouer la chanson
+            spotifyApi.getTrack(songUris[currentSongIndex].substring(songUris[currentSongIndex].lastIndexOf(":") + 1))
+                .then(function (data) {
+                    setCurrentTrack(data.body);
 
-
-
-
-return (
-    <>
+                }, function (err) {
+                    message.error("Error retrieving track information: " + err.message);
+                    console.error(err);
+                });
+        }
+    }, [currentSongIndex, accessToken, songUris]);
 
 
 
-        <MainLayout>
-            <div className="layoutWrapper" >
 
-                <Player
-                    accessToken={accessToken}
-                    callback={handlePlayerStateChange}
-                    trackUri={songUris[0]} 
-                    //offset={}
-                    play={isFirstPlayClicked}/>
 
-                <h1 className="title"> {Icon && <Icon />} {type}</h1>
-                <Divider
-                    className="divider"
-                    style={{ borderColor: 'white', width: '400px', margin: '12px 0' }} />
-                <h3 className="subTitle"> <i>Your input:  </i> {input}</h3>
 
-                <div className="main-wrapper">
-                    {!isFirstPlayClicked && (
-                        <Button
-                            className="play-button"
-                            type="primary"
-                            icon={<PlayCircleOutlined />}
-                            onClick={handlePlayClick}
-                            size="large"
-                            loading={isLoadingPlay}
-                        >
 
-                            Play
-                        </Button>
-                    )}
-                    {isFirstPlayClicked && (
-                        <div className="current-track-wrapper">
-                            <div className="equalizer-wrapper">
-                                <Equalizer />
+
+    return (
+        <>
+
+
+
+            <MainLayout>
+                <div className="layoutWrapper" >
+
+                    <Player
+                        accessToken={accessToken}
+                        callback={handlePlayerStateChange}
+                        trackUri={songUris[0]}
+                        play={isFirstPlayClicked} />
+
+                    <h1 className="title"> {Icon && <Icon />} {type}</h1>
+                    <Divider
+                        className="divider"
+                        style={{ borderColor: 'white', width: '400px', margin: '12px 0' }} />
+                    <h3 className="subTitle"> <i>Your input:  </i> {input}</h3>
+
+                    <div className="main-wrapper">
+                        {!isFirstPlayClicked && (
+                            <Button
+                                className="play-button"
+                                type="primary"
+                                icon={<PlayCircleOutlined />}
+                                onClick={handlePlayClick}
+                                size="large"
+                                loading={isLoadingPlay}
+                            >
+
+                                Play
+                            </Button>
+                        )}
+                        {isFirstPlayClicked && (
+                            <div className="current-track-wrapper">
+                                <div className="equalizer-wrapper">
+                                    <Equalizer />
+                                </div>
+
+                                <div className="next-show-button">
+
+                                    <Button
+                                        className="next-button"
+                                        type="default"
+                                        icon={<ForwardOutlined />}
+                                        onClick={() => { handleNextTrack() }}>
+                                        Next song
+                                    </Button>
+
+
+                                    <Button
+                                        className="show-button"
+                                        type="default"
+                                        onClick={togglePopupResult}
+                                        icon={<EyeOutlined />}
+                                    >
+                                        Show Track
+                                    </Button>
+                                </div>
                             </div>
-
-                            <div className="next-show-button">
-
-                                <Button
-                                    className="next-button"
-                                    type="default"
-                                    icon={<ForwardOutlined />}
-                                    onClick={() => { handleNextTrack() }}>
-                                    Next song
-                                </Button>
-
-
-                                <Button
-                                    className="show-button"
-                                    type="default"
-                                    onClick={togglePopupResult}
-                                    icon={<EyeOutlined />}
-                                >
-                                    Show Track
-                                </Button>
-                            </div>
-                        </div>
-                    )}
+                        )}
 
 
 
-                    {currentTrack && (
-                        <PopUpResult
-                            isVisible={showPopupResult}
-                            onClose={togglePopupResult}
-                            currentTrack={currentTrack}
-                            onNextTrack={handleNextTrack}
-                        />
-                    )}
+                        {currentTrack && (
+                            <PopUpResult
+                                isVisible={showPopupResult}
+                                onClose={togglePopupResult}
+                                currentTrack={currentTrack}
+                                onNextTrack={handleNextTrack}
+                            />
+                        )}
 
-                    {isPlaylistFinished && <PopUpFinish
-                        isVisible={showPopupFinish}
-                        onClose={() => setShowPopupFinish(false)}
-                        onReplay={onReplay}
-                        onGoToHome={onGoToHome}
-                    />}
+                        {isPlaylistFinished && <PopUpFinish
+                            isVisible={showPopupFinish}
+                            onClose={() => setShowPopupFinish(false)}
+                            onReplay={onReplay}
+                            onGoToHome={onGoToHome}
+                        />}
+                    </div>
+
                 </div>
+            </MainLayout>
 
-            </div>
-        </MainLayout>
-
-    </>);
+        </>);
 };
 
 
