@@ -46,7 +46,7 @@ function Game() {
     const [isLoadingPlay, setIsLoadingPlay] = useState(true);
     const [deviceId, setDeviceId] = useState('');
     const [isPlayerReady, setIsPlayerReady] = useState(false);
-    const [offset, setOffset] = useState(0);
+    
 
     const Icon = iconMap[iconName];
 
