@@ -7,7 +7,7 @@ function Player({ accessToken, trackUri, callback, play}) {
 
   return (
     //<div style={{display:'none'}}>
-    <div style={{display:'none'}}>
+    <div >
       <SpotifyPlayer
         token={accessToken}
         uris={trackUri}
