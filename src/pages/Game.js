@@ -93,7 +93,7 @@ function Game() {
 
     const handlePlayerStateChange = (state) => {
         console.log(state);
-        if (state.deviceId) {
+        if (state.status === 'READY') {
             setDeviceId(state.deviceId);
             setIsPlayerReady(true);
             setIsLoadingPlay(false);
