@@ -17,7 +17,7 @@ const { Search } = Input;
 
 //const urlServer = 'http://localhost:3001'; // Ou 'https://spotiguess-server-4a46bc45d48c.herokuapp.com'
 
-const urlServer = 'https://spotiguess-server-4a46bc45d48c.herokuapp.com'
+const urlServer = process.env.REACT_APP_URL_SERVER;
 
 
 function AIGenerated() {

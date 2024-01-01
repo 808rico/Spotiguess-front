@@ -1,32 +1,43 @@
 body {
-    font-family: 'Poppins', sans-serif ;
-    background-color: black;
-  }
-  .ant-btn, .ant-input, .ant-menu, .ant-card {
-    font-family: 'Poppins', sans-serif;
-}
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-h1{
-  color: white;
-  font-family: 'Poppins', sans-serif ;
+  font-family: 'Poppins', sans-serif;
+  background-color: black;
 }
 
-h2{
-  color: white;
-  font-family: 'Poppins', sans-serif ;
+.ant-btn,
+.ant-input,
+.ant-menu,
+.ant-card {
+  font-family: 'Poppins', sans-serif;
 }
 
-h3{
-  color: white;
-  font-family: 'Poppins', sans-serif ;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-p{
+body, html {
+  width: 100%;
+  height: 100%;
+  /*overflow: hidden; /* Empêche le défilement au niveau du corps du document */
+}
+
+h1 {
   color: white;
-  font-family: 'Poppins', sans-serif ;
+  font-family: 'Poppins', sans-serif;
+}
+
+h2 {
+  color: white;
+  font-family: 'Poppins', sans-serif;
+}
+
+h3 {
+  color: white;
+  font-family: 'Poppins', sans-serif;
+}
+
+p {
+  color: white;
+  font-family: 'Poppins', sans-serif;
 }
