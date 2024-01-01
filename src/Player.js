@@ -3,7 +3,8 @@ import SpotifyPlayer from "react-spotify-web-playback";
 
 function Player({ accessToken, trackUri, callback, play}) {
   
-
+  console.log('Player render track uri', trackUri)
+  console.log('Player render play', play)
 
   return (
     //<div style={{display:'none'}}>
