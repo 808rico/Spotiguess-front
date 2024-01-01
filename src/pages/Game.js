@@ -36,7 +36,7 @@ function Game() {
     // eslint-disable-next-line
     const [accessToken, setAccessToken] = useState(localStorage.getItem('access_token'))
     const [isFirstPlayClicked, setIsFirstPlayClicked] = useState(false);
-    const [currentSongIndex, setCurrentSongIndex] = useState(null);
+    const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const [isPlaylistFinished, setIsPlaylistFinished] = useState(false);
     const [currentTrack, setCurrentTrack] = useState(null);
     const [showPopupResult, setShowPopupResult] = useState(false);
@@ -60,13 +60,16 @@ function Game() {
 
     const handleNextTrack = () => {
         const nextIndex = currentSongIndex + 1;
+        
 
 
         if (nextIndex < songUris.length) {
 
+            setCurrentSongIndex(nextIndex);
+
             //setOffset(random_position_ms);
 
-
+            /*
             spotifyApi.setAccessToken(accessToken);
             const random_position_ms = Math.floor(Math.random() * 30001);
             // Demander à l'API de Spotify de jouer la chanson
@@ -76,11 +79,11 @@ function Game() {
                 position_ms: random_position_ms
             }).then(() => {
                 console.log("Playback started");
-                setCurrentSongIndex(nextIndex);
+                
             }).catch(err => {
                 message.error("Error in starting playback: " + err.message);
                 console.error("Error in starting playback", err);
-            });
+            });*/   
             
 
         } else {
@@ -165,7 +168,7 @@ function Game() {
                     <Player
                         accessToken={accessToken}
                         callback={handlePlayerStateChange}
-                        trackUri={songUris[0]}
+                        trackUri={songUris[currentSongIndex]}
                         play={isFirstPlayClicked} />
 
                     <h1 className="title"> {Icon && <Icon />} {type}</h1>
