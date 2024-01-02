@@ -15,7 +15,7 @@ function Login() {
             </div>
             <div className='button-section'>
                 <Button type="primary" className="btn-login" href={AUTH_URL}>
-                    Se connecter avec Spotify
+                    Login with Spotify
                 </Button>
             </div>
         </div>
