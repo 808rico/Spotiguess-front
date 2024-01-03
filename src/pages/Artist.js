@@ -6,12 +6,13 @@ import MainLayout from '../components/layout/MainLayout';
 import { Divider, message, Input, AutoComplete } from "antd";
 import {  RightOutlined, UserOutlined } from '@ant-design/icons';
 import './Artist.css'
+import axios from "axios";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
 });
 
-
+const urlServer = process.env.REACT_APP_URL_SERVER;
 //const urlServer = 'http://localhost:3001'; // Ou 'https://spotiguess-server-4a46bc45d48c.herokuapp.com'
 
 
@@ -82,45 +83,23 @@ function Artist() {
     console.log('onSelect', value);
     setInputValue(option.artistName);
     setLoading(true); // Start the loader
+
     try {
       // Get artist's albums
-      const artistData = await spotifyApi.getArtist(value);
-
-      const albumsData = await spotifyApi.getArtistAlbums(value);
-      const albums = albumsData.body.items;
-
-      // Prepare to gather track data
-      let trackUris = [];
-      let albumTracksPromises = [];
-
-      // Get tracks from each album
-      albums.forEach(album => {
-        albumTracksPromises.push(spotifyApi.getAlbumTracks(album.id));
+      const trackUris = await axios.post(`${urlServer}/artist`, {
+        artistId: value,
+        accessToken: accessToken // Inclure l'access token ici
       });
 
-      const albumsTracksData = await Promise.all(albumTracksPromises);
+      console.log(trackUris.data)
 
-      // Flatten the array of track data
-      let allTracks = [];
-      albumsTracksData.forEach(albumTracks => {
-        allTracks.push(...albumTracks.body.items);
-      });
-
-      // Random selection of 15 songs
-      while (trackUris.length < 15 && allTracks.length > 0) {
-        let randomIndex = Math.floor(Math.random() * allTracks.length);
-        trackUris.push(allTracks[randomIndex].uri);
-        allTracks.splice(randomIndex, 1); // Remove the selected track
-      }
-
-      console.log(artistData.body.name);
       // Navigate to the game page
       navigate('/game', {
         state: {
           type: 'Artist',
           iconName: 'BulbOutlined',
-          input: artistData.body.name, // Name of the artist
-          songUris: trackUris // List of selected URIs
+          input: option.artistName, // Name of the artist
+          songUris: trackUris.data // List of selected URIs
         }
       });
     } catch (error) {

@@ -35,7 +35,9 @@ function AIGenerated() {
 
   const onSearch = (value) => {
     setLoading(true); // Active le loader
-    axios.post(`${urlServer}/generate`, { preferences: value })
+    axios.post(`${urlServer}/ai-generated`, { 
+      spotifyAccessToken: accessToken,
+      preferences: value })
       .then(response => {
         console.log(response)
         navigate('/game', { state: { type: 'AI Generated',iconName: 'BulbOutlined', input: value, songUris: response.data.songUris } });

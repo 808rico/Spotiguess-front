@@ -6,12 +6,13 @@ import MainLayout from '../components/layout/MainLayout';
 import { Divider, message, Input, AutoComplete } from "antd";
 import { UnorderedListOutlined,  RightOutlined } from '@ant-design/icons';
 import './Playlist.css'
+import axios from "axios";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
 });
 
-
+const urlServer = process.env.REACT_APP_URL_SERVER;
 
 
 //const urlServer = 'http://localhost:3001'; // Ou 'https://spotiguess-server-4a46bc45d48c.herokuapp.com'
@@ -83,37 +84,36 @@ function Playlist() {
     console.log('onSelect', value);
     setInputValue(option.playlistName);
     setLoading(true); // Start the loader
-    try {
-      // Get playlist
-      const playlistData = await spotifyApi.getPlaylist(value);
-      console.log(playlistData)
 
-      const { body: { total } } = await spotifyApi.getPlaylistTracks(value, { limit: 1 });
-    let allTracks = [];
-    for (let offset = 0; offset < total; offset += 50) {
-      const { body: { items } } = await spotifyApi.getPlaylistTracks(value, { limit: 50, offset });
-      allTracks = [...allTracks, ...items];
-    }
-      
-    // Mélanger les pistes et sélectionner les 20 premières URIs
-    const shuffledTracks = allTracks.sort(() => 0.5 - Math.random());
-    const selectedTracks = shuffledTracks.slice(0, 20).map(track => track.track.uri);
+    try {
+      // Assurez-vous d'avoir l'access token disponible ici
+      const accessToken = localStorage.getItem('access_token');
+
+      // Envoyez l'ID de la playlist et l'access token à votre backend
+      const response = await axios.post(`${urlServer}/playlist`, {
+        playlistId: value,
+        accessToken: accessToken // Inclure l'access token ici
+      });
+
+      const selectedTracks = response.data; // Supposons que la réponse contient directement les URIs sélectionnés
+
       // Navigate to the game page
       navigate('/game', {
         state: {
           type: 'Playlist',
           iconName: 'BulbOutlined',
-          input: option.playlistName, // Name of the artist
+          input: option.playlistName, // Name of the playlist
           songUris: selectedTracks // List of selected URIs
         }
       });
+
     } catch (error) {
       message.error(error.message); // Display error message
       console.error(error);
     } finally {
       setLoading(false); // Stop the loader
     }
-  };
+};
 
 
 

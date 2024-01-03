@@ -6,50 +6,16 @@ import MainLayout from '../components/layout/MainLayout';
 import { Divider, message, Button } from "antd";
 import { PlayCircleOutlined, HeartOutlined } from '@ant-design/icons';
 import './LikedSongs.css'
+import axios from "axios";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
 });
 
-
+const urlServer = process.env.REACT_APP_URL_SERVER;
 
 
 //const urlServer = 'http://localhost:3001'; // Ou 'https://spotiguess-server-4a46bc45d48c.herokuapp.com'
-
-
-
-
-
-async function RandomSongsFromLiked(accessToken) {
-  spotifyApi.setAccessToken(accessToken);
-
-  try {
-      // Obtenir le nombre total de chansons sauvegardées
-      const data = await spotifyApi.getMySavedTracks({ limit: 1 });
-      const totalTracks = data.body.total;
-
-      // Générer 20 indices aléatoires et récupérer les chansons
-      const randomSongPromises = [];
-      for (let i = 0; i < 20; i++) {
-          const randomSongNumber = Math.floor(Math.random() * totalTracks);
-          randomSongPromises.push(
-              spotifyApi.getMySavedTracks({ limit: 1, offset: randomSongNumber })
-          );
-      }
-
-      // Attendre que toutes les promesses se résolvent
-      const songResults = await Promise.all(randomSongPromises);
-      console.log(songResults)
-      const randomSongs = songResults.map(result => result.body.items[0].track);
-      console.log(randomSongs)
-      return randomSongs;
-
-  } catch (err) {
-      console.error("Error in RandomSongsFromLiked:", err);
-      throw err;  // Propager l'erreur pour la gérer plus loin dans la chaîne des promesses
-  }
-}
-
 
 
 function LikedSongs() {
@@ -68,9 +34,9 @@ function LikedSongs() {
   const onPlayLikedSongs = () => {
     setLoading(true); // Active le loader
 
-    RandomSongsFromLiked(accessToken)
+    axios.post(`${urlServer}/liked-songs`, { accessToken: accessToken })
         .then((response) => {
-          const songUris = response.map(song => song.uri)
+          const songUris = response.data.map(song => song.uri)
           console.log(songUris)
             navigate('/game', {
                 state: {
