@@ -7,6 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import { Divider, Input, message } from "antd";
 import { PlayCircleOutlined, BulbOutlined,LoadingOutlined } from '@ant-design/icons';
 import './AIGenerated.css'
+import AISuggestion from "../components/suggestions/AiSuggestion";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
@@ -26,6 +27,7 @@ function AIGenerated() {
   const accessToken = localStorage.getItem('access_token')
   spotifyApi.setAccessToken(accessToken);
   const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     if (!accessToken) return
@@ -33,7 +35,7 @@ function AIGenerated() {
   }, [accessToken])
 
 
-  const onSearch = (value) => {
+  const onSearch = (value = searchValue) => {
     setLoading(true); // Active le loader
     axios.post(`${urlServer}/ai-generated`, { 
       spotifyAccessToken: accessToken,
@@ -54,6 +56,12 @@ function AIGenerated() {
       });
   };
 
+  const handleSuggestionSelect = (suggestion) => {
+    const value = `${suggestion.title} ${suggestion.subtitle}`;
+    setSearchValue(value);
+    onSearch(value);
+  };
+
 
 
   
@@ -65,20 +73,13 @@ function AIGenerated() {
       <div style={{ background: '#000000', padding: 24, minHeight: 280, height: '100%' }}>
         <h1><BulbOutlined style={{ fontSize: '25px', marginRight: '10px' }} />AI Generated</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
-        <h2>How it works?</h2>
-        <p>
-          👉🏻<b>Type in your favorite artist, genre, or mood in the input box.</b> <br />For example, "Drake's top hits from 2016 to 2019", "energetic 80s pop", or "relaxing acoustic tunes".</p>
-        <p>
-          👉🏻 <b>Hit Generate.</b> <br />
-          Our AI, will analyze your input and create a blind test playlist tailored just for you.
-        </p>
-        <p>
-          👉🏻 <b>Play.</b><br />
-          Alone or with your friends and family, try to guess the song and yell when you got it.
-        </p>
+        <h2>Ask ChatGPT to generate the your playlist.</h2>
+        
         <div className="search-container" >
           <Search
             placeholder="Top 80s songs in the US..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
             enterButton={
               loading ? (
                 <LoadingOutlined />
@@ -95,6 +96,8 @@ function AIGenerated() {
             
           />
         </div>
+
+        <AISuggestion onSuggestionSelect={handleSuggestionSelect}/>
       </div>
     </MainLayout>
   );
