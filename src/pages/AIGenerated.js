@@ -28,6 +28,7 @@ function AIGenerated() {
   spotifyApi.setAccessToken(accessToken);
   const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
   const [searchValue, setSearchValue] = useState('');
+  const [suggestionEnabled, setSuggestionEnabled] = useState(true);
 
   useEffect(() => {
     if (!accessToken) return
@@ -36,6 +37,7 @@ function AIGenerated() {
 
 
   const onSearch = (value = searchValue) => {
+    setSuggestionEnabled(false);
     setLoading(true); // Active le loader
     axios.post(`${urlServer}/ai-generated`, { 
       spotifyAccessToken: accessToken,
@@ -49,9 +51,11 @@ function AIGenerated() {
         // Gérez l'erreur ici
         message.error('Error:' + error.message)
         console.error('Erreur lors de la requête:', error);
+        setSuggestionEnabled(true);
       })
       .finally(() => {
         setLoading(false);
+        setSuggestionEnabled(true);
          // Désactive le loader une fois la requête terminée
       });
   };
@@ -97,7 +101,7 @@ function AIGenerated() {
           />
         </div>
 
-        <AISuggestion onSuggestionSelect={handleSuggestionSelect}/>
+        <AISuggestion onSuggestionSelect={handleSuggestionSelect}  enabled={suggestionEnabled}/>
       </div>
     </MainLayout>
   );

@@ -7,7 +7,7 @@ import { RedoOutlined } from '@ant-design/icons';
 const urlServer = process.env.REACT_APP_URL_SERVER;
 
 
-const AISuggestion = ({onSuggestionSelect}) => {
+const AISuggestion = ({onSuggestionSelect, enabled}) => {
     const [suggestions, setSuggestions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -49,7 +49,7 @@ const AISuggestion = ({onSuggestionSelect}) => {
         <div className="suggestions-container">
             <div className="suggestions-header">
                 <h2 className='suggestion-text'>Suggestions:</h2>
-                <div className="regenerate-button" onClick={handleRegenerate}>
+                <div className={`regenerate-button ${enabled ? '' : 'disabled'}`}  onClick={handleRegenerate}>
                     <RedoOutlined />
                     <span className="regenerate-button-text">Regenerate</span>
                 </div>
@@ -66,7 +66,7 @@ const AISuggestion = ({onSuggestionSelect}) => {
             ) : (
                 <div className="suggestions-list">
                     {suggestions.map((suggestion, index) => (
-                        <div className="suggestion-item" key={index} onClick={() => handleSuggestionClick(suggestion)} >
+                        <div className={`suggestion-item ${enabled ? '' : 'disabled'}`} key={index} onClick={() => handleSuggestionClick(suggestion)} >
                             <div className="suggestion-content">
                                 <h3 className="suggestion-title">{suggestion.title}</h3>
                                 <p className="suggestion-subtitle">{suggestion.subtitle}</p>

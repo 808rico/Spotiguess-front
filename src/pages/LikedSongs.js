@@ -66,16 +66,10 @@ function LikedSongs() {
       <div style={{ background: '#000000', padding: 24, minHeight: 280, height: '100%' }}>
         <h1><HeartOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Your liked songs</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
-        <h2>How it works?</h2>
-        <p>
-          👉🏻<b>Hit play:</b> <br />15 songs of your liked playlist will be randomly selected. </p>
-
-        <p>
-          👉🏻 <b>Play.</b><br />
-          Alone or with your friends and family, try to guess the song and yell when you got it.
-        </p>
+        <h2>Hit play.</h2>
+        <p className="paragraph-liked-songs">
+          15 songs of your liked playlist will be randomly selected. </p>
         <div className="search-container" >
-
 
           <Button
             className="play-button-liked"

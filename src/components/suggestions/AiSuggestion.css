@@ -26,6 +26,11 @@
     cursor: pointer;
 }
 
+.regenerate-button.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .regenerate-button:hover {
     font-weight: bold;
 }
@@ -87,6 +92,11 @@
 
 .suggestion-item:hover {
     background-color: #2F2F2F;
+}
+
+.suggestion-item.disabled {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 .suggestion-title {
