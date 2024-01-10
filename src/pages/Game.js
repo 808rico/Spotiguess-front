@@ -175,7 +175,7 @@ function Game() {
                     <Divider
                         className="divider"
                         style={{ borderColor: 'white', width: '400px', margin: '12px 0' }} />
-                    <h3 className="subTitle"> <i>Your input:  </i> {input}</h3>
+                    <h3 className="subTitle">  {input}</h3>
 
                     <div className="main-wrapper">
                         {!isFirstPlayClicked && (

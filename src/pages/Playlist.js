@@ -43,7 +43,7 @@ function Playlist() {
   const [options, setOptions] = useState([]);
 
   const handleSuggestionSelect = (suggestion) => {
-    const value = suggestion.name;
+    const value = { playlistName: suggestion.name };
     setInputValue(value);
     onSelect(suggestion.id, value);
     
@@ -54,7 +54,6 @@ function Playlist() {
       setOptions([]);
       return;
     }
-
 
     // Rechercher des artistes avec l'API Spotify
     spotifyApi.searchPlaylists(value, { limit: 4 })
@@ -87,7 +86,7 @@ function Playlist() {
 
   const onSelect = async (value, option) => {
     console.log('onSelect', value);
-    //setInputValue(option.playlistName);
+    setInputValue(option.playlistName);
     setLoading(true); // Start the loader
     setSuggestionEnabled(false); // Disable the suggestion button
 

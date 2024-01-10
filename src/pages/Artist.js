@@ -7,6 +7,7 @@ import { Divider, message, Input, AutoComplete } from "antd";
 import {  RightOutlined, UserOutlined } from '@ant-design/icons';
 import './Artist.css'
 import axios from "axios";
+import ArtistSuggestion from "../components/suggestions/ArtistSuggestion";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
@@ -23,6 +24,7 @@ function Artist() {
   spotifyApi.setAccessToken(accessToken);
   //const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
   const [inputValue, setInputValue] = useState('');
+  const [suggestionEnabled, setSuggestionEnabled] = useState(true);
 
   const handleInputChange = value => {
     setInputValue(value);
@@ -38,7 +40,13 @@ function Artist() {
   
 
   
-
+  const handleSuggestionSelect = (suggestion) => {
+    const value = { artistName: suggestion.name };
+    setInputValue(value);
+    onSelect(suggestion.id, value);
+    
+    
+  };
 
   const [options, setOptions] = useState([]);
 
@@ -80,9 +88,9 @@ function Artist() {
   };
 
   const onSelect = async (value, option) => {
-    console.log('onSelect', value);
     setInputValue(option.artistName);
     setLoading(true); // Start the loader
+    setSuggestionEnabled(false); // Disable the suggestion button
 
     try {
       // Get artist's albums
@@ -105,8 +113,10 @@ function Artist() {
     } catch (error) {
       message.error(error.message); // Display error message
       console.error(error);
+      setSuggestionEnabled(true); // Enable the suggestion button
     } finally {
       setLoading(false); // Stop the loader
+      setSuggestionEnabled(true); // Enable the suggestion button
     }
   };
 
@@ -120,17 +130,7 @@ function Artist() {
       <div style={{ background: '#000000',  minHeight: 280, height: '100%' }}>
         <h1><UserOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Artist</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
-        <h2>How it works?</h2>
-        <p>
-          👉🏻<b>Search an artist.</b> <br />Use the search bar below to find an artist on Spotify. </p>
-        <p>
-          👉🏻 <b>Hit Play.</b> <br />
-          15 songs from his discography will be randomly selected.
-        </p>
-        <p>
-          👉🏻 <b>Play.</b><br />
-          Alone or with your friends and family, try to guess the song and yell when you got it.
-        </p>
+        <h2>Search for an artist.</h2>
 
 
 
@@ -149,6 +149,7 @@ function Artist() {
           </AutoComplete>
         </div>
 
+        <ArtistSuggestion enabled={suggestionEnabled} onSuggestionSelect={handleSuggestionSelect} />
 
 
       </div>
