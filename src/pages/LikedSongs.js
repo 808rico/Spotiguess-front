@@ -63,7 +63,7 @@ function LikedSongs() {
 
 
     <MainLayout>
-      <div style={{ background: '#000000', padding: 24, minHeight: 280, height: '100%' }}>
+      <div style={{ background: '#000000',  minHeight: 280, height: '100%' }}>
         <h1><HeartOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Your liked songs</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
         <h2>Hit play.</h2>

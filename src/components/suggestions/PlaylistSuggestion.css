@@ -1,0 +1,159 @@
+.playlist-suggestions-container {
+    color: #fff;
+    border-radius: 10px;
+    margin-top: 30px;
+
+
+    padding: 4px;
+
+}
+
+.playlist-suggestions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    
+
+}
+
+.playlist-regenerate-button {
+    
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.playlist-regenerate-button.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.playlist-regenerate-button:hover {
+    font-weight: bold;
+}
+
+.playlist-regenerate-button-text{
+    margin-left: 5px;
+}
+
+.playlist-suggestion-text{
+    color: #D9D9D9;
+    font-size: 14px;
+    margin-bottom: 0px;
+    font-style: italic;
+    font-weight: normal;
+}
+
+.playlist-custom-skeleton .ant-skeleton-content .ant-skeleton-title,
+.playlist-custom-skeleton .ant-skeleton-content .ant-skeleton-paragraph > li {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 75%);
+    background-size: 400% 100%;
+    
+}
+
+.playlist-custom-skeleton{
+    width: 150px;
+    height: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #1F1F1F;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+
+}
+.ant-skeleton-content {
+    background-color: #1F1F1F;
+    border-radius: 10px;
+    
+    width: 100%;
+    padding: 15px;
+}
+
+.playlist-skeleton-image {
+    
+    width: 80px;
+    height: 80px; /* Assurez-vous que l'image est aussi large que le squelette */
+    background-color: #2F2F2F;
+    border-radius: 10px;/* La hauteur est égale à la largeur pour créer un carré */
+/* Couleur de fond pour la fausse image */
+  }
+
+.playlist-loading-suggestions-list {
+    width: 100%;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Ajoutez de l'espace entre les éléments */
+    justify-content: center; 
+}
+
+.playlist-suggestions-list {
+    width: 100%;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Ajoutez de l'espace entre les éléments */
+    justify-content: center; /* Centrez les éléments */
+  
+}
+
+.playlist-suggestion-item {
+    /*flex: 0 0 calc(50% - 8px);*/
+    
+    width: 150px;
+    height: 200px;
+    background-color: #1F1F1F;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.playlist-suggestion-item:hover {
+    background-color: #2F2F2F;
+}
+
+.playlist-suggestion-item.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+.playlist-suggestion-thumbnail {
+    width: 100%; /* L'image prend toute la largeur de .suggestion-item */
+    height: 80px; /* Hauteur fixe pour l'image */
+    border-radius: 10px;
+    object-fit: cover;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.playlist-suggestion-thumbnail img {
+
+    height: 100%;
+    object-fit: contain;
+    border-radius: 10px; /* Garantit que l'image couvre l'espace disponible sans déformation */
+  }
+
+.playlist-suggestion-name {
+
+    font-size: 14px;
+    margin: 0;
+    margin-top: 10px;
+    max-height: 40px;
+    overflow:hidden;
+}
+
+.playlist-suggestion-author {
+    font-size: 12px;
+    color: #737373;
+    margin-top: 5px;
+    max-height: 15px;
+    overflow:hidden;
+}

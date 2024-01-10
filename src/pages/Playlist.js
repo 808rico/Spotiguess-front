@@ -7,6 +7,7 @@ import { Divider, message, Input, AutoComplete } from "antd";
 import { UnorderedListOutlined,  RightOutlined } from '@ant-design/icons';
 import './Playlist.css'
 import axios from "axios";
+import PlaylistSuggestion from "../components/suggestions/PlaylistSuggestion";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
@@ -25,6 +26,7 @@ function Playlist() {
   spotifyApi.setAccessToken(accessToken);
   //const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
   const [inputValue, setInputValue] = useState('');
+  const [suggestionEnabled, setSuggestionEnabled] = useState(true);
 
   const handleInputChange = value => {
     setInputValue(value);
@@ -37,18 +39,21 @@ function Playlist() {
   }, [accessToken])
 
 
-  
-
 
   const [options, setOptions] = useState([]);
 
+  const handleSuggestionSelect = (suggestion) => {
+    const value = suggestion.name;
+    setInputValue(value);
+    onSelect(suggestion.id, value);
+    
+  };
 
   const handleSearch = value => {
     if (!value) {
       setOptions([]);
       return;
     }
-
 
 
     // Rechercher des artistes avec l'API Spotify
@@ -82,8 +87,9 @@ function Playlist() {
 
   const onSelect = async (value, option) => {
     console.log('onSelect', value);
-    setInputValue(option.playlistName);
+    //setInputValue(option.playlistName);
     setLoading(true); // Start the loader
+    setSuggestionEnabled(false); // Disable the suggestion button
 
     try {
       // Assurez-vous d'avoir l'access token disponible ici
@@ -110,8 +116,10 @@ function Playlist() {
     } catch (error) {
       message.error(error.message); // Display error message
       console.error(error);
+      setSuggestionEnabled(true)
     } finally {
-      setLoading(false); // Stop the loader
+      setLoading(false);
+      setSuggestionEnabled(true) // Stop the loader
     }
 };
 
@@ -122,21 +130,11 @@ function Playlist() {
 
 
     <MainLayout>
-      <div style={{ background: '#000000', padding: 24, minHeight: 280, height: '100%' }}>
+      <div style={{ background: '#000000',  minHeight: 280, height: '100%' }}>
         <h1><UnorderedListOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Playlist</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
-        <h2>How it works?</h2>
-        <p>
-          👉🏻<b>Search a playlist:</b> <br />Use the search bar below to find a playlist on Spotify. It can be a playlist that you  or someone else created. </p>
-        <p>
-          👉🏻 <b>Hit Play.</b> <br />
-          15 songs from the playlist will be randomly selected.
-        </p>
-        <p>
-          👉🏻 <b>Play.</b><br />
-          Alone or with your friends and family, try to guess the song and yell when you got it.
-        </p>
-
+        <h2>Search for a playlist in the Spotify catalog.</h2>
+      
 
 
         <div className="search-container" style={{ width: '100%' }}>
@@ -152,6 +150,8 @@ function Playlist() {
             <Input.Search loading={loading} size="large" placeholder="Search for a playlist" enterButton />
           </AutoComplete>
         </div>
+
+        <PlaylistSuggestion enabled={suggestionEnabled} onSuggestionSelect={handleSuggestionSelect} />
 
 
 

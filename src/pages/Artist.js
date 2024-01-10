@@ -117,7 +117,7 @@ function Artist() {
 
 
     <MainLayout>
-      <div style={{ background: '#000000', padding: 24, minHeight: 280, height: '100%' }}>
+      <div style={{ background: '#000000',  minHeight: 280, height: '100%' }}>
         <h1><UserOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Artist</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
         <h2>How it works?</h2>
