@@ -72,7 +72,7 @@ function App() {
       ) : (
         // Display the login page
         <SpotifyAuth
-          redirectUri = {process.env.REACT_APP_URL_SERVER}
+          redirectUri = {process.env.REACT_APP_URL_CLIENT}
           clientID='80256b057e324c5f952f3577ff843c29'
           scopes={['streaming', 'user-read-email', 'user-read-private' , 'user-library-read', 'user-library-modify', 'user-top-read', 'user-read-playback-state', 'user-modify-playback-state']}
           onAccessToken={(token) => setToken(token)}
