@@ -1,7 +1,7 @@
 import React from 'react';
 import Dashboard from './Dashboard';
 import './app.css';
-import SpotifyWebApi from 'spotify-web-api-node';
+//import SpotifyWebApi from 'spotify-web-api-node';
 import { SpotifyApiContext } from 'react-spotify-api'
 import Cookies from 'js-cookie'
 
