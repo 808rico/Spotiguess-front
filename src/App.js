@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect} from 'react';
 import Dashboard from './Dashboard';
 import './app.css';
 import SpotifyWebApi from 'spotify-web-api-node';
