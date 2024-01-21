@@ -4,7 +4,7 @@ import axios from 'axios';
 import MusicNote from '../../assets/MusicNote';
 import './PopUpPay.css';
 import { CloseCircleOutlined } from '@ant-design/icons';
-import gif_monica from '../../assets/gif_monica.webp';
+import gif_party1 from '../../assets/gif_party1.webp';
 import { loadStripe } from '@stripe/stripe-js';
 import Cookies from 'js-cookie';
 
@@ -47,7 +47,7 @@ function PopUpPay({ isVisible, onClose }) {
 
 
                 <MusicNote />
-                <span className="modal-title-text-pay">Oh no...</span>
+                <span className="modal-title-text-pay">Don't stop the party...</span>
                 <div className='close-icon-container-pay' onClick={onClose}>
                     <CloseCircleOutlined className="close-icon-pay" /></div>
             </div>
@@ -59,10 +59,10 @@ function PopUpPay({ isVisible, onClose }) {
         >
             <div className="content-container-pay">
                 <div className="text-container-pay" style={{ textAlign: 'center' }}>
-                    <p>You have reached your daily limit of 5 free quizz.</p>
-                    <p>Grab a pass to get <b>unlimited quizz for life.</b></p>
+                    <p>You have reached your daily limit of 5 free games.</p>
+                    <p>Grab a pass to get <b>unlimited quizzes for life.</b></p>
                 </div>
-                <img className='img-monica' src={gif_monica} alt='gif-monica' />
+                <img className='gif-container-pay' src={gif_party1}  />
                 <Button autoFocus className="hr24-button-pay" onClick={() => redirectToCheckout(process.env.REACT_APP_UNLIMITED_PASS_PRICE_ID)} >
                     Unlimited pass - $4.99
                 </Button>
