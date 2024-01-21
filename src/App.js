@@ -64,23 +64,25 @@ function App() {
     <div className='app'>
       {token ? (
         <SpotifyApiContext.Provider value={token}>
-          
-          
+
+
           <Dashboard />
-          
+
         </SpotifyApiContext.Provider>
       ) : (
         // Display the login page
-        <SpotifyAuth
-          redirectUri = {process.env.REACT_APP_URL_CLIENT}
-          clientID='80256b057e324c5f952f3577ff843c29'
-          scopes={['streaming', 'user-read-email', 'user-read-private' , 'user-library-read', 'user-library-modify', 'user-top-read', 'user-read-playback-state', 'user-modify-playback-state']}
-          onAccessToken={(token) => setToken(token)}
-        />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <SpotifyAuth
+            redirectUri={process.env.REACT_APP_URL_CLIENT}
+            clientID='80256b057e324c5f952f3577ff843c29'
+            scopes={['streaming', 'user-read-email', 'user-read-private', 'user-library-read', 'user-library-modify', 'user-top-read', 'user-read-playback-state', 'user-modify-playback-state']}
+            onAccessToken={(token) => setToken(token)}
+          />
+        </div>
       )}
     </div>
   )
-  
+
 
 
 }
