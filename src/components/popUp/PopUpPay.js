@@ -10,19 +10,19 @@ import Cookies from 'js-cookie';
 
 const stripePromise = loadStripe("pk_test_51OXyYTDy7uXRzgyHBqXDCpppWzpexZ9kSFmXPfxduSHlU3nRcpVdTEUFwZyYfMZ4bd1LyN0E6jvkEomMntkoKhMG00mwsYpe3U");
 const urlServer = process.env.REACT_APP_URL_SERVER;
-const urlClient = process.env.REACT_APP_URL_CLIENT;
 
 
 
 
-function PopUpPay({ isVisible, onClose, onReplay, onGoToHome }) {
+
+function PopUpPay({ isVisible, onClose }) {
     const accessToken = Cookies.get("spotifyAuthToken");
-    const [paymentSuccess, setPaymentSuccess] = useState(false);
+    
 
     const redirectToCheckout = async (priceId) => {
         console.log('priceId', priceId);
         const stripe = await stripePromise;
-        const currentUrl = window.location.href;
+        
         const { data } = await axios.post(`${urlServer}/create-checkout-session`, {
             priceId: priceId,
             accessToken: accessToken,
