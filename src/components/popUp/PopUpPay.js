@@ -38,7 +38,6 @@ function PopUpPay({ isVisible, onClose }) {
     };
 
 
-
     
 
     return (
@@ -64,7 +63,7 @@ function PopUpPay({ isVisible, onClose }) {
                     <p>Grab a pass to get <b>unlimited quizz for life.</b></p>
                 </div>
                 <img className='img-monica' src={gif_monica} alt='gif-monica' />
-                <Button autoFocus className="hr24-button-pay" onClick={() => redirectToCheckout(process.env.UNLIMITED_PASS_PRICE_ID)} >
+                <Button autoFocus className="hr24-button-pay" onClick={() => redirectToCheckout(process.env.REACT_APP_UNLIMITED_PASS_PRICE_ID)} >
                     Unlimited pass - 4.99€
                 </Button>
                 <div className="text-container-pay-bottom" >
