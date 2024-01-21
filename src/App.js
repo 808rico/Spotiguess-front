@@ -1,25 +1,28 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Dashboard from './Dashboard';
-import Login from './Login';
-import { Spin } from 'antd'; // Importer le composant Spin d'Ant Design
 import './app.css';
 import SpotifyWebApi from 'spotify-web-api-node';
-import { message } from 'antd';
-
 import { SpotifyApiContext } from 'react-spotify-api'
 import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom';
+
 import { SpotifyAuth } from 'react-spotify-auth'
 import 'react-spotify-auth/dist/index.css'
+/*
+import Login from './Login';
+import { Spin } from 'antd'; // Importer le composant Spin d'Ant Design
+import { useNavigate } from 'react-router-dom';
+import { message } from 'antd';
+*/
+
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isPremium, setIsPremium] = useState(false);
+  //const [isLoading, setIsLoading] = useState(true);
+  //const [isPremium, setIsPremium] = useState(false);
 
   const [token, setToken] = React.useState(Cookies.get("spotifyAuthToken"))
 
 
-  const spotifyApi = useRef(new SpotifyWebApi());
+  //const spotifyApi = useRef(new SpotifyWebApi());
 
   /*useEffect(() => {
     if (accessToken) {
