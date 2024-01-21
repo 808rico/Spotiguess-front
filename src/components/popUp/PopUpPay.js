@@ -64,7 +64,7 @@ function PopUpPay({ isVisible, onClose }) {
                 </div>
                 <img className='img-monica' src={gif_monica} alt='gif-monica' />
                 <Button autoFocus className="hr24-button-pay" onClick={() => redirectToCheckout(process.env.REACT_APP_UNLIMITED_PASS_PRICE_ID)} >
-                    Unlimited pass - 4.99€
+                    Unlimited pass - $4.99
                 </Button>
                 <div className="text-container-pay-bottom" >
                     <p>Available only for the first 20 customers.</p>
