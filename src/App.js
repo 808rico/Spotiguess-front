@@ -1,50 +1,48 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Dashboard from './Dashboard';
 import './app.css';
-//import SpotifyWebApi from 'spotify-web-api-node';
+import SpotifyWebApi from 'spotify-web-api-node';
 import { SpotifyApiContext } from 'react-spotify-api'
 import Cookies from 'js-cookie'
-
+import { message } from 'antd';
 import { SpotifyAuth } from 'react-spotify-auth'
 import 'react-spotify-auth/dist/index.css'
 /*
 import Login from './Login';
 import { Spin } from 'antd'; // Importer le composant Spin d'Ant Design
 import { useNavigate } from 'react-router-dom';
-import { message } from 'antd';
+
 */
 
 
 function App() {
   //const [isLoading, setIsLoading] = useState(true);
-  //const [isPremium, setIsPremium] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
 
   const [token, setToken] = React.useState(Cookies.get("spotifyAuthToken"))
+  console.log(token)
 
 
-  //const spotifyApi = useRef(new SpotifyWebApi());
+  const spotifyApi = new SpotifyWebApi();
 
-  /*useEffect(() => {
-    if (accessToken) {
-      spotifyApi.current.setAccessToken(accessToken);
-      spotifyApi.current.getMe().then(data => {
-
+  useEffect(() => {
+    if (token) {
+      spotifyApi.setAccessToken(token);
+      spotifyApi.getMe().then(data => {
         if (data.body.product !== 'premium') {
           message.error('You need a premium Spotify account to use this app');
+          Cookies.remove("spotifyAuthToken");
+          setToken(null);
+          // Supprimez le token ou déconnectez l'utilisateur ici
         }
-
-        setIsPremium(data.body.product === 'premium');
-        setIsLoading(false);
-      }).catch((err) => {
-        message.error('An error occured while trying to get your Spotify account type', err);
-        setIsPremium(false);
-        setIsLoading(false);
+        // Autres traitements si l'utilisateur est premium
+      }).catch(err => {
+        console.error('Error fetching user data:', err);
       });
-    } else {
-      setIsLoading(false);
     }
-  }, [accessToken]);
+  }, [token]);
 
+  /*
   if (isLoading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -52,13 +50,13 @@ function App() {
     </div>
     
     );
-  }
+  }*/
 
-  console.log('accessToken', accessToken);
+  //console.log('accessToken', accessToken);
 
-  return accessToken && isPremium ? <Dashboard accessToken={accessToken} /> : <Login />;
+  //return accessToken && isPremium ? <Dashboard accessToken={accessToken} /> : <Login />;
 
-  */
+  
 
   return (
     <div className='app'>
