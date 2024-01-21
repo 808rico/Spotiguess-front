@@ -17,16 +17,17 @@ import { useNavigate } from 'react-router-dom';
 
 function App() {
   //const [isLoading, setIsLoading] = useState(true);
-  const [isPremium, setIsPremium] = useState(false);
+  //const [isPremium, setIsPremium] = useState(false);
 
   const [token, setToken] = React.useState(Cookies.get("spotifyAuthToken"))
   console.log(token)
 
 
-  const spotifyApi = new SpotifyWebApi();
+
 
   useEffect(() => {
     if (token) {
+      const spotifyApi = new SpotifyWebApi();
       spotifyApi.setAccessToken(token);
       spotifyApi.getMe().then(data => {
         if (data.body.product !== 'premium') {
