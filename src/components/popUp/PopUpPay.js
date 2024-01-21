@@ -8,7 +8,7 @@ import gif_monica from '../../assets/gif_monica.webp';
 import { loadStripe } from '@stripe/stripe-js';
 import Cookies from 'js-cookie';
 
-const stripePromise = loadStripe("pk_test_51OXyYTDy7uXRzgyHBqXDCpppWzpexZ9kSFmXPfxduSHlU3nRcpVdTEUFwZyYfMZ4bd1LyN0E6jvkEomMntkoKhMG00mwsYpe3U");
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 const urlServer = process.env.REACT_APP_URL_SERVER;
 
 
