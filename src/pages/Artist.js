@@ -4,10 +4,12 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
 //import { useMediaQuery } from 'react-responsive';
 import { Divider, message, Input, AutoComplete } from "antd";
-import {  RightOutlined, UserOutlined } from '@ant-design/icons';
+import { RightOutlined, UserOutlined } from '@ant-design/icons';
 import './Artist.css'
 import axios from "axios";
 import ArtistSuggestion from "../components/suggestions/ArtistSuggestion";
+import Cookies from 'js-cookie';
+import PopUpPay from "../components/popUp/PopUpPay";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
@@ -20,11 +22,12 @@ const urlServer = process.env.REACT_APP_URL_SERVER;
 function Artist() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('access_token')
+  const accessToken = Cookies.get("spotifyAuthToken")
   spotifyApi.setAccessToken(accessToken);
   //const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
   const [inputValue, setInputValue] = useState('');
   const [suggestionEnabled, setSuggestionEnabled] = useState(true);
+  const [showPopupPay, setShowPopupPay] = useState(false);
 
   const handleInputChange = value => {
     setInputValue(value);
@@ -37,15 +40,15 @@ function Artist() {
   }, [accessToken])
 
 
-  
 
-  
+
+
   const handleSuggestionSelect = (suggestion) => {
     const value = { artistName: suggestion.name };
     setInputValue(value);
     onSelect(suggestion.id, value);
-    
-    
+
+
   };
 
   const [options, setOptions] = useState([]);
@@ -111,8 +114,13 @@ function Artist() {
         }
       });
     } catch (error) {
-      message.error(error.message); // Display error message
-      console.error(error);
+      console.log('Status code:', error.response.status); // Affiche le code de statut de l'erreur
+      if (error.response.status === 400) {
+        setShowPopupPay(true); // Afficher la popup pour le code 400
+      }
+      else {
+        message.error("Error:" + error.message);
+      }
       setSuggestionEnabled(true); // Enable the suggestion button
     } finally {
       setLoading(false); // Stop the loader
@@ -127,7 +135,7 @@ function Artist() {
 
 
     <MainLayout>
-      <div style={{ background: '#000000',  minHeight: 280, height: '100%' }}>
+      <div style={{ background: '#000000', minHeight: 280, height: '100%' }}>
         <h1><UserOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Artist</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
         <h2>Search for an artist.</h2>
@@ -143,7 +151,7 @@ function Artist() {
             onSearch={handleSearch}
             onChange={handleInputChange}
             value={inputValue}
-            
+
           >
             <Input.Search loading={loading} size="large" placeholder="Search for an artist" enterButton />
           </AutoComplete>
@@ -151,6 +159,7 @@ function Artist() {
 
         <ArtistSuggestion enabled={suggestionEnabled} onSuggestionSelect={handleSuggestionSelect} />
 
+        <PopUpPay isVisible={showPopupPay} onClose={() => setShowPopupPay(false)} />
 
       </div>
     </MainLayout>

@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { message } from 'antd';
 import MainLayout from '../components/layout/MainLayout';
 import OptionCard from '../components/optionCard';
 import { BulbOutlined, HeartOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
@@ -13,9 +15,47 @@ function Home() {
   const navigate = useNavigate();
   console.log("home");
 
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
+
+
+
+  const location = useLocation();
+
+
+    const handleNavigate = (path) => {
+      navigate(path);
+    };
+
+    useEffect(() => {
+        // Extraire les paramètres de requête de l'URL
+        const queryParams = new URLSearchParams(location.search);
+        const paymentStatus = queryParams.get('payment');
+
+        if (paymentStatus === 'success') {
+            // Afficher le message de succès
+            
+            message.success('Thank you for your purchase !');
+
+            // Supprimer le session_id de l'URL
+            queryParams.delete('payment');
+            navigate({
+                pathname: location.pathname,
+                search: queryParams.toString()
+            }, { replace: true });
+        }
+
+        if (paymentStatus === 'cancel') {
+            // Afficher le message d'erreur
+            message.error('Your payment has been cancelled.');
+
+            // Supprimer le session_id de l'URL
+            queryParams.delete('payment');
+            navigate({
+                pathname: location.pathname,
+                search: queryParams.toString()
+            }, { replace: true });
+        }
+        // Le comportement normal de la page continue ici
+    }, [location, navigate]);
 
   return (
 

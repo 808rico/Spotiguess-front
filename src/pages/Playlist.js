@@ -4,10 +4,12 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
 //import { useMediaQuery } from 'react-responsive';
 import { Divider, message, Input, AutoComplete } from "antd";
-import { UnorderedListOutlined,  RightOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, RightOutlined } from '@ant-design/icons';
 import './Playlist.css'
 import axios from "axios";
 import PlaylistSuggestion from "../components/suggestions/PlaylistSuggestion";
+import Cookies from 'js-cookie';
+import PopUpPay from "../components/popUp/PopUpPay";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
@@ -22,11 +24,12 @@ const urlServer = process.env.REACT_APP_URL_SERVER;
 function Playlist() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('access_token')
+  const accessToken = Cookies.get("spotifyAuthToken")
   spotifyApi.setAccessToken(accessToken);
   //const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
   const [inputValue, setInputValue] = useState('');
   const [suggestionEnabled, setSuggestionEnabled] = useState(true);
+  const [showPopupPay, setShowPopupPay] = useState(false);
 
   const handleInputChange = value => {
     setInputValue(value);
@@ -46,7 +49,7 @@ function Playlist() {
     const value = { playlistName: suggestion.name };
     setInputValue(value);
     onSelect(suggestion.id, value);
-    
+
   };
 
   const handleSearch = value => {
@@ -92,7 +95,7 @@ function Playlist() {
 
     try {
       // Assurez-vous d'avoir l'access token disponible ici
-      const accessToken = localStorage.getItem('access_token');
+
 
       // Envoyez l'ID de la playlist et l'access token à votre backend
       const response = await axios.post(`${urlServer}/playlist`, {
@@ -113,14 +116,21 @@ function Playlist() {
       });
 
     } catch (error) {
-      message.error(error.message); // Display error message
-      console.error(error);
+
+      console.log('Status code:', error.response.status); // Affiche le code de statut de l'erreur
+      if (error.response.status === 400) {
+        setShowPopupPay(true); // Afficher la popup pour le code 400
+      }
+      else {
+        message.error("Error:" + error.message);
+      }
+
       setSuggestionEnabled(true)
     } finally {
       setLoading(false);
       setSuggestionEnabled(true) // Stop the loader
     }
-};
+  };
 
 
 
@@ -129,11 +139,11 @@ function Playlist() {
 
 
     <MainLayout>
-      <div style={{ background: '#000000',  minHeight: 280, height: '100%' }}>
+      <div style={{ background: '#000000', minHeight: 280, height: '100%' }}>
         <h1><UnorderedListOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Playlist</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
         <h2>Search for a playlist in the Spotify catalog.</h2>
-      
+
 
 
         <div className="search-container" style={{ width: '100%' }}>
@@ -152,7 +162,7 @@ function Playlist() {
 
         <PlaylistSuggestion enabled={suggestionEnabled} onSuggestionSelect={handleSuggestionSelect} />
 
-
+        <PopUpPay isVisible={showPopupPay} onClose={() => setShowPopupPay(false)} />
 
       </div>
     </MainLayout>

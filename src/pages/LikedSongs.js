@@ -7,6 +7,8 @@ import { Divider, message, Button } from "antd";
 import { PlayCircleOutlined, HeartOutlined } from '@ant-design/icons';
 import './LikedSongs.css'
 import axios from "axios";
+import PopUpPay from "../components/popUp/PopUpPay";
+import Cookies from 'js-cookie';
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
@@ -21,7 +23,8 @@ const urlServer = process.env.REACT_APP_URL_SERVER;
 function LikedSongs() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('access_token')
+  const accessToken = Cookies.get("spotifyAuthToken")
+  const [showPopupPay, setShowPopupPay] = useState(false);
   spotifyApi.setAccessToken(accessToken);
 
 
@@ -47,8 +50,13 @@ function LikedSongs() {
             });
         })
         .catch(error => {
-            message.error('Error: ' + error.message);
-            console.error('Erreur lors de la récupération des chansons:', error);
+          console.log('Status code:', error.response.status); // Affiche le code de statut de l'erreur
+          if (error.response.status === 400) {
+              setShowPopupPay(true); // Afficher la popup pour le code 400
+          }
+          else{
+            message.error("Error:" + error.message);
+          }
         })
         .finally(() => {
             setLoading(false); // Désactive le loader
@@ -84,6 +92,7 @@ function LikedSongs() {
 
 
         </div>
+        <PopUpPay isVisible={showPopupPay} onClose={() => setShowPopupPay(false)}/>
       </div>
     </MainLayout>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button } from 'antd';
 import {  CloseCircleOutlined } from '@ant-design/icons';
-import MusicNote from '../assets/MusicNote';
+import MusicNote from '../../assets/MusicNote';
 import './PopUpResult.css';
 
 function PopUpResult({ isVisible, onClose, currentTrack, onNextTrack }) {

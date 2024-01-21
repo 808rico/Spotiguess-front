@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'antd';
-import MusicNote from '../assets/MusicNote';
+import MusicNote from '../../assets/MusicNote';
 import './PopUpFinish.css';
 import { CloseCircleOutlined } from '@ant-design/icons';
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import useAuth from './UseAuth';
 import Dashboard from './Dashboard';
 import Login from './Login';
 import { Spin } from 'antd'; // Importer le composant Spin d'Ant Design
@@ -7,13 +6,22 @@ import './app.css';
 import SpotifyWebApi from 'spotify-web-api-node';
 import { message } from 'antd';
 
+import { SpotifyApiContext } from 'react-spotify-api'
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom';
+import { SpotifyAuth } from 'react-spotify-auth'
+import 'react-spotify-auth/dist/index.css'
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(false);
-  const accessToken = useAuth(new URLSearchParams(window.location.search).get('code'));
+
+  const [token, setToken] = React.useState(Cookies.get("spotifyAuthToken"))
+
+
   const spotifyApi = useRef(new SpotifyWebApi());
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (accessToken) {
       spotifyApi.current.setAccessToken(accessToken);
       spotifyApi.current.getMe().then(data => {
@@ -43,7 +51,35 @@ function App() {
     );
   }
 
+  console.log('accessToken', accessToken);
+
   return accessToken && isPremium ? <Dashboard accessToken={accessToken} /> : <Login />;
+
+  */
+
+  return (
+    <div className='app'>
+      {token ? (
+        <SpotifyApiContext.Provider value={token}>
+          
+          
+          <Dashboard />
+          
+        </SpotifyApiContext.Provider>
+      ) : (
+        // Display the login page
+        <SpotifyAuth
+          redirectUri='http://localhost:3000/'
+          clientID='80256b057e324c5f952f3577ff843c29'
+          scopes={['streaming', 'user-read-email', 'user-read-private' , 'user-library-read', 'user-library-modify', 'user-top-read', 'user-read-playback-state', 'user-modify-playback-state']}
+          onAccessToken={(token) => setToken(token)}
+        />
+      )}
+    </div>
+  )
+  
+
+
 }
 
 export default App;

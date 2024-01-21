@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
-import PopUpResult from '../components/PopUpResult'
-import PopUpFinish from '../components/PopUpFinish'
+import PopUpResult from '../components/popUp/PopUpResult'
+import PopUpFinish from '../components/popUp/PopUpFinish'
 import Equalizer from "../components/Equalizer";
 import { Divider, message } from "antd";
-import { useLocation } from 'react-router-dom';
 import { Button } from 'antd';
 import { PlayCircleOutlined, ForwardOutlined, BulbOutlined, EyeOutlined } from '@ant-design/icons';
 //import { PlayCircleOutlined, BulbOutlined,LoadingOutlined } from '@ant-design/icons';
 import './Game.css'
 import Player from "../Player";
+import Cookies from 'js-cookie';
+
 
 const iconMap = {
     BulbOutlined: BulbOutlined,
@@ -34,7 +35,7 @@ function Game() {
     const { type, iconName, input, songUris } = location.state;
     console.log("game");
     // eslint-disable-next-line
-    const [accessToken, setAccessToken] = useState(localStorage.getItem('access_token'))
+    const accessToken = Cookies.get("spotifyAuthToken");
     const [isFirstPlayClicked, setIsFirstPlayClicked] = useState(false);
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const [isPlaylistFinished, setIsPlaylistFinished] = useState(false);
@@ -46,7 +47,8 @@ function Game() {
     const [isLoadingPlay, setIsLoadingPlay] = useState(true);
     const [deviceId, setDeviceId] = useState('');
     const [isPlayerReady, setIsPlayerReady] = useState(false);
-    
+
+
 
     const Icon = iconMap[iconName];
 
@@ -60,7 +62,7 @@ function Game() {
 
     const handleNextTrack = () => {
         const nextIndex = currentSongIndex + 1;
-        
+
 
 
         if (nextIndex < songUris.length) {
@@ -83,8 +85,8 @@ function Game() {
             }).catch(err => {
                 message.error("Error in starting playback: " + err.message);
                 console.error("Error in starting playback", err);
-            });*/   
-            
+            });*/
+
 
         } else {
 
@@ -132,12 +134,12 @@ function Game() {
         console.log("useEffect");
         console.log(currentSongIndex)
 
-        if ( accessToken && songUris[currentSongIndex]) {
+        if (accessToken && songUris[currentSongIndex]) {
 
 
-            
+
             spotifyApi.setAccessToken(accessToken);
-            
+
             // Demander à l'API de Spotify de jouer la chanson
             spotifyApi.getTrack(songUris[currentSongIndex].substring(songUris[currentSongIndex].lastIndexOf(":") + 1))
                 .then(function (data) {

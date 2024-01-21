@@ -3,6 +3,7 @@ import axios from 'axios';
 import { message, Skeleton } from 'antd';
 import './PlaylistSuggestion.css';
 import { RedoOutlined } from '@ant-design/icons';
+import Cookies from 'js-cookie';
 
 const urlServer = process.env.REACT_APP_URL_SERVER;
 
@@ -13,7 +14,8 @@ const PlaylistSuggestion = ({ onSuggestionSelect, enabled }) => {
 
     // Fonction pour récupérer les suggestions
     const fetchSuggestions = () => {
-        const accessToken = localStorage.getItem('access_token');
+
+        const accessToken= Cookies.get("spotifyAuthToken");
         if (accessToken) {
             setIsLoading(true);
             axios.post(`${urlServer}/playlist-recommendations`, { accessToken })
