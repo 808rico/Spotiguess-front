@@ -62,7 +62,7 @@ function PopUpPay({ isVisible, onClose }) {
                     <p>You have reached your daily limit of 5 free games.</p>
                     <p>Grab a pass to get <b>unlimited quizzes for life.</b></p>
                 </div>
-                <img className='gif-container-pay' src={gif_party1}  />
+                <img className='gif-container-pay' alt='gif-party' src={gif_party1}  />
                 <Button autoFocus className="hr24-button-pay" onClick={() => redirectToCheckout(process.env.REACT_APP_UNLIMITED_PASS_PRICE_ID)} >
                     Unlimited pass - $4.99
                 </Button>
