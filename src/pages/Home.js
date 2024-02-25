@@ -16,8 +16,6 @@ function Home() {
   console.log("home");
 
 
-
-
   const location = useLocation();
 
 
@@ -63,19 +61,19 @@ function Home() {
     <MainLayout>
       <div style={{ background: '#000000', padding: 24, minHeight: 280, height: '100%' }}>
         <h1>Home</h1>
-        <h2>Select the type of music blind test you want to play.</h2>
+        <h2>Select the type of music quiz you want to play.</h2>
         <div className="options-container" >
           <OptionCard 
             title="AI Generated" 
             Icon={BulbOutlined} 
-            description="Use the power of GPT to create meaningful blind test based on your current desire."
+            description="Use the power of GPT to create meaningful quiz based on your current desire."
             onClick={() => handleNavigate('/ai-generated')}
             isPopular={true}
           />
           <OptionCard 
             title="Your liked songs" 
             Icon={HeartOutlined} 
-            description="All your liked songs in a music blind test. It's not the moment to lose to your friend."
+            description="All your liked songs in a music quiz."
             onClick={() => handleNavigate('/liked-songs')}
           />
           <OptionCard 

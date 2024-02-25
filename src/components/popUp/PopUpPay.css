@@ -1,4 +1,12 @@
-.pop-up-pay .ant-modal-content {
+.pop-up-pay  {
+    background-color: #121212;
+    border-radius: 20px;
+    width: 95%;
+    min-width: 350px;
+    overflow: hidden;
+}
+
+ .ant-modal-content {
     background-color: #121212;
     border-radius: 20px;
     width: 95%;
@@ -6,8 +14,6 @@
     min-width: 350px;
     overflow: hidden;
 }
-
-
 
 .modal-title-pay {
     display: flex;

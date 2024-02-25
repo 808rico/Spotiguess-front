@@ -12,6 +12,10 @@ import { PlayCircleOutlined, ForwardOutlined, BulbOutlined, EyeOutlined } from '
 import './Game.css'
 import Player from "../Player";
 import Cookies from 'js-cookie';
+import axios from 'axios'
+import PopUpPay from "../components/popUp/PopUpPay";
+
+
 
 
 const iconMap = {
@@ -24,7 +28,7 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 
-
+const urlServer = process.env.REACT_APP_URL_SERVER;
 
 function Game() {
 
@@ -38,10 +42,13 @@ function Game() {
     const accessToken = Cookies.get("spotifyAuthToken");
     const [isFirstPlayClicked, setIsFirstPlayClicked] = useState(false);
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
+    const [maxSongIndex, setMaxSongIndex] = useState(10);
     const [isPlaylistFinished, setIsPlaylistFinished] = useState(false);
+    const [isReplayButtonVisible,setIsReplayButtonVisible] = useState(false)
     const [currentTrack, setCurrentTrack] = useState(null);
     const [showPopupResult, setShowPopupResult] = useState(false);
     const [showPopupFinish, setShowPopupFinish] = useState(false);
+    const [showPopupPay, setShowPopupPay] = useState(false);
     // eslint-disable-next-line
     const [player, setPlayer] = useState(undefined);
     const [isLoadingPlay, setIsLoadingPlay] = useState(true);
@@ -61,11 +68,13 @@ function Game() {
     };
 
     const handleNextTrack = () => {
+        console.log("currentSongIndex", currentSongIndex)
+        console.log("maxSongIndex", maxSongIndex)
         const nextIndex = currentSongIndex + 1;
 
 
 
-        if (nextIndex < songUris.length) {
+        if (nextIndex < maxSongIndex) {
 
             setCurrentSongIndex(nextIndex);
 
@@ -89,7 +98,12 @@ function Game() {
 
 
         } else {
-
+            if ((songUris.length- maxSongIndex) >= 10){
+                setIsReplayButtonVisible(true)
+            }
+            else{
+                setIsReplayButtonVisible(false)
+            }
             setIsPlaylistFinished(true);
             togglePopupFinish(); // Toutes les chansons ont été jouées
         }
@@ -125,8 +139,40 @@ function Game() {
     // Fonction pour rejouer le blindtest
     const onReplay = () => {
         // Vous pouvez remettre à zéro l'état du jeu ou effectuer toute autre logique nécessaire pour recommencer
-        setShowPopupFinish(false);
+
         // Ajoutez ici la logique pour redémarrer le jeu
+
+
+        axios.post(`${urlServer}/keep-playing`, {
+            accessToken: accessToken,
+            gameType: { type }
+        })
+            .then(response => {
+
+                setMaxSongIndex(maxSongIndex + 10)
+                setShowPopupFinish(false);
+                setCurrentSongIndex(currentSongIndex +1 );
+                console.log(response);
+
+            })
+            .catch(error => {
+                // Gérer les réponses d'erreur ici
+                if (error.response) {
+                    console.log('Status code:', error.response.status); // Affiche le code de statut de l'erreur
+                    if (error.response.status === 400) {
+                        setShowPopupFinish(false);
+                        setShowPopupPay(true); // Afficher la popup pour le code 400
+                    }
+                } else {
+                    // Erreur produite dans la mise en place de la requête
+                    console.error('Error:', error.message);
+                    message.error('Error:' + error.message);
+                }
+
+            })
+
+
+
     };
 
 
@@ -236,9 +282,12 @@ function Game() {
                         {isPlaylistFinished && <PopUpFinish
                             isVisible={showPopupFinish}
                             onClose={() => setShowPopupFinish(false)}
+                            isReplayButtonVisible={isReplayButtonVisible}
                             onReplay={onReplay}
                             onGoToHome={onGoToHome}
                         />}
+
+                        <PopUpPay isVisible={showPopupPay} onClose={() => setShowPopupPay(false)} />
                     </div>
 
                 </div>

@@ -4,7 +4,7 @@ import MusicNote from '../../assets/MusicNote';
 import './PopUpFinish.css';
 import { CloseCircleOutlined } from '@ant-design/icons';
 
-function PopUpFinish({ isVisible, onClose, onReplay, onGoToHome }) {
+function PopUpFinish({ isVisible, onClose, onReplay, onGoToHome, isReplayButtonVisible }) {
     return (
         <Modal
             className="pop-up-finish"
@@ -27,9 +27,15 @@ function PopUpFinish({ isVisible, onClose, onReplay, onGoToHome }) {
                     <p>The blindtest is over.</p>
                     <p>What do you want to do next?</p>
                 </div>
+                {isReplayButtonVisible &&
+                    <Button autoFocus className="keep-playing-button" onClick={onReplay}>
+                        Keep playing
+                    </Button>
+                }
                 <Button autoFocus className="main-menu-button" onClick={onGoToHome}>
                     Main menu
                 </Button>
+
             </div>
 
         </Modal>

@@ -1,12 +1,21 @@
-.pop-up-finish .ant-modal-content {
+.pop-up-finish{
+    display: flex;
+    justify-content: center;
     background-color: #121212;
+    border-radius: 20px;
+
+    min-width: 350px;
+}
+
+.ant-modal-content {
+    background-color: #121212!important;
     border-radius: 20px;
     width: 95%;
     max-width: 500px!important;
     min-width: 350px;
     overflow: hidden;
-}
 
+}
 
 
 .modal-title-finish {
@@ -73,7 +82,27 @@
     
 }
 
-.main-menu-button {
+.main-menu-button{
+    width: 135px;
+    margin-top: 15px;
+    font-weight: bold;
+    background-color: transparent;
+    color: white;
+    border-color: #1ED760;
+    height: 40px;
+}
+
+.main-menu-button:hover{
+    
+    color: #1ED760!important;
+    border-color: #1ED760!important;
+    background-color: #1ed75f1a;
+    
+}
+
+
+
+.keep-playing-button {
 
     width: 135px;
     margin-top: 20px;
@@ -83,7 +112,7 @@
     height: 40px;
 }
 
-.main-menu-button:hover {
+.keep-playing-button:hover {
     background-color: #1ED760;
     font-weight: 900!important;
     color: black!important;
@@ -91,4 +120,3 @@
     
     height: 40px;
 }
-

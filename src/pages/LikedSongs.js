@@ -76,7 +76,7 @@ function LikedSongs() {
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
         <h2>Hit play.</h2>
         <p className="paragraph-liked-songs">
-          15 songs of your liked playlist will be randomly selected. </p>
+          Your saved songs will be randomly played. </p>
         <div className="search-container" >
 
           <Button
