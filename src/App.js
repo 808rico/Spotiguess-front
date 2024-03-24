@@ -7,6 +7,9 @@ import Cookies from 'js-cookie'
 import { message } from 'antd';
 import { SpotifyAuth } from 'react-spotify-auth'
 import 'react-spotify-auth/dist/index.css'
+
+import Feedback from "feeder-react-feedback"; // import Feedback component
+import "feeder-react-feedback/dist/feeder-react-feedback.css"; // import stylesheet
 /*
 import Login from './Login';
 import { Spin } from 'antd'; // Importer le composant Spin d'Ant Design
@@ -66,6 +69,11 @@ function App() {
 
 
           <Dashboard />
+          <Feedback 
+          projectId="66008793f8e6de00023d2f8b"
+          email={true} 
+          primaryColor="#222222"
+          />
 
         </SpotifyApiContext.Provider>
       ) : (
