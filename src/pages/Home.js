@@ -86,7 +86,7 @@ function Home() {
           <OptionCard 
             title="Artist" 
             Icon={UserOutlined} 
-            description="Choose an artist and guess his songs, from his top hit to the hidden title."
+            description="Choose an artist and guess their songs, from their top hit to the hidden title."
             onClick={() => handleNavigate('/artist')}
           />
         </div>
