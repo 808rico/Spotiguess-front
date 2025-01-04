@@ -1,4 +1,4 @@
-import React, { useEffect} from 'react';
+import React, { useEffect } from 'react';
 import Dashboard from './Dashboard';
 import './app.css';
 import SpotifyWebApi from 'spotify-web-api-node';
@@ -60,38 +60,63 @@ function App() {
 
   //return accessToken && isPremium ? <Dashboard accessToken={accessToken} /> : <Login />;
 
-  
+
 
   return (
     <div className='app'>
       {token ? (
         <SpotifyApiContext.Provider value={token}>
-
-
           <Dashboard />
-          <Feedback 
-          projectId="66008793f8e6de00023d2f8b"
-          email={true} 
-          primaryColor="#222222"
+          <Feedback
+            projectId="66008793f8e6de00023d2f8b"
+            email={true}
+            primaryColor="#222222"
           />
-
         </SpotifyApiContext.Provider>
       ) : (
-        // Display the login page
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        // Page de connexion
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+            color: 'white',
+            textAlign: 'center',
+          }}
+        >
+          <h1>Welcome to Spotiguess</h1>
+          <p style={{ marginBottom: '20px' }}>
+            Sign in with your Spotify Premium account to use the app.
+            </p>
+  
           <SpotifyAuth
             redirectUri={process.env.REACT_APP_URL_CLIENT}
-            clientID='80256b057e324c5f952f3577ff843c29'
-            scopes={['streaming', 'user-read-email', 'user-read-private', 'user-library-read', 'user-library-modify', 'user-top-read', 'user-read-playback-state', 'user-modify-playback-state']}
+            clientID="80256b057e324c5f952f3577ff843c29"
+            scopes={[
+              'streaming',
+              'user-read-email',
+              'user-read-private',
+              'user-library-read',
+              'user-library-modify',
+              'user-top-read',
+              'user-read-playback-state',
+              'user-modify-playback-state',
+            ]}
             onAccessToken={(token) => setToken(token)}
           />
+          
         </div>
       )}
     </div>
-  )
+  );
 
 
 
 }
 
 export default App;
+
+
+
