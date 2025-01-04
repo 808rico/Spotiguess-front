@@ -1,32 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dashboard from './Dashboard';
 import './app.css';
 import SpotifyWebApi from 'spotify-web-api-node';
-import { SpotifyApiContext } from 'react-spotify-api'
-import Cookies from 'js-cookie'
-import { message } from 'antd';
-import { SpotifyAuth } from 'react-spotify-auth'
-import 'react-spotify-auth/dist/index.css'
+import { SpotifyApiContext } from 'react-spotify-api';
+import Cookies from 'js-cookie';
+import { message, Modal } from 'antd'; // Import Modal from Ant Design
+import { SpotifyAuth } from 'react-spotify-auth';
+import 'react-spotify-auth/dist/index.css';
 
-import Feedback from "feeder-react-feedback"; // import Feedback component
-import "feeder-react-feedback/dist/feeder-react-feedback.css"; // import stylesheet
-/*
-import Login from './Login';
-import { Spin } from 'antd'; // Importer le composant Spin d'Ant Design
-import { useNavigate } from 'react-router-dom';
-
-*/
-
+import Feedback from 'feeder-react-feedback'; // Import Feedback component
+import 'feeder-react-feedback/dist/feeder-react-feedback.css'; // Import stylesheet
 
 function App() {
-  //const [isLoading, setIsLoading] = useState(true);
-  //const [isPremium, setIsPremium] = useState(false);
-
-  const [token, setToken] = React.useState(Cookies.get("spotifyAuthToken"))
-  console.log(token)
-
-
-
+  const [token, setToken] = React.useState(Cookies.get('spotifyAuthToken'));
+  const [isModalVisible, setIsModalVisible] = useState(false); // State for Modal visibility
 
   useEffect(() => {
     if (token) {
@@ -35,32 +22,23 @@ function App() {
       spotifyApi.getMe().then(data => {
         if (data.body.product !== 'premium') {
           message.error('You need a premium Spotify account to use this app');
-          Cookies.remove("spotifyAuthToken");
+          Cookies.remove('spotifyAuthToken');
           setToken(null);
-          // Supprimez le token ou déconnectez l'utilisateur ici
         }
-        // Autres traitements si l'utilisateur est premium
       }).catch(err => {
         console.error('Error fetching user data:', err);
       });
     }
   }, [token]);
 
-  /*
-  if (isLoading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <Spin size="large" />
-    </div>
-    
-    );
-  }*/
+  // Open and close modal handlers
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
-  //console.log('accessToken', accessToken);
-
-  //return accessToken && isPremium ? <Dashboard accessToken={accessToken} /> : <Login />;
-
-
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <div className='app'>
@@ -89,8 +67,7 @@ function App() {
           <h1>Welcome to Spotiguess</h1>
           <p style={{ marginBottom: '20px' }}>
             Sign in with your Spotify Premium account to use the app.
-            </p>
-  
+          </p>
           <SpotifyAuth
             redirectUri={process.env.REACT_APP_URL_CLIENT}
             clientID="80256b057e324c5f952f3577ff843c29"
@@ -106,17 +83,42 @@ function App() {
             ]}
             onAccessToken={(token) => setToken(token)}
           />
-          
+          <p style={{ marginTop: '20px', fontSize: '12px' }}>
+            Your privacy is important to us.{' '}
+            <button
+              onClick={showModal}
+              style={{
+                background: 'none',
+                color: '#1DB954',
+                border: 'none',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                fontSize: '12px',
+              }}
+            >
+              Learn more
+            </button>
+          </p>
         </div>
       )}
+
+      {/* Modal with privacy information */}
+      <Modal
+        open={isModalVisible}
+        onCancel={handleModalClose}
+        footer={null}
+        style={{ textAlign: 'center', backgroundColor: '#000000' }}
+        closeIcon={<span style={{ color: 'white' }}>×</span>}
+      >
+        <h3>Privacy Policy</h3>
+        <p>
+          We respect your privacy and take the protection of your data seriously.
+          Spotiguess uses your Spotify account to provide personalized features.
+          Your data is never shared with third parties without your consent.
+        </p>
+      </Modal>
     </div>
   );
-
-
-
 }
 
 export default App;
-
-
-
