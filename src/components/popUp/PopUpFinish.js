@@ -24,7 +24,7 @@ function PopUpFinish({ isVisible, onClose, onReplay, onGoToHome, isReplayButtonV
         >
             <div className="content-container-finish">
                 <div className="text-container-finish" style={{ textAlign: 'center' }}>
-                    <p>The blindtest is over.</p>
+                    <p>The quiz is over.</p>
                     <p>What do you want to do next?</p>
                 </div>
                 {isReplayButtonVisible &&
