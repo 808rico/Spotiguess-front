@@ -5,199 +5,209 @@ import MainLayout from '../components/layout/MainLayout';
 import PopUpResult from '../components/popUp/PopUpResult';
 import PopUpFinish from '../components/popUp/PopUpFinish';
 import Equalizer from "../components/Equalizer";
-import { Divider, message, Button } from "antd";
-import { BackwardOutlined, PlayCircleOutlined, PauseCircleOutlined, ForwardOutlined, EyeOutlined } from '@ant-design/icons';
-import './Game.css';
 import Player from "../Player";
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import PopUpPay from "../components/popUp/PopUpPay";
 
 const spotifyApi = new SpotifyWebApi({
-    clientId: '80256b057e324c5f952f3577ff843c29',
+  clientId: '80256b057e324c5f952f3577ff843c29',
 });
 
 const urlServer = process.env.REACT_APP_URL_SERVER;
 
 function Game() {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const { type, iconName, input, songUris } = location.state;
-    console.log("game");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { type, input, songUris } = location.state;
+  
+  const accessToken = Cookies.get("spotifyAuthToken");
 
-    const accessToken = Cookies.get("spotifyAuthToken");
-    const [isFirstPlayClicked, setIsFirstPlayClicked] = useState(false);
-    const [currentSongIndex, setCurrentSongIndex] = useState(0);
-    const [maxSongIndex, setMaxSongIndex] = useState(10);
-    const [isPlaylistFinished, setIsPlaylistFinished] = useState(false);
-    const [isReplayButtonVisible, setIsReplayButtonVisible] = useState(false);
-    const [currentTrack, setCurrentTrack] = useState(null);
-    const [showPopupResult, setShowPopupResult] = useState(false);
-    const [showPopupFinish, setShowPopupFinish] = useState(false);
-    const [showPopupPay, setShowPopupPay] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(true);
-    const [deviceId, setDeviceId] = useState('');
-    const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const [isFirstPlayClicked, setIsFirstPlayClicked] = useState(false);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [maxSongIndex, setMaxSongIndex] = useState(10);
+  const [isPlaylistFinished, setIsPlaylistFinished] = useState(false);
+  const [isReplayButtonVisible, setIsReplayButtonVisible] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState(null);
+  const [showPopupResult, setShowPopupResult] = useState(false);
+  const [showPopupFinish, setShowPopupFinish] = useState(false);
+  const [showPopupPay, setShowPopupPay] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [deviceId, setDeviceId] = useState('');
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
 
-    useEffect(() => {
-        console.log("useEffect");
-        console.log(currentSongIndex);
-
-        if (accessToken && songUris[currentSongIndex]) {
-            spotifyApi.setAccessToken(accessToken);
-
-            // Récupérer les infos du track actuel
-            spotifyApi.getTrack(songUris[currentSongIndex].split(":").pop())
-                .then(data => {
-                    setCurrentTrack(data.body);
-                })
-                .catch(err => {
-                    message.error("Error retrieving track information: " + err.message);
-                    console.error(err);
-                });
-        }
-    }, [currentSongIndex, accessToken, songUris]);
-
-    
-
-    const handlePreviousTrack = () => {
-        if (currentSongIndex > 0) {
-            setCurrentSongIndex(prevIndex => prevIndex - 1);
-            setIsPlaying(true); // 🔥 Relance la musique après "Previous song"
-        }
-    };
-
-    const handleNextTrack = () => {
-        console.log("currentSongIndex", currentSongIndex);
-        console.log("maxSongIndex", maxSongIndex);
-        const nextIndex = currentSongIndex + 1;
-    
-        if (nextIndex < maxSongIndex) {
-            setCurrentSongIndex(nextIndex);
-            setIsPlaying(true); // 🔥 Redémarre la musique après "Next song"
-        } else {
-            setIsReplayButtonVisible((songUris.length - maxSongIndex) >= 10);
-            setIsPlaylistFinished(true);
-            setShowPopupFinish(true);
-        }
-    };
-    
-
-    const handlePlayerStateChange = (state) => {
-        console.log(state);
-        if (state.status === 'READY') {
-            setDeviceId(state.deviceId);
-            setIsPlayerReady(true);
-        }
-    };
-
-    const handlePlayPauseClick = () => {
-        setIsPlaying(!isPlaying);
-    };
-
-    const onReplay = () => {
-        axios.post(`${urlServer}/keep-playing`, {
-            accessToken: accessToken,
-            gameType: { type }
+  useEffect(() => {
+    if (accessToken && songUris[currentSongIndex]) {
+      spotifyApi.setAccessToken(accessToken);
+      // Récupérer les infos du track actuel
+      spotifyApi
+        .getTrack(songUris[currentSongIndex].split(":").pop())
+        .then(data => {
+          setCurrentTrack(data.body);
         })
-            .then(() => {
-                setMaxSongIndex(maxSongIndex + 10);
-                setShowPopupFinish(false);
-                setCurrentSongIndex(currentSongIndex + 1);
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 400) {
-                    setShowPopupFinish(false);
-                    setShowPopupPay(true);
-                } else {
-                    console.error('Error:', error.message);
-                    message.error('Error:' + error.message);
-                }
-            });
-    };
+        .catch(err => {
+          console.error("Error retrieving track information: ", err.message);
+        });
+    }
+  }, [currentSongIndex, accessToken, songUris]);
 
+  const handlePreviousTrack = () => {
+    if (currentSongIndex > 0) {
+      setCurrentSongIndex(prevIndex => prevIndex - 1);
+      setIsPlaying(true);
+    }
+  };
 
+  const handleNextTrack = () => {
+    const nextIndex = currentSongIndex + 1;
+    if (nextIndex < maxSongIndex) {
+      setCurrentSongIndex(nextIndex);
+      setIsPlaying(true);
+    } else {
+      setIsReplayButtonVisible((songUris.length - maxSongIndex) >= 10);
+      setIsPlaylistFinished(true);
+      setShowPopupFinish(true);
+    }
+  };
 
-    
-    return (
-        <MainLayout>
-            <div className="layoutWrapper">
-                <Player
-                    accessToken={accessToken}
-                    callback={handlePlayerStateChange}
-                    trackUri={songUris[currentSongIndex]}
-                    play={isPlaying}
-                />
-    
-                <h1 className="title">{type}</h1>
-                <Divider className="divider" style={{ borderColor: 'white', width: '400px', margin: '12px 0' }} />
-                <h3 className="subTitle">{input}</h3>
-    
-                <div className="main-wrapper">
-                    <div className="current-track-wrapper">
-                        <div className="equalizer-wrapper">
-                            <Equalizer />
-                        </div>
-    
-                        {/* Boutons Previous, Play/Pause et Next en ligne */}
-                        <div className="controls">
-                            <Button
-                                type="default"
-                                icon={<BackwardOutlined />}
-                                onClick={handlePreviousTrack}
-                                disabled={currentSongIndex === 0}
-                            />
-                            <Button
-                                type="default"
-                                icon={isPlaying ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
-                                onClick={handlePlayPauseClick}
-                            />
-                            <Button
-                                type="default"
-                                icon={<ForwardOutlined />}
-                                onClick={handleNextTrack}
-                            />
-                        </div>
-    
-                        {/* Bouton "Show Track" en dessous */}
-                        <div className="show-button-container">
-                            <Button
-                                className="show-button"
-                                type="default"
-                                onClick={() => setShowPopupResult(!showPopupResult)}
-                                icon={<EyeOutlined />}
-                            >
-                                Show Track
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-    
-                {currentTrack && (
-                    <PopUpResult
-                        isVisible={showPopupResult}
-                        onClose={() => setShowPopupResult(false)}
-                        currentTrack={currentTrack}
-                        onNextTrack={handleNextTrack}
-                    />
-                )}
-    
-                {isPlaylistFinished && (
-                    <PopUpFinish
-                        isVisible={showPopupFinish}
-                        onClose={() => setShowPopupFinish(false)}
-                        isReplayButtonVisible={isReplayButtonVisible}
-                        onReplay={onReplay}
-                        onGoToHome={() => navigate('/')}
-                    />
-                )}
-    
-                <PopUpPay isVisible={showPopupPay} onClose={() => setShowPopupPay(false)} />
-            </div>
-        </MainLayout>
-    );
-    
+  const handlePlayerStateChange = (state) => {
+    if (state.status === 'READY') {
+      setDeviceId(state.deviceId);
+      setIsPlayerReady(true);
+    }
+  };
 
+  const handlePlayPauseClick = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const onReplay = () => {
+    axios
+      .post(`${urlServer}/keep-playing`, {
+        accessToken: accessToken,
+        gameType: { type }
+      })
+      .then(() => {
+        setMaxSongIndex(maxSongIndex + 10);
+        setShowPopupFinish(false);
+        setCurrentSongIndex(currentSongIndex + 1);
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 400) {
+          setShowPopupFinish(false);
+          setShowPopupPay(true);
+        } else {
+          console.error('Error:', error.message);
+        }
+      });
+  };
+
+  return (
+    <MainLayout>
+      {/* Container principal */}
+      <div className="bg-black pt-6 min-h-screen flex flex-col items-center justify-start">
+        
+        {/* Lecteur Spotify */}
+        <Player
+          accessToken={accessToken}
+          callback={handlePlayerStateChange}
+          trackUri={songUris[currentSongIndex]}
+          play={isPlaying}
+        />
+
+        {/* Titre du jeu */}
+        <h1 className="text-white font-bold mb-4 text-center text-2xl">
+          {type}
+        </h1>
+
+        {/* Séparateur (remplace <Divider /> d'Ant Design) */}
+        <hr className="border-t border-white w-64 mb-4" />
+
+        {/* Sous-titre */}
+        <h3 className="text-white font-medium mb-4 text-center text-lg">
+          {input}
+        </h3>
+
+        {/* Wrapper principal (Equalizer + Contrôles) */}
+        <div className="flex flex-col items-center justify-center">
+          {/* Equalizer */}
+          <div className="flex justify-center items-center mb-4">
+            <Equalizer />
+          </div>
+
+          {/* Contrôles: Previous / Play-Pause / Next */}
+          <div className="flex gap-4 my-4">
+            <button
+              onClick={handlePreviousTrack}
+              disabled={currentSongIndex === 0}
+              className="w-16 h-16 flex justify-center items-center text-2xl 
+                         rounded-full bg-white text-black 
+                         hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed 
+                         transition-transform transform hover:scale-110"
+            >
+              &#9664; {/* Icône "Previous" */}
+            </button>
+
+            <button
+              onClick={handlePlayPauseClick}
+              className="w-16 h-16 flex justify-center items-center text-2xl 
+                         rounded-full bg-white text-black 
+                         hover:bg-green-500 transition-transform transform hover:scale-110"
+            >
+              {isPlaying ? '❚❚' : '►'} {/* Icône Play/Pause */}
+            </button>
+
+            <button
+              onClick={handleNextTrack}
+              className="w-16 h-16 flex justify-center items-center text-2xl 
+                         rounded-full bg-white text-black 
+                         hover:bg-green-500 transition-transform transform hover:scale-110"
+            >
+              &#9654; {/* Icône "Next" */}
+            </button>
+          </div>
+
+          {/* Bouton "Show Track" */}
+          <div className="mt-4">
+            <button
+              onClick={() => setShowPopupResult(!showPopupResult)}
+              className="bg-green-500 text-black font-bold px-6 py-3 rounded 
+                         hover:bg-green-600 transition-colors"
+            >
+              Show Track
+            </button>
+          </div>
+        </div>
+
+        {/* PopUpResult */}
+        {currentTrack && (
+          <PopUpResult
+            isVisible={showPopupResult}
+            onClose={() => setShowPopupResult(false)}
+            currentTrack={currentTrack}
+            onNextTrack={handleNextTrack}
+          />
+        )}
+
+        {/* PopUpFinish (si la playlist est finie) */}
+        {isPlaylistFinished && (
+          <PopUpFinish
+            isVisible={showPopupFinish}
+            onClose={() => setShowPopupFinish(false)}
+            isReplayButtonVisible={isReplayButtonVisible}
+            onReplay={onReplay}
+            onGoToHome={() => navigate('/')}
+          />
+        )}
+
+        {/* PopUpPay */}
+        <PopUpPay
+          isVisible={showPopupPay}
+          onClose={() => setShowPopupPay(false)}
+        />
+      </div>
+    </MainLayout>
+  );
 }
 
 export default Game;
