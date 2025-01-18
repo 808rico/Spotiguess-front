@@ -6,8 +6,7 @@ import PopUpResult from '../components/popUp/PopUpResult';
 import PopUpFinish from '../components/popUp/PopUpFinish';
 import Equalizer from "../components/Equalizer";
 import { Divider, message, Button } from "antd";
-import { PlayCircleOutlined, PauseCircleOutlined, ForwardOutlined, EyeOutlined } from '@ant-design/icons';
-import { BackwardOutlined } from '@ant-design/icons'; // Import de l'icône Previous
+import { BackwardOutlined, PlayCircleOutlined, PauseCircleOutlined, ForwardOutlined, EyeOutlined } from '@ant-design/icons';
 import './Game.css';
 import Player from "../Player";
 import Cookies from 'js-cookie';
@@ -119,70 +118,61 @@ function Game() {
 
 
 
-return (
-    <MainLayout>
-        <div className="layoutWrapper">
-            <Player
-                accessToken={accessToken}
-                callback={handlePlayerStateChange}
-                trackUri={songUris[currentSongIndex]}
-                play={isPlaying}
-            />
-
-            <h1 className="title">{type}</h1>
-            <Divider className="divider" style={{ borderColor: 'white', width: '400px', margin: '12px 0' }} />
-            <h3 className="subTitle">{input}</h3>
-
-            <div className="main-wrapper">
-                <div className="current-track-wrapper">
-                    <div className="equalizer-wrapper">
-                        <Equalizer />
-                    </div>
-
-                    <div className="controls">
-                        {/* BOUTON PREVIOUS */}
-                        <Button
-                            className="prev-button"
-                            type="default"
-                            icon={<BackwardOutlined />}
-                            onClick={handlePreviousTrack}
-                            disabled={currentSongIndex === 0} // 🔥 Désactivé si c'est la première musique
-                        >
-                            Previous song
-                        </Button>
-
-                        {/* BOUTON PAUSE/PLAY */}
-                        <Button
-                            className="play-pause-button"
-                            type="default"
-                            icon={isPlaying ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
-                            onClick={handlePlayPauseClick}
-                        >
-                            {isPlaying ? "Pause" : "Play"}
-                        </Button>
-
-                        {/* BOUTON NEXT */}
-                        <Button
-                            className="next-button"
-                            type="default"
-                            icon={<ForwardOutlined />}
-                            onClick={handleNextTrack}
-                        >
-                            Next song
-                        </Button>
-
-                        {/* BOUTON SHOW TRACK */}
-                        <Button
-                            className="show-button"
-                            type="default"
-                            onClick={() => setShowPopupResult(!showPopupResult)}
-                            icon={<EyeOutlined />}
-                        >
-                            Show Track
-                        </Button>
+    
+    return (
+        <MainLayout>
+            <div className="layoutWrapper">
+                <Player
+                    accessToken={accessToken}
+                    callback={handlePlayerStateChange}
+                    trackUri={songUris[currentSongIndex]}
+                    play={isPlaying}
+                />
+    
+                <h1 className="title">{type}</h1>
+                <Divider className="divider" style={{ borderColor: 'white', width: '400px', margin: '12px 0' }} />
+                <h3 className="subTitle">{input}</h3>
+    
+                <div className="main-wrapper">
+                    <div className="current-track-wrapper">
+                        <div className="equalizer-wrapper">
+                            <Equalizer />
+                        </div>
+    
+                        {/* Boutons Previous, Play/Pause et Next en ligne */}
+                        <div className="controls">
+                            <Button
+                                type="default"
+                                icon={<BackwardOutlined />}
+                                onClick={handlePreviousTrack}
+                                disabled={currentSongIndex === 0}
+                            />
+                            <Button
+                                type="default"
+                                icon={isPlaying ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
+                                onClick={handlePlayPauseClick}
+                            />
+                            <Button
+                                type="default"
+                                icon={<ForwardOutlined />}
+                                onClick={handleNextTrack}
+                            />
+                        </div>
+    
+                        {/* Bouton "Show Track" en dessous */}
+                        <div className="show-button-container">
+                            <Button
+                                className="show-button"
+                                type="default"
+                                onClick={() => setShowPopupResult(!showPopupResult)}
+                                icon={<EyeOutlined />}
+                            >
+                                Show Track
+                            </Button>
+                        </div>
                     </div>
                 </div>
-
+    
                 {currentTrack && (
                     <PopUpResult
                         isVisible={showPopupResult}
@@ -191,7 +181,7 @@ return (
                         onNextTrack={handleNextTrack}
                     />
                 )}
-
+    
                 {isPlaylistFinished && (
                     <PopUpFinish
                         isVisible={showPopupFinish}
@@ -201,12 +191,12 @@ return (
                         onGoToHome={() => navigate('/')}
                     />
                 )}
-
+    
                 <PopUpPay isVisible={showPopupPay} onClose={() => setShowPopupPay(false)} />
             </div>
-        </div>
-    </MainLayout>
-);
+        </MainLayout>
+    );
+    
 
 }
 
