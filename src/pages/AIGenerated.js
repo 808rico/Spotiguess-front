@@ -87,9 +87,9 @@ function AIGenerated() {
 
     <MainLayout>
       <div style={{ background: '#000000', minHeight: 280, height: '100%' }}>
-        <h1><BulbOutlined style={{ fontSize: '25px', marginRight: '10px' }} />AI Generated</h1>
+        <h1 className="text-white text-3xl font-bold mb-2" ><BulbOutlined style={{ fontSize: '25px', marginRight: '10px' }} />AI Generated</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
-        <h2>Ask ChatGPT to generate your playlist.</h2>
+        <h2 className="text-white text-xl mb-6 font-medium">Ask ChatGPT to generate your playlist.</h2>
 
         <div className="search-container" >
           <Search

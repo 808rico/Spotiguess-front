@@ -72,11 +72,10 @@ function LikedSongs() {
 
     <MainLayout>
       <div style={{ background: '#000000',  minHeight: 280, height: '100%' }}>
-        <h1><HeartOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Your liked songs</h1>
+        <h1 className="text-white text-3xl font-bold mb-2"><HeartOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Your liked songs</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
-        <h2>Hit play.</h2>
-        <p className="paragraph-liked-songs">
-          Your saved songs will be randomly played. </p>
+        <h2 className="text-white text-xl mb-6 font-medium">Your saved songs will be randomly played.</h2>
+
         <div className="search-container" >
 
           <Button

@@ -140,9 +140,9 @@ function Playlist() {
 
     <MainLayout>
       <div style={{ background: '#000000', minHeight: 280, height: '100%' }}>
-        <h1><UnorderedListOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Playlist</h1>
+        <h1 className="text-white text-3xl font-bold mb-2"><UnorderedListOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Playlist</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
-        <h2>Search for a playlist.</h2>
+        <h2 className="text-white text-xl mb-6 font-medium">Search for a playlist.</h2>
 
 
 
