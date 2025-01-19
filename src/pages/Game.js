@@ -34,7 +34,9 @@ function Game() {
   const [showPopupFinish, setShowPopupFinish] = useState(false);
   const [showPopupPay, setShowPopupPay] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
+  // eslint-disable-next-line
   const [deviceId, setDeviceId] = useState('');
+  // eslint-disable-next-line
   const [isPlayerReady, setIsPlayerReady] = useState(false);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { message } from 'antd';
 import MainLayout from '../components/layout/MainLayout';
 import OptionCard from '../components/optionCard';
-import { BulbOutlined, HeartOutlined, UnorderedListOutlined, UserOutlined, HomeOutlined } from '@ant-design/icons';
+import { BulbOutlined, HeartOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
 import { FaHome } from 'react-icons/fa';
 
 
