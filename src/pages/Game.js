@@ -10,6 +10,8 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import PopUpPay from "../components/popUp/PopUpPay";
 
+import { FaPlay, FaPause, FaForward, FaBackward, FaEye } from 'react-icons/fa';
+
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
 });
@@ -20,10 +22,9 @@ function Game() {
   const location = useLocation();
   const navigate = useNavigate();
   const { type, input, songUris } = location.state;
-  
+
   const accessToken = Cookies.get("spotifyAuthToken");
 
-  const [isFirstPlayClicked, setIsFirstPlayClicked] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [maxSongIndex, setMaxSongIndex] = useState(10);
   const [isPlaylistFinished, setIsPlaylistFinished] = useState(false);
@@ -39,7 +40,7 @@ function Game() {
   useEffect(() => {
     if (accessToken && songUris[currentSongIndex]) {
       spotifyApi.setAccessToken(accessToken);
-      // Récupérer les infos du track actuel
+
       spotifyApi
         .getTrack(songUris[currentSongIndex].split(":").pop())
         .then(data => {
@@ -104,9 +105,8 @@ function Game() {
 
   return (
     <MainLayout>
-      {/* Container principal */}
       <div className="bg-black pt-6 min-h-screen flex flex-col items-center justify-start">
-        
+
         {/* Lecteur Spotify */}
         <Player
           accessToken={accessToken}
@@ -120,7 +120,7 @@ function Game() {
           {type}
         </h1>
 
-        {/* Séparateur (remplace <Divider /> d'Ant Design) */}
+        {/* Séparateur */}
         <hr className="border-t border-white w-64 mb-4" />
 
         {/* Sous-titre */}
@@ -131,39 +131,40 @@ function Game() {
         {/* Wrapper principal (Equalizer + Contrôles) */}
         <div className="flex flex-col items-center justify-center">
           {/* Equalizer */}
-          <div className="flex justify-center items-center mb-4">
-            <Equalizer />
+          <div className="flex justify-center items-center mb-6 my-6">
+          <Equalizer isPlaying={isPlaying} />
+
           </div>
 
           {/* Contrôles: Previous / Play-Pause / Next */}
-          <div className="flex gap-4 my-4">
+          <div className="flex gap-6 my-4">
             <button
               onClick={handlePreviousTrack}
               disabled={currentSongIndex === 0}
-              className="w-16 h-16 flex justify-center items-center text-2xl 
+              className="w-16 h-16 flex justify-center items-center 
                          rounded-full bg-white text-black 
                          hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed 
                          transition-transform transform hover:scale-110"
             >
-              &#9664; {/* Icône "Previous" */}
+              <FaBackward size={24} />
             </button>
 
             <button
               onClick={handlePlayPauseClick}
-              className="w-16 h-16 flex justify-center items-center text-2xl 
+              className="w-16 h-16 flex justify-center items-center 
                          rounded-full bg-white text-black 
                          hover:bg-green-500 transition-transform transform hover:scale-110"
             >
-              {isPlaying ? '❚❚' : '►'} {/* Icône Play/Pause */}
+              {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
             </button>
 
             <button
               onClick={handleNextTrack}
-              className="w-16 h-16 flex justify-center items-center text-2xl 
+              className="w-16 h-16 flex justify-center items-center 
                          rounded-full bg-white text-black 
                          hover:bg-green-500 transition-transform transform hover:scale-110"
             >
-              &#9654; {/* Icône "Next" */}
+              <FaForward size={24} />
             </button>
           </div>
 
@@ -171,9 +172,10 @@ function Game() {
           <div className="mt-4">
             <button
               onClick={() => setShowPopupResult(!showPopupResult)}
-              className="bg-green-500 text-black font-bold px-6 py-3 rounded 
-                         hover:bg-green-600 transition-colors"
+              className="bg-green-500 text-black font-black px-6 py-3 rounded
+                   hover:bg-green-600 transition-colors flex items-center gap-2"
             >
+              <FaEye size={18} />
               Show Track
             </button>
           </div>
