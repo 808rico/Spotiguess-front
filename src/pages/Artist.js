@@ -136,9 +136,9 @@ function Artist() {
 
     <MainLayout>
       <div style={{ background: '#000000', minHeight: 280, height: '100%' }}>
-        <h1><UserOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Artist</h1>
+        <h1 className="text-white text-3xl font-bold mb-2"><UserOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Artist</h1>
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
-        <h2>Search for an artist.</h2>
+        <h2 className="text-white text-xl mb-6 font-medium">Search for an artist.</h2>
 
 
 
