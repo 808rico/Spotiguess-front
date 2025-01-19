@@ -2,29 +2,59 @@
     width: fit-content;
     height: 100px;
     background: #000;
+    display: flex;
     justify-content: center;
     align-items: center;
-    display: flex;
-}
-
-rect{
-    width: 25px;
-}
-.bar {
+  }
+  
+  /* Styles communs à toutes les barres */
+  .bar {
     fill: #1ED760;
+    width: 25px;
+    /* On définit une transition pour que la hauteur et la position (y) changent en douceur */
+    transition: all 0.8s ease-in-out;
+  }
+  
+  /* Animation quand isPlaying = true */
+  .barPlaying {
     animation: up 1s linear infinite;
-}
-@keyframes up {
+  }
+  
+  /* Barres quand isPlaying = false : plus de keyframe, juste un état bas */
+  .barPaused {
+    height: 2px;  /* On fixe la hauteur */
+    y: 98px;      /* Position en bas (si height = 2, alors 98 => 2px à la base) */
+  }
+  
+  /* Keyframes de l’effet "up" */
+  @keyframes up {
     0%, 100% {
-        height: 1px;
-        y: 99px;
+      height: 1px;
+      y: 99px;
     }
     50% {
-        height: 100px;
-        y: 0px;
+      height: 100px;
+      y: 0px;
     }
-}
-.bar:nth-child(2) { animation-delay: 0.36s; }
-.bar:nth-child(3) { animation-delay: 0.12s; }
-.bar:nth-child(4) { animation-delay: 0.24s; }
-.bar:nth-child(5) { animation-delay: 0.48s; }
+  }
+  
+  /* Délais propres à chaque barre si vous voulez un effet décalé */
+  .delay1 {
+    animation-delay: 0.36s;
+  }
+  .delay2 {
+    animation-delay: 0.12s;
+  }
+  .delay3 {
+    animation-delay: 0.24s;
+  }
+  .delay4 {
+    animation-delay: 0.48s;
+  }
+  .delay5 {
+    animation-delay: 0.60s;
+  }
+  .delay6 {
+    animation-delay: 0.72s;
+  }
+  
