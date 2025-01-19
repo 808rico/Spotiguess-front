@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Divider } from 'antd';
 import './optionCard.css'; // Assurez-vous que le chemin d'importation est correct
 
-function OptionCard({ title, Icon, description, onClick, isPopular }) {
+function OptionCard({ title, Icon, description, onClick }) {
   return (
 
 

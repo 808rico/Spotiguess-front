@@ -11,7 +11,7 @@ const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
 });
 
-function Header({ toggleMenu, code }) {
+function Header({ toggleMenu }) {
   
   const [profileImageUrl, setProfileImageUrl] = useState('');
 
