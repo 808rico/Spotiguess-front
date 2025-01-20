@@ -64,7 +64,7 @@ function App() {
             textAlign: 'center',
           }}
         >
-          <h1>Welcome to Spotiguess</h1>
+          <h1 className="text-2xl font-bold	mb-2">Welcome to Spotiguess</h1>
           <p style={{ marginBottom: '20px' }}>
             Sign in with your Spotify Premium account to use the app.
           </p>
