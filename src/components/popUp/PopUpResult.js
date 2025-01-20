@@ -33,7 +33,8 @@ function PopUpResult({ isVisible, onClose, currentTrack, onNextTrack }) {
                     <div className="track-details">
                         <p className="track-name">{currentTrack.name}</p>
                         <p className="track-artist">{currentTrack.artists.map(artist => artist.name).join(", ")}</p>
-                        <p className="track-album">{currentTrack.album.name}</p>
+                        <p className="track-album">{currentTrack.album.name} - {currentTrack.album.release_date.split('-')[0]}</p>
+                        
                     </div>
                 </div>
                 <Button autoFocus  className="next-song-button" onClick={handleNextAndClose}>
