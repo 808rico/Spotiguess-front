@@ -8,6 +8,7 @@ import {
   HeartOutlined,
   UnorderedListOutlined,
   UserOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -25,6 +26,7 @@ const DesktopMenu = ({ menuOpen }) => {
       case '/liked-songs': return ['3'];
       case '/playlist': return ['4'];
       case '/artist': return ['5'];
+      case '/setings': return ['5'];
       default: return [];
     }
   };
@@ -37,6 +39,7 @@ const DesktopMenu = ({ menuOpen }) => {
       case '3': navigate('/liked-songs'); break;
       case '4': navigate('/playlist'); break;
       case '5': navigate('/artist'); break;
+      case '6': navigate('/settings'); break;
       default: break;
     }
   };
@@ -67,6 +70,9 @@ const DesktopMenu = ({ menuOpen }) => {
         </Menu.Item>
         <Menu.Item key="5" icon={<UserOutlined />}>
           Artist
+        </Menu.Item>
+        <Menu.Item key="6" icon={<SettingOutlined />}>
+          Settings
         </Menu.Item>
       </Menu>
     </Sider>
