@@ -3,7 +3,7 @@ import './Equalizer.css';
 
 const BAR_COUNT = 6;
 const MAX_HEIGHT = 100;
-const UPDATE_INTERVAL = 10;
+const UPDATE_INTERVAL = 20;
 const WAVE_DURATION = 1;
 
 function wave(t) {
