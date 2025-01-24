@@ -42,7 +42,6 @@ function Game() {
 
   // On suppose que vous passez iconName via location.state
   const { type, iconName, input, songUris } = location.state;
-
   const accessToken = Cookies.get("spotifyAuthToken");
 
   // Récupération de l'icône
@@ -69,23 +68,21 @@ function Game() {
   // eslint-disable-next-line
   const [isPlayerReady, setIsPlayerReady] = useState(false);
 
-
   useEffect(() => {
     if (accessToken) {
-      axios.get(`${urlServer}/settings/game-mode`, {
-        params: { accessToken }
-      })
-      .then((response) => {
-        if (response.data && response.data.gameType) {
-          setGameType(response.data.gameType);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching game mode:", error);
-        message.error("Error user settings");
-      });
+      axios
+        .get(`${urlServer}/settings/game-mode`, { params: { accessToken } })
+        .then((response) => {
+          if (response.data && response.data.gameType) {
+            setGameType(response.data.gameType);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching game mode:", error);
+          message.error("Error user settings");
+        });
     }
-  }, [urlServer]);
+  }, [urlServer, accessToken]);
 
   useEffect(() => {
     console.log("GameType:", gameType);
@@ -113,15 +110,19 @@ function Game() {
 
   const handleStartGame = () => {
     setIsGameStarted(true);
-    setIsPlaying(true);
+    // En mode "manual", on veut démarrer la lecture dès qu'on lance la game
+    // En mode "auto", on laisse le useEffect gérer la lecture automatique
+    if (gameType === "manual") {
+      setIsPlaying(true);
+    }
   };
 
-  // Play / Pause
+  // Play / Pause (MANUAL)
   const handlePlayPauseClick = () => {
     setIsPlaying(!isPlaying);
   };
 
-  // Previous
+  // Previous (MANUAL)
   const handlePreviousTrack = () => {
     if (currentSongIndex > 0) {
       setCurrentSongIndex((prev) => prev - 1);
@@ -129,17 +130,18 @@ function Game() {
     }
   };
 
-  // Next
+  // Next (MANUAL)
   const handleNextTrack = () => {
     const nextIndex = currentSongIndex + 1;
-    if (nextIndex < maxSongIndex) {
+    if (nextIndex < maxSongIndex && nextIndex < songUris.length) {
       setCurrentSongIndex(nextIndex);
       setIsPlaying(true);
     } else {
       // Fin de la playlist
-      setIsReplayButtonVisible((songUris.length - maxSongIndex) >= 10);
       setIsPlaylistFinished(true);
       setShowPopupFinish(true);
+      // Vérifie si on peut "rejouer" 10 de plus
+      setIsReplayButtonVisible((songUris.length - maxSongIndex) >= 10);
     }
   };
 
@@ -165,10 +167,70 @@ function Game() {
       });
   };
 
+  // ---------------------------------------------------------
+  // AJOUT AUTO MODE : Gérer la lecture auto si gameType === "auto"
+  // ---------------------------------------------------------
+  useEffect(() => {
+    // On ne lance la logique auto que si :
+    // 1. Le mode est "auto"
+    // 2. Le jeu a démarré
+    // 3. La playlist n'est pas finie
+    // 4. L'index courant est dans les limites
+    if (
+      gameType === 'auto' &&
+      isGameStarted &&
+      !isPlaylistFinished &&
+      currentSongIndex < maxSongIndex
+    ) {
+      // On enchaîne :
+      // - Lire la musique pendant 15s
+      // - Mettre en pause pendant 5s
+      // - Afficher le résultat pendant 5s
+      // - Passer à la piste suivante
+
+      // On commence par lancer la lecture
+      setIsPlaying(true);
+
+      const timer1 = setTimeout(() => {
+        // Après 15 secondes -> pause
+        setIsPlaying(false);
+
+        const timer2 = setTimeout(() => {
+          // Après 5 secondes -> montrer le résultat
+          setShowPopupResult(true);
+
+          const timer3 = setTimeout(() => {
+            // Après 5 secondes -> masquer le résultat + passer au morceau suivant
+            setShowPopupResult(false);
+            handleNextTrack();
+          }, 5000);
+
+          // Nettoyage si on quitte avant
+          return () => clearTimeout(timer3);
+        }, 5000);
+
+        // Nettoyage si on quitte avant
+        return () => clearTimeout(timer2);
+      }, 15000);
+
+      // Nettoyage général si l'index change pendant les timeouts ou si on démonte le composant
+      return () => {
+        clearTimeout(timer1);
+      };
+    }
+  }, [
+    gameType,
+    isGameStarted,
+    isPlaylistFinished,
+    currentSongIndex,
+    maxSongIndex
+    // handleNextTrack est une dépendance si on veut être carré,
+    // mais attention aux re-rendus. On peut l'inclure si la fonction est stable (useCallback)
+  ]);
+
   return (
     <MainLayout>
       <div className="bg-black pt-6 min-h-screen flex flex-col items-center justify-start">
-
         {/* ÉCRAN DE DÉMARRAGE : même style qu'avant (si la partie n'est pas lancée) */}
         {!isGameStarted && (
           <div className="layoutWrapper">
@@ -225,49 +287,56 @@ function Game() {
                 <Equalizer isPlaying={isPlaying} />
               </div>
 
-              {/* Contrôles (précédent, play/pause, suivant) */}
-              <div className="flex gap-6 my-4">
-                <button
-                  onClick={handlePreviousTrack}
-                  disabled={currentSongIndex === 0}
-                  className="w-16 h-16 flex justify-center items-center 
-                             rounded-full bg-white text-black 
-                             hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed 
-                             transition-transform transform hover:scale-110"
-                >
-                  <FaBackward size={24} />
-                </button>
+              {/* 
+                Si on est en mode MANUAL, on affiche les boutons 
+                (en mode AUTO, on peut les cacher ou les laisser : au choix).
+              */}
+              {gameType === "manual" && (
+                <div className="flex gap-6 my-4">
+                  <button
+                    onClick={handlePreviousTrack}
+                    disabled={currentSongIndex === 0}
+                    className="w-16 h-16 flex justify-center items-center 
+                               rounded-full bg-white text-black 
+                               hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed 
+                               transition-transform transform hover:scale-110"
+                  >
+                    <FaBackward size={24} />
+                  </button>
 
-                <button
-                  onClick={handlePlayPauseClick}
-                  className="w-16 h-16 flex justify-center items-center 
-                             rounded-full bg-white text-black 
-                             hover:bg-green-500 transition-transform transform hover:scale-110"
-                >
-                  {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
-                </button>
+                  <button
+                    onClick={handlePlayPauseClick}
+                    className="w-16 h-16 flex justify-center items-center 
+                               rounded-full bg-white text-black 
+                               hover:bg-green-500 transition-transform transform hover:scale-110"
+                  >
+                    {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
+                  </button>
 
-                <button
-                  onClick={handleNextTrack}
-                  className="w-16 h-16 flex justify-center items-center 
-                             rounded-full bg-white text-black 
-                             hover:bg-green-500 transition-transform transform hover:scale-110"
-                >
-                  <FaForward size={24} />
-                </button>
-              </div>
+                  <button
+                    onClick={handleNextTrack}
+                    className="w-16 h-16 flex justify-center items-center 
+                               rounded-full bg-white text-black 
+                               hover:bg-green-500 transition-transform transform hover:scale-110"
+                  >
+                    <FaForward size={24} />
+                  </button>
+                </div>
+              )}
 
-              {/* Bouton "Show Track" */}
-              <div className="mt-4">
-                <button
-                  onClick={() => setShowPopupResult(!showPopupResult)}
-                  className="bg-green-500 text-black font-black px-6 py-3 rounded
-                             hover:bg-green-600 transition-colors flex items-center gap-2"
-                >
-                  <FaEye size={18} />
-                  Show Track
-                </button>
-              </div>
+              {/* Bouton "Show Track" (possible en mode manuel) */}
+              {gameType === "manual" && (
+                <div className="mt-4">
+                  <button
+                    onClick={() => setShowPopupResult(!showPopupResult)}
+                    className="bg-green-500 text-black font-black px-6 py-3 rounded
+                               hover:bg-green-600 transition-colors flex items-center gap-2"
+                  >
+                    <FaEye size={18} />
+                    Show Track
+                  </button>
+                </div>
+              )}
             </div>
           </>
         )}
