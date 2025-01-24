@@ -156,6 +156,7 @@ function Game() {
         setMaxSongIndex(maxSongIndex + 10);
         setShowPopupFinish(false);
         setCurrentSongIndex(currentSongIndex + 1);
+        setIsPlaylistFinished(false);
       })
       .catch((error) => {
         if (error.response && error.response.status === 400) {
@@ -197,17 +198,19 @@ function Game() {
 
         const timer2 = setTimeout(() => {
           // Après 5 secondes -> montrer le résultat
+          setIsPlaying(true);
           setShowPopupResult(true);
+          
 
           const timer3 = setTimeout(() => {
             // Après 5 secondes -> masquer le résultat + passer au morceau suivant
             setShowPopupResult(false);
             handleNextTrack();
-          }, 5000);
+          }, 7000);
 
           // Nettoyage si on quitte avant
           return () => clearTimeout(timer3);
-        }, 5000);
+        }, 2000);
 
         // Nettoyage si on quitte avant
         return () => clearTimeout(timer2);
