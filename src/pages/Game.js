@@ -62,13 +62,33 @@ function Game() {
   const [showPopupResult, setShowPopupResult] = useState(false);
   const [showPopupFinish, setShowPopupFinish] = useState(false);
   const [showPopupPay, setShowPopupPay] = useState(false);
+  const [gameType, setGameType] = useState(null);
 
   // eslint-disable-next-line
   const [deviceId, setDeviceId] = useState('');
   // eslint-disable-next-line
   const [isPlayerReady, setIsPlayerReady] = useState(false);
 
+
   useEffect(() => {
+    if (accessToken) {
+      axios.get(`${urlServer}/settings/game-mode`, {
+        params: { accessToken }
+      })
+      .then((response) => {
+        if (response.data && response.data.gameType) {
+          setGameType(response.data.gameType);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching game mode:", error);
+        message.error("Error user settings");
+      });
+    }
+  }, [urlServer]);
+
+  useEffect(() => {
+    console.log("GameType:", gameType);
     if (accessToken && songUris[currentSongIndex]) {
       spotifyApi.setAccessToken(accessToken);
 
