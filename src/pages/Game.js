@@ -15,7 +15,7 @@ import { FaPlay, FaPause, FaForward, FaBackward, FaEye } from 'react-icons/fa';
 
 // Composants/Styles "ancienne" version
 import { Divider, Button, message } from 'antd';
-import { PlayCircleOutlined, BulbOutlined, HeartOutlined, UserOutlined,UnorderedListOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, BulbOutlined, HeartOutlined, UserOutlined, UnorderedListOutlined } from '@ant-design/icons';
 
 import './Game.css'; // Vos anciennes classes CSS
 
@@ -62,6 +62,7 @@ function Game() {
   const [showPopupFinish, setShowPopupFinish] = useState(false);
   const [showPopupPay, setShowPopupPay] = useState(false);
   const [gameType, setGameType] = useState(null);
+  const [isKeepPlayingLoading, setIsKeepPlayingLoading] = useState(false);
 
   // eslint-disable-next-line
   const [deviceId, setDeviceId] = useState('');
@@ -147,6 +148,7 @@ function Game() {
 
   // Rejouer
   const onReplay = () => {
+    setIsKeepPlayingLoading(true);
     axios
       .post(`${urlServer}/keep-playing`, {
         accessToken: accessToken,
@@ -154,9 +156,9 @@ function Game() {
       })
       .then(() => {
         setMaxSongIndex(maxSongIndex + 10);
-        setShowPopupFinish(false);
         setCurrentSongIndex(currentSongIndex + 1);
         setIsPlaylistFinished(false);
+        setShowPopupFinish(false);
       })
       .catch((error) => {
         if (error.response && error.response.status === 400) {
@@ -164,215 +166,220 @@ function Game() {
           setShowPopupPay(true);
         } else {
           console.error('Error:', error.message);
+          message.error('Error while trying to load more songs');
         }
+      })
+      .finally(() => {
+        // On enlève le loader quoiqu'il arrive
+        setIsKeepPlayingLoading(false);
       });
-  };
+    };
+    // ---------------------------------------------------------
+    // AJOUT AUTO MODE : Gérer la lecture auto si gameType === "auto"
+    // ---------------------------------------------------------
+    useEffect(() => {
+      // On ne lance la logique auto que si :
+      // 1. Le mode est "auto"
+      // 2. Le jeu a démarré
+      // 3. La playlist n'est pas finie
+      // 4. L'index courant est dans les limites
+      if (
+        gameType === 'auto' &&
+        isGameStarted &&
+        !isPlaylistFinished &&
+        currentSongIndex < maxSongIndex
+      ) {
+        // On enchaîne :
+        // - Lire la musique pendant 15s
+        // - Mettre en pause pendant 5s
+        // - Afficher le résultat pendant 5s
+        // - Passer à la piste suivante
 
-  // ---------------------------------------------------------
-  // AJOUT AUTO MODE : Gérer la lecture auto si gameType === "auto"
-  // ---------------------------------------------------------
-  useEffect(() => {
-    // On ne lance la logique auto que si :
-    // 1. Le mode est "auto"
-    // 2. Le jeu a démarré
-    // 3. La playlist n'est pas finie
-    // 4. L'index courant est dans les limites
-    if (
-      gameType === 'auto' &&
-      isGameStarted &&
-      !isPlaylistFinished &&
-      currentSongIndex < maxSongIndex
-    ) {
-      // On enchaîne :
-      // - Lire la musique pendant 15s
-      // - Mettre en pause pendant 5s
-      // - Afficher le résultat pendant 5s
-      // - Passer à la piste suivante
+        // On commence par lancer la lecture
+        setIsPlaying(true);
 
-      // On commence par lancer la lecture
-      setIsPlaying(true);
+        const timer1 = setTimeout(() => {
+          // Après 15 secondes -> pause
+          setIsPlaying(false);
 
-      const timer1 = setTimeout(() => {
-        // Après 15 secondes -> pause
-        setIsPlaying(false);
+          const timer2 = setTimeout(() => {
+            // Après 5 secondes -> montrer le résultat
+            setIsPlaying(true);
+            setShowPopupResult(true);
 
-        const timer2 = setTimeout(() => {
-          // Après 5 secondes -> montrer le résultat
-          setIsPlaying(true);
-          setShowPopupResult(true);
-          
 
-          const timer3 = setTimeout(() => {
-            // Après 5 secondes -> masquer le résultat + passer au morceau suivant
-            setShowPopupResult(false);
-            handleNextTrack();
-          }, 7000);
+            const timer3 = setTimeout(() => {
+              // Après 5 secondes -> masquer le résultat + passer au morceau suivant
+              setShowPopupResult(false);
+              handleNextTrack();
+            }, 7000);
+
+            // Nettoyage si on quitte avant
+            return () => clearTimeout(timer3);
+          }, 2000);
 
           // Nettoyage si on quitte avant
-          return () => clearTimeout(timer3);
-        }, 2000);
+          return () => clearTimeout(timer2);
+        }, 15000);
 
-        // Nettoyage si on quitte avant
-        return () => clearTimeout(timer2);
-      }, 15000);
+        // Nettoyage général si l'index change pendant les timeouts ou si on démonte le composant
+        return () => {
+          clearTimeout(timer1);
+        };
+      }
+    }, [
+      gameType,
+      isGameStarted,
+      isPlaylistFinished,
+      currentSongIndex,
+      maxSongIndex
+      // handleNextTrack est une dépendance si on veut être carré,
+      // mais attention aux re-rendus. On peut l'inclure si la fonction est stable (useCallback)
+    ]);
 
-      // Nettoyage général si l'index change pendant les timeouts ou si on démonte le composant
-      return () => {
-        clearTimeout(timer1);
-      };
-    }
-  }, [
-    gameType,
-    isGameStarted,
-    isPlaylistFinished,
-    currentSongIndex,
-    maxSongIndex
-    // handleNextTrack est une dépendance si on veut être carré,
-    // mais attention aux re-rendus. On peut l'inclure si la fonction est stable (useCallback)
-  ]);
+    return (
+      <MainLayout>
+        <div className="bg-black pt-6 min-h-screen flex flex-col items-center justify-start">
+          {/* ÉCRAN DE DÉMARRAGE : même style qu'avant (si la partie n'est pas lancée) */}
+          {!isGameStarted && (
+            <div className="layoutWrapper">
+              {/* Titre : on affiche l'icône si disponible */}
+              <h1 className="title">
+                {Icon && <Icon style={{ marginRight: 8 }} />}
+                {type}
+              </h1>
+              <Divider
+                className="divider"
+                style={{ borderColor: 'white', width: '400px', margin: '12px 0' }}
+              />
+              <h3 className="subTitle">{input}</h3>
 
-  return (
-    <MainLayout>
-      <div className="bg-black pt-6 min-h-screen flex flex-col items-center justify-start">
-        {/* ÉCRAN DE DÉMARRAGE : même style qu'avant (si la partie n'est pas lancée) */}
-        {!isGameStarted && (
-          <div className="layoutWrapper">
-            {/* Titre : on affiche l'icône si disponible */}
-            <h1 className="title">
-              {Icon && <Icon style={{ marginRight: 8 }} />}
-              {type}
-            </h1>
-            <Divider
-              className="divider"
-              style={{ borderColor: 'white', width: '400px', margin: '12px 0' }}
-            />
-            <h3 className="subTitle">{input}</h3>
+              <Button
+                className="play-button"
+                type="primary"
+                icon={<PlayCircleOutlined />}
+                onClick={handleStartGame}
+                size="large"
+              >
+                Play
+              </Button>
+            </div>
+          )}
 
-            <Button
-              className="play-button"
-              type="primary"
-              icon={<PlayCircleOutlined />}
-              onClick={handleStartGame}
-              size="large"
-            >
-              Play
-            </Button>
-          </div>
-        )}
+          {/* ÉCRAN DU JEU : nouveau style (si la partie est lancée) */}
+          {isGameStarted && (
+            <>
+              {/* Player Spotify */}
+              <Player
+                accessToken={accessToken}
+                callback={handlePlayerStateChange}
+                trackUri={songUris[currentSongIndex]}
+                play={isPlaying}
+              />
 
-        {/* ÉCRAN DU JEU : nouveau style (si la partie est lancée) */}
-        {isGameStarted && (
-          <>
-            {/* Player Spotify */}
-            <Player
-              accessToken={accessToken}
-              callback={handlePlayerStateChange}
-              trackUri={songUris[currentSongIndex]}
-              play={isPlaying}
-            />
+              {/* Titre */}
+              <h1 className="text-white font-bold mb-4 text-center text-2xl">
+                {type}
+              </h1>
 
-            {/* Titre */}
-            <h1 className="text-white font-bold mb-4 text-center text-2xl">
-              {type}
-            </h1>
+              {/* Séparateur */}
+              <hr className="border-t border-white w-64 mb-4" />
 
-            {/* Séparateur */}
-            <hr className="border-t border-white w-64 mb-4" />
+              {/* Sous-titre */}
+              <h3 className="text-white font-medium mb-4 text-center text-lg">
+                {input}
+              </h3>
 
-            {/* Sous-titre */}
-            <h3 className="text-white font-medium mb-4 text-center text-lg">
-              {input}
-            </h3>
+              {/* Équalizer + Contrôles */}
+              <div className="flex flex-col items-center justify-center">
+                <div className="flex justify-center items-center mb-6 my-6">
+                  <Equalizer isPlaying={isPlaying} />
+                </div>
 
-            {/* Équalizer + Contrôles */}
-            <div className="flex flex-col items-center justify-center">
-              <div className="flex justify-center items-center mb-6 my-6">
-                <Equalizer isPlaying={isPlaying} />
-              </div>
-
-              {/* 
+                {/* 
                 Si on est en mode MANUAL, on affiche les boutons 
                 (en mode AUTO, on peut les cacher ou les laisser : au choix).
               */}
-              {gameType === "manual" && (
-                <div className="flex gap-6 my-4">
-                  <button
-                    onClick={handlePreviousTrack}
-                    disabled={currentSongIndex === 0}
-                    className="w-16 h-16 flex justify-center items-center 
+                {gameType === "manual" && (
+                  <div className="flex gap-6 my-4">
+                    <button
+                      onClick={handlePreviousTrack}
+                      disabled={currentSongIndex === 0}
+                      className="w-16 h-16 flex justify-center items-center 
                                rounded-full bg-white text-black 
                                hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed 
                                transition-transform transform hover:scale-110"
-                  >
-                    <FaBackward size={24} />
-                  </button>
+                    >
+                      <FaBackward size={24} />
+                    </button>
 
-                  <button
-                    onClick={handlePlayPauseClick}
-                    className="w-16 h-16 flex justify-center items-center 
+                    <button
+                      onClick={handlePlayPauseClick}
+                      className="w-16 h-16 flex justify-center items-center 
                                rounded-full bg-white text-black 
                                hover:bg-green-500 transition-transform transform hover:scale-110"
-                  >
-                    {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
-                  </button>
+                    >
+                      {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
+                    </button>
 
-                  <button
-                    onClick={handleNextTrack}
-                    className="w-16 h-16 flex justify-center items-center 
+                    <button
+                      onClick={handleNextTrack}
+                      className="w-16 h-16 flex justify-center items-center 
                                rounded-full bg-white text-black 
                                hover:bg-green-500 transition-transform transform hover:scale-110"
-                  >
-                    <FaForward size={24} />
-                  </button>
-                </div>
-              )}
+                    >
+                      <FaForward size={24} />
+                    </button>
+                  </div>
+                )}
 
-              {/* Bouton "Show Track" (possible en mode manuel) */}
-              {gameType === "manual" && (
-                <div className="mt-4">
-                  <button
-                    onClick={() => setShowPopupResult(!showPopupResult)}
-                    className="bg-green-500 text-black font-black px-6 py-3 rounded
+                {/* Bouton "Show Track" (possible en mode manuel) */}
+                {gameType === "manual" && (
+                  <div className="mt-4">
+                    <button
+                      onClick={() => setShowPopupResult(!showPopupResult)}
+                      className="bg-green-500 text-black font-black px-6 py-3 rounded
                                hover:bg-green-600 transition-colors flex items-center gap-2"
-                  >
-                    <FaEye size={18} />
-                    Show Track
-                  </button>
-                </div>
-              )}
-            </div>
-          </>
-        )}
+                    >
+                      <FaEye size={18} />
+                      Show Track
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
 
-        {/* PopUpResult */}
-        {currentTrack && (
-          <PopUpResult
-            isVisible={showPopupResult}
-            onClose={() => setShowPopupResult(false)}
-            currentTrack={currentTrack}
-            onNextTrack={handleNextTrack}
+          {/* PopUpResult */}
+          {currentTrack && (
+            <PopUpResult
+              isVisible={showPopupResult}
+              onClose={() => setShowPopupResult(false)}
+              currentTrack={currentTrack}
+              onNextTrack={handleNextTrack}
+            />
+          )}
+
+          {/* PopUpFinish */}
+          {isPlaylistFinished && (
+            <PopUpFinish
+              isVisible={showPopupFinish}
+              onClose={() => setShowPopupFinish(false)}
+              isReplayButtonVisible={isReplayButtonVisible}
+              onReplay={onReplay}
+              onGoToHome={() => navigate('/')}
+              isKeepPlayingLoading={isKeepPlayingLoading}
+            />
+          )}
+
+          {/* PopUpPay */}
+          <PopUpPay
+            isVisible={showPopupPay}
+            onClose={() => setShowPopupPay(false)}
           />
-        )}
+        </div>
+      </MainLayout>
+    );
+  }
 
-        {/* PopUpFinish */}
-        {isPlaylistFinished && (
-          <PopUpFinish
-            isVisible={showPopupFinish}
-            onClose={() => setShowPopupFinish(false)}
-            isReplayButtonVisible={isReplayButtonVisible}
-            onReplay={onReplay}
-            onGoToHome={() => navigate('/')}
-          />
-        )}
-
-        {/* PopUpPay */}
-        <PopUpPay
-          isVisible={showPopupPay}
-          onClose={() => setShowPopupPay(false)}
-        />
-      </div>
-    </MainLayout>
-  );
-}
-
-export default Game;
+  export default Game;
