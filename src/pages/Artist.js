@@ -108,7 +108,7 @@ function Artist() {
       navigate('/game', {
         state: {
           type: 'Artist',
-          iconName: 'BulbOutlined',
+          iconName: 'UserOutlined',
           input: option.artistName, // Name of the artist
           songUris: trackUris.data // List of selected URIs
         }

@@ -281,7 +281,10 @@ function Game() {
               className="divider"
               style={{ borderColor: 'white', width: '400px', margin: '12px 0' }}
             />
-            <h3 className="subTitle">{input}</h3>
+            {input !== "Your Liked Songs" && (
+              <h3 className="subTitle">{input}</h3>
+            )}
+            
 
             <Button
               className="play-button"
@@ -307,17 +310,15 @@ function Game() {
             />
 
             {/* Titre */}
-            <h1 className="text-white font-bold mb-4 text-center text-2xl">
-              {type}
-            </h1>
+            
+            <h2 className="text-white mb-4 text-center text-l">
+            {Icon && <Icon style={{ marginRight: 8 }} />} {input} {Icon && <Icon style={{ marginLeft: 8 }} />}
+            </h2>
 
             {/* Séparateur */}
             <hr className="border-t border-white w-64 mb-4" />
 
-            {/* Sous-titre */}
-            <h3 className="text-white font-medium mb-4 text-center text-lg">
-              {input}
-            </h3>
+
 
             {/* Équalizer + Contrôles */}
             <div className="flex flex-col items-center justify-center">

@@ -109,7 +109,7 @@ function Playlist() {
       navigate('/game', {
         state: {
           type: 'Playlist',
-          iconName: 'BulbOutlined',
+          iconName: 'UnorderedListOutlined',
           input: option.playlistName, // Name of the playlist
           songUris: selectedTracks // List of selected URIs
         }

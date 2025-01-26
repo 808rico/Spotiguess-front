@@ -44,6 +44,7 @@ function LikedSongs() {
             navigate('/game', {
                 state: {
                     type: 'Your Liked Songs',
+                    input: 'Your Liked Songs',
                     iconName: 'HeartOutlined',
                     songUris: songUris
                 }
