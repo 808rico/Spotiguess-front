@@ -65,6 +65,8 @@ function Game() {
   const [isKeepPlayingLoading, setIsKeepPlayingLoading] = useState(false);
   const [countdown, setCountdown] = useState(15); // Compteur
   const [subtitle, setSubtitle] = useState("What's the song?"); // Texte dynamique
+  const [popupCountdown, setPopupCountdown] = useState(5);
+
 
 
   // eslint-disable-next-line
@@ -181,7 +183,7 @@ function Game() {
   // AJOUT AUTO MODE : Gérer la lecture auto si gameType === "auto"
   // ---------------------------------------------------------
   // En haut de votre composant
- 
+
   // etc.
 
   // ---------------------------------------------------------
@@ -200,6 +202,7 @@ function Game() {
       let lastChanceTimer;
       let showResultTimer;
       let hideResultTimer;
+      let popupCountdownInterval; 
 
       // Lancement de la lecture
       setIsPlaying(true);
@@ -233,8 +236,20 @@ function Game() {
         // On reste avec "?" + "Last chance" pendant 3s, donc pas de popup ici
         showResultTimer = setTimeout(() => {
           // 3) Après ces 3s, on affiche la popup du résultat pendant 5s
+          setPopupCountdown(5);
           setShowPopupResult(true);
           setIsPlaying(true);
+
+          // On décrémente ce nouveau compteur chaque seconde
+        popupCountdownInterval = setInterval(() => {
+          setPopupCountdown((prev) => {
+            if (prev <= 1) {
+              clearInterval(popupCountdownInterval);
+              return 0; // ou “0” si tu préfères
+            }
+            return prev - 1;
+          });
+        }, 1000);
 
           hideResultTimer = setTimeout(() => {
             // 4) Au bout de 5s, on masque la popup et on passe au morceau suivant
@@ -251,6 +266,7 @@ function Game() {
         clearTimeout(lastChanceTimer);
         clearTimeout(showResultTimer);
         clearTimeout(hideResultTimer);
+        clearInterval(popupCountdownInterval);
       };
     }
   }, [
@@ -260,9 +276,9 @@ function Game() {
     currentSongIndex,
     maxSongIndex
   ]);
-  
-  
-  
+
+
+
 
 
 
@@ -284,7 +300,7 @@ function Game() {
             {input !== "Your Liked Songs" && (
               <h3 className="subTitle">{input}</h3>
             )}
-            
+
 
             <Button
               className="play-button"
@@ -310,9 +326,9 @@ function Game() {
             />
 
             {/* Titre */}
-            
-            <h2 className="text-white mb-4 text-center text-l">
-            {Icon && <Icon style={{ marginRight: 8 }} />} {input} {Icon && <Icon style={{ marginLeft: 8 }} />}
+
+            <h2 className="text-white mb-4 text-center text-l max-w-72">
+              {Icon && <Icon style={{ marginRight: 8 }} />} {input} {Icon && <Icon style={{ marginLeft: 8 }} />}
             </h2>
 
             {/* Séparateur */}
@@ -407,6 +423,8 @@ function Game() {
             onClose={() => setShowPopupResult(false)}
             currentTrack={currentTrack}
             onNextTrack={handleNextTrack}
+            gameType={gameType}             
+            nextSongCountdown={popupCountdown}
           />
         )}
 
