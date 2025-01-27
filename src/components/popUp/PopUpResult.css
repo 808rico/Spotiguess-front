@@ -25,8 +25,13 @@
     align-items: center;
     color: white;
     background-color: #121212;
-    
-    
+}
+
+/* Centrer le titre si la croix n'est pas présente */
+.centered-title {
+    display: flex;
+    justify-content: flex-start;
+    gap:5px;
 }
 
 .modal-title-text {

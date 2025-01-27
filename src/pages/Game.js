@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
@@ -66,7 +66,7 @@ function Game() {
   const [countdown, setCountdown] = useState(15); // Compteur
   const [subtitle, setSubtitle] = useState("What's the song?"); // Texte dynamique
   const [popupCountdown, setPopupCountdown] = useState(5);
-
+  const hideResultTimerRef = useRef(null);
 
 
   // eslint-disable-next-line
@@ -201,7 +201,7 @@ function Game() {
       let countdownInterval;
       let lastChanceTimer;
       let showResultTimer;
-      let hideResultTimer;
+      //let hideResultTimer;
       let popupCountdownInterval; 
 
       // Lancement de la lecture
@@ -251,7 +251,7 @@ function Game() {
           });
         }, 1000);
 
-          hideResultTimer = setTimeout(() => {
+          hideResultTimerRef.current = setTimeout(() => {
             // 4) Au bout de 5s, on masque la popup et on passe au morceau suivant
             setShowPopupResult(false);
             handleNextTrack();
@@ -265,8 +265,10 @@ function Game() {
         clearInterval(countdownInterval);
         clearTimeout(lastChanceTimer);
         clearTimeout(showResultTimer);
-        clearTimeout(hideResultTimer);
         clearInterval(popupCountdownInterval);
+        if (hideResultTimerRef.current) {
+          clearTimeout(hideResultTimerRef.current);
+        }
       };
     }
   }, [
@@ -277,6 +279,13 @@ function Game() {
     maxSongIndex
   ]);
 
+  const cancelAutoClose = () => {
+    if (hideResultTimerRef.current) {
+      clearTimeout(hideResultTimerRef.current);
+      hideResultTimerRef.current = null;
+    }
+  };
+
 
 
 
@@ -284,7 +293,7 @@ function Game() {
 
   return (
     <MainLayout>
-      <div className="bg-black pt-6 min-h-screen flex flex-col items-center justify-start">
+      <div className="bg-black pt-6 min-h-screen flex flex-col items-center justify-start space-y-8">
         {/* ÉCRAN DE DÉMARRAGE : même style qu'avant (si la partie n'est pas lancée) */}
         {!isGameStarted && (
           <div className="layoutWrapper">
@@ -364,8 +373,7 @@ function Game() {
                     <Equalizer isPlaying={isPlaying} />
                   </div>
 
-
-                  <div className="flex gap-6 my-4">
+                  <div className="flex gap-6 my-9">
 
                     <button
                       onClick={handlePreviousTrack}
@@ -425,6 +433,7 @@ function Game() {
             onNextTrack={handleNextTrack}
             gameType={gameType}             
             nextSongCountdown={popupCountdown}
+            onCancelAutoClose={cancelAutoClose}
           />
         )}
 

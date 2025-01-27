@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect} from 'react';
 import { Modal, Button } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import MusicNote from '../../assets/MusicNote';
@@ -9,20 +9,36 @@ function PopUpResult({
   onClose,
   currentTrack,
   onNextTrack,
-  // Ajout d’une prop pour connaître le mode
   gameType,
-  // Si tu veux afficher « X seconds », il te faut un compte à rebours
-  nextSongCountdown
+  nextSongCountdown,
+  onCancelAutoClose
 }) {
-  // On réagit au clic sur le bouton en mode manuel
+  // Pour basculer l’affichage après clic sur "Keep playing"
+  const [showManualButton, setShowManualButton] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) {
+      setShowManualButton(false);
+    }
+  }, [isVisible]);
+
   const handleNextAndClose = () => {
-    onClose();      // Fermer la fenêtre
-    onNextTrack();  // Passer au morceau suivant
+
+    onClose();
+    onNextTrack();
+
   };
 
-  // Titre de la modal : on retire la croix si on est en mode auto
+  // Quand on clique sur "Keep playing"
+  const handleKeepPlayingClick = () => {
+    
+    onCancelAutoClose();
+    setShowManualButton(true);
+  };
+
+  // En mode auto, on cache la croix de fermeture
   const modalTitle = (
-    <div className="modal-title">
+    <div className={`modal-title ${gameType === 'auto' ? 'centered-title' : ''}`}>
       <MusicNote />
       <span className="modal-title-text">Result</span>
       {gameType !== 'auto' && (
@@ -38,8 +54,6 @@ function PopUpResult({
       className="pop-up-result"
       title={modalTitle}
       open={isVisible}
-      // onCancel est appelé quand on clique à l'extérieur ou sur la croix
-      // En mode auto, on force closable à false pour ne pas pouvoir fermer la popup manuellement
       closable={gameType !== 'auto'}
       onCancel={gameType !== 'auto' ? onClose : undefined}
       footer={null}
@@ -62,16 +76,56 @@ function PopUpResult({
           </div>
         </div>
 
-        {/* On affiche soit le bouton (mode manuel), soit un texte (mode auto) */}
-        {gameType === 'auto' ? (
-          <div style={{ marginTop: '20px', color: 'white', fontWeight: 'bold' }}>
-            Next song in {nextSongCountdown} seconds...
-          </div>
-        ) : (
+        {/* MODE AUTO */}
+        {gameType === 'auto' && (
+          <>
+            {/* Si on n’a pas encore cliqué sur "Keep playing" */}
+            {!showManualButton && (
+              <div style={{ marginTop: 20, textAlign: 'center' }}>
+                <div
+                  style={{
+                    color: 'white',
+                    fontWeight: 'bold',
+                    marginBottom: 8,
+                  }}
+                >
+                  Next song in {nextSongCountdown} seconds...
+                </div>
+                <div
+                  style={{
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    color: '#1ED760',
+                    fontWeight: 'bold',
+                  }}
+                  onClick={handleKeepPlayingClick}
+                >
+                  Keep playing
+                </div>
+              </div>
+            )}
+
+            {/* Si on a cliqué sur "Keep playing", on affiche le bouton "Next song" */}
+            {showManualButton && (
+              <Button
+                autoFocus
+                className="next-song-button"
+                onClick={handleNextAndClose}
+                style={{ marginTop: 20 }}
+              >
+                Next song
+              </Button>
+            )}
+          </>
+        )}
+
+        {/* MODE MANUEL */}
+        {gameType !== 'auto' && (
           <Button
             autoFocus
             className="next-song-button"
             onClick={handleNextAndClose}
+            style={{ marginTop: 20 }}
           >
             Next song
           </Button>
