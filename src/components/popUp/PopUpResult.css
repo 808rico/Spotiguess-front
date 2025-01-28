@@ -1,159 +1,168 @@
-.pop-up-result{
+/* Container global de la pop-up */
+.pop-up-result {
     display: flex;
     justify-content: center;
     background-color: #121212;
     border-radius: 20px;
     width: 95%;
-
     min-width: 350px;
-}
-
-.ant-modal-content {
-    background-color: #121212!important;
+  }
+  
+  .ant-modal-content {
+    background-color: #121212 !important;
     border-radius: 20px;
     width: 95%;
-    max-width: 500px!important;
+    max-width: 500px !important;
     min-width: 350px;
     overflow: hidden;
-    box-shadow: none!important;
-
-}
-
-.modal-title {
+    box-shadow: none !important;
+  }
+  
+  .modal-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: white;
     background-color: #121212;
-}
-
-/* Centrer le titre si la croix n'est pas présente */
-.centered-title {
+  }
+  
+  /* Centrer le titre si la croix n'est pas présente */
+  .centered-title {
     display: flex;
     justify-content: flex-start;
-    gap:5px;
-}
-
-.modal-title-text {
+    gap: 5px;
+  }
+  
+  .modal-title-text {
     font-size: 18px;
     font-weight: 700;
-    
-}
-
-.close-icon-container{
+  }
+  
+  .close-icon-container {
     display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%; /* Rend le conteneur rond */
-  width: 45px; /* Taille du conteneur */
-  height: 45px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-   /* Effet de transition pour le survol */
-}
-
-.close-icon-container:hover {
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .close-icon-container:hover {
     background-color: #060606;
-}
-
-.close-icon {
+  }
+  
+  .close-icon {
     color: #fff;
     cursor: pointer;
     font-size: 20px;
-}
-
-.close-icon:hover {
-
+  }
+  
+  .close-icon:hover {
     cursor: pointer;
     font-weight: 700;
     font-size: 20px;
-}
-
-.content-container {
+  }
+  
+  .content-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 15px;
     max-width: 100%;
-    
-}
-
-.result-container {
+  }
+  
+  .result-container {
     display: flex;
     flex-direction: row;
-    justify-content:space-around;
+    justify-content: space-around;
     max-width: 100%;
     word-wrap: break-word;
     width: 100%;
-    
-}
-
-.img-album {
+  }
+  
+  .img-album {
     border-radius: 12px;
     max-width: 180px;
     margin-bottom: 24px;
-}
-
-.track-details {
+  }
+  
+  .track-details {
     margin-left: 10px;
     color: #fff;
     text-align: left;
     margin-bottom: 24px;
-}
-
-.track-name {
+  }
+  
+  .track-name {
     position: relative;
     font-weight: bold;
     font-size: 18px;
     overflow: hidden;
     white-space: wrap;
     margin-top: 10px;
-    
     line-height: 20px;
     max-width: 200px;
     max-height: 80px;
-}
-
-
-.track-artist {
+  }
+  
+  .track-artist {
     color: #aaa;
     max-width: 200px;
     max-height: 42px;
     overflow: hidden;
     margin-top: 10px;
-}
-
-.track-album {
+  }
+  
+  .track-album {
     color: #aaa;
     font-style: italic;
     max-width: 200px;
     max-height: 42px;
     overflow: hidden;
     margin-top: 10px;
-}
-
-.music-note{
+  }
+  
+  .music-note {
     width: 20px;
     height: 20px;
     color: #1DB954;
     font-size: 24px;
     margin-right: 8px;
-}
-.next-song-button {
+  }
+  
+  .next-song-button {
     width: 135px;
     margin-left: 5px;
     font-weight: bold;
     background-color: #1ED760;
     border: none;
     height: 40px;
-}
-
-.next-song-button:hover {
-    background-color: #1ED760;
-    font-weight: 900!important;
-    color: black!important;
+  }
   
-    
+  .next-song-button:hover {
+    background-color: #1ED760;
+    font-weight: 900 !important;
+    color: black !important;
     height: 40px;
-}
-
+  }
+  
+  /* Barre de progression */
+  .progress-bar-container {
+    width: 200px; /* Ajustez selon vos besoins */
+    height: 8px;
+    background: #333;
+    border-radius: 4px;
+    margin: 0 auto; /* Pour centrer la barre */
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .progress-bar-fill {
+    height: 100%;
+    background: #1ED760;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+  }
+  

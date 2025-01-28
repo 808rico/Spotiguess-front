@@ -17,7 +17,7 @@
 }
 .title{
     
-    font-weight: bold;
+    font-weight: bold!important;
     margin-bottom: 1rem;
     text-align: center;
 }

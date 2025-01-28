@@ -349,8 +349,8 @@ function Game() {
             <div className="flex flex-col items-center justify-center">
               {gameType === "auto" && (
                 <div className="game-timer text-center mb-6">
-                  <h2 className="text-white font-bold text-3xl mb-2">{subtitle}</h2>
-                  <div className="text-white font-black text-7xl">{countdown}</div>
+                  <h2 className="text-white font-bold text-2xl mb-2">{subtitle}</h2>
+                  <div className="text-white font-black text-6xl">{countdown}</div>
                   <div className="flex justify-center items-center mt-4">
                     <Equalizer isPlaying={isPlaying} />
                   </div>

@@ -23,18 +23,23 @@ function PopUpResult({
   }, [isVisible]);
 
   const handleNextAndClose = () => {
-
     onClose();
     onNextTrack();
-
   };
 
   // Quand on clique sur "Keep playing"
   const handleKeepPlayingClick = () => {
-    
     onCancelAutoClose();
     setShowManualButton(true);
   };
+
+  // Calcul du pourcentage de progression : de 5 (restant) jusqu'à 0
+  // => Quand nextSongCountdown = 5, progression = 0%
+  // => Quand nextSongCountdown = 0, progression = 100%
+  const progressPercentage = ((6 - nextSongCountdown) / 5) * 100;
+
+
+
 
   // En mode auto, on cache la croix de fermeture
   const modalTitle = (
@@ -89,14 +94,24 @@ function PopUpResult({
                     marginBottom: 8,
                   }}
                 >
-                  Next song in {nextSongCountdown} seconds...
+                  Next song in {nextSongCountdown -1} {nextSongCountdown - 1 > 1 ? "seconds" : "second"}...
                 </div>
+                
+                {/* Barre de progression */}
+                <div className="progress-bar-container">
+                  <div
+                    className="progress-bar-fill"
+                    style={{ width: `${progressPercentage}%` }}
+                  ></div>
+                </div>
+
                 <div
                   style={{
                     textDecoration: 'underline',
                     cursor: 'pointer',
                     color: '#1ED760',
                     fontWeight: 'bold',
+                    marginTop: 10
                   }}
                   onClick={handleKeepPlayingClick}
                 >
