@@ -10,6 +10,7 @@ import axios from "axios";
 import PlaylistSuggestion from "../components/suggestions/PlaylistSuggestion";
 import Cookies from 'js-cookie';
 import PopUpPay from "../components/popUp/PopUpPay";
+import PopUpGameMode from "../components/popUp/PopUpGameMode";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
@@ -30,16 +31,35 @@ function Playlist() {
   const [inputValue, setInputValue] = useState('');
   const [suggestionEnabled, setSuggestionEnabled] = useState(true);
   const [showPopupPay, setShowPopupPay] = useState(false);
+  const [gameMode, setGameMode] = useState(null); // Default game mode
+  const [showGameModePopup, setShowGameModePopup] = useState(false); // Popup state
 
   const handleInputChange = value => {
     setInputValue(value);
     handleSearch(value);
   };
 
+
   useEffect(() => {
-    if (!accessToken) return
+    if (!accessToken) return;
+
     spotifyApi.setAccessToken(accessToken)
-  }, [accessToken])
+
+    // 🔹 GET Game Mode au chargement
+    axios.get(`${urlServer}/settings/game-mode`, {
+      params: { accessToken }
+    })
+    .then((response) => {
+      if (response.data && response.data.gameType) {
+        setGameMode(response.data.gameType); // "auto" ou "manual"
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching game mode:", error);
+      message.error("Error fetching game mode");
+    });
+
+  }, [accessToken]);
 
 
 
@@ -160,6 +180,30 @@ function Playlist() {
           </AutoComplete>
         </div>
 
+        
+        {/* Current Game Mode Display + Button to Open Popup */}
+        <div className="mt-6 text-white">
+          <p className="text-lg font-medium">
+            <span className="opacity-70">Current Game Mode:</span> <span className="font-bold">{gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}
+            </span>
+          </p>
+          <button
+            onClick={() => setShowGameModePopup(true)}
+            className="mt-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition"
+          >
+            Change Game Mode
+          </button>
+        </div>
+
+         {/* Popup for Switching Game Mode */}
+         <PopUpGameMode
+          isVisible={showGameModePopup}
+          onClose={() => setShowGameModePopup(false)}
+          gameMode={gameMode}
+          setGameMode={setGameMode}
+          accessToken={accessToken}
+        />
+        
         <PlaylistSuggestion enabled={suggestionEnabled} onSuggestionSelect={handleSuggestionSelect} />
 
         <PopUpPay isVisible={showPopupPay} onClose={() => setShowPopupPay(false)} />
