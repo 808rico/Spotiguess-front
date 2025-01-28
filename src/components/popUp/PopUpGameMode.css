@@ -1,119 +1,116 @@
-/* Container global de la pop-up */
 .pop-up-game-mode {
-    display: flex;
-    justify-content: center;
-    background-color: #121212;
-    border-radius: 20px;
-    width: 95%;
-    min-width: 350px;
-  }
-  
-  .ant-modal-content {
-    background-color: #121212 !important;
-    border-radius: 20px;
-    width: 95%;
-    max-width: 500px !important;
-    min-width: 350px;
-    overflow: hidden;
-    box-shadow: none !important;
-  }
-  
-  .modal-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    background-color: #121212;
-  }
-  
-  .centered-title {
-    display: flex;
-    justify-content: flex-start;
-    gap: 5px;
-  }
-  
-  .modal-title-text {
-    font-size: 18px;
-    font-weight: 700;
-  }
-  
-  .close-icon-container {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .close-icon-container:hover {
-    background-color: #060606;
-  }
-  
-  .close-icon {
-    color: #fff;
-    cursor: pointer;
-    font-size: 20px;
-  }
-  
-  .content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 15px;
-    max-width: 100%;
-  }
-  
-  .mode-selection {
-    width: 100%;
-    color: white;
-    margin-top: 20px;
-  }
-  
-  .radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .radio-button {
-    background: #1a1a1a;
-    padding: 10px 15px;
-    border-radius: 8px;
-    color: #fff;
-    cursor: pointer;
-  }
-  
-  .radio-button:hover {
-    background: #333;
-  }
-  
-  .radio-button strong {
-    font-size: 16px;
-    color: #1ed760;
-  }
-  
-  .radio-button .description {
-    font-size: 14px;
-    color: #aaa;
-    margin-top: 5px;
-  }
-  
-  .save-button {
-    width: 135px;
-    margin-left: 5px;
-    font-weight: bold;
-    background-color: #1ED760;
-    border: none;
-    height: 40px;
-  }
-  
-  .save-button:hover {
-    background-color: #1ED760;
-    font-weight: 900 !important;
-    color: black !important;
-    height: 40px;
-  }
-  
+  display: flex;
+  justify-content: center;
+  background-color: #121212;
+  border-radius: 20px;
+  width: 95%;
+  min-width: 350px;
+}
+
+.ant-modal-content {
+  background-color: #121212 !important;
+  border-radius: 20px;
+  width: 95%;
+  max-width: 500px !important;
+  min-width: 350px;
+  overflow: hidden;
+  box-shadow: none !important;
+}
+
+.modal-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  background-color: #121212;
+}
+
+.centered-title {
+  display: flex;
+  gap: 5px;
+}
+
+.modal-title-text {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.close-icon-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.close-icon-container:hover {
+  background-color: #060606;
+}
+
+.close-icon {
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 15px;
+  max-width: 100%;
+}
+
+.mode-selection {
+  width: 100%;
+  color: white;
+  margin-top: 20px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radio-button {
+  background: #1a1a1a;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.radio-button:hover {
+  background: #333;
+}
+
+.radio-button strong {
+  font-size: 16px;
+  color: #1ed760;
+}
+
+.radio-button .description {
+  font-size: 14px;
+  color: #aaa;
+  margin-top: 5px;
+}
+
+.save-button {
+  width: 135px;
+  margin-left: 5px;
+  font-weight: bold;
+  background-color: #1ED760;
+  border: none;
+  height: 40px;
+}
+
+.save-button:hover {
+  background-color: #1ED760;
+  font-weight: 900 !important;
+  color: black !important;
+  height: 40px;
+}

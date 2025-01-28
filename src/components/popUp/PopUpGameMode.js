@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Radio,message } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import MusicNote from '../../assets/MusicNote';
@@ -9,6 +9,12 @@ const urlServer = process.env.REACT_APP_URL_SERVER;
 
 function PopUpGameMode({ isVisible, onClose, gameMode, setGameMode, accessToken }) {
   const [selectedMode, setSelectedMode] = useState(gameMode);
+
+  console.log("gameMode", gameMode);
+
+  useEffect(() => {
+    setSelectedMode(gameMode);
+  }, [gameMode]);
 
   const handleModeChange = (e) => {
     setSelectedMode(e.target.value);

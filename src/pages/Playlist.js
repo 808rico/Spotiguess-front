@@ -4,7 +4,7 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
 //import { useMediaQuery } from 'react-responsive';
 import { Divider, message, Input, AutoComplete } from "antd";
-import { UnorderedListOutlined, RightOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, RightOutlined, SwapOutlined } from '@ant-design/icons';
 import './Playlist.css'
 import axios from "axios";
 import PlaylistSuggestion from "../components/suggestions/PlaylistSuggestion";
@@ -182,20 +182,20 @@ function Playlist() {
 
         
         {/* Current Game Mode Display + Button to Open Popup */}
-        <div className="mt-6 text-white">
-          <p className="text-lg font-medium">
-            <span className="opacity-70">Current Game Mode:</span> <span className="font-bold">{gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}
+        <div className="mt-6 text-white flex bg-slate-800 rounded-md p-2 justify-between items-center">
+          <p className="text-base font-medium  ml-5 justify-center">
+            <span >Current Game Mode:</span> <span className="font-bold text-green-600">{gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}
             </span>
           </p>
           <button
             onClick={() => setShowGameModePopup(true)}
-            className="mt-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition"
+            className=" bg-slate-900 px-4 py-1  hover:font-bold rounded-lg transition mr-5 "
           >
-            Change Game Mode
+            <SwapOutlined style={{ fontSize: '20px' }} />
+            Switch
           </button>
         </div>
 
-         {/* Popup for Switching Game Mode */}
          <PopUpGameMode
           isVisible={showGameModePopup}
           onClose={() => setShowGameModePopup(false)}
