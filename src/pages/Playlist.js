@@ -86,19 +86,19 @@ function Playlist() {
         console.log(data.body)
         const playlists = data.body.playlists.items;
         const formattedResults = playlists.map(playlist => ({
-          value: playlist.id,
-          playlistName: playlist.name,
+          value: playlist.name,       // ← le champ affichera le nom
+          playlistId: playlist.id,    // ← on stocke l’ID ailleurs
           label: (
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <img
-                src={playlist.images[0]?.url || 'default_image_url'} // Utilisez l'image de l'artiste ou une image par défaut
+                src={playlist.images[0]?.url || 'default_image_url'}
                 alt={playlist.name}
-                style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }}
+                style={{ width: 30, height: 30, borderRadius: '50%', marginRight: 10 }}
               />
               {playlist.name}
               <RightOutlined style={{ marginLeft: 'auto' }} />
             </div>
-          ),
+          )
         }));
         setOptions([])
         setOptions(formattedResults);
@@ -144,8 +144,8 @@ function Playlist() {
   };
 
   const onSelect = (value, option) => {
-    setSelectedPlaylistId(value);
-    setSelectedPlaylistName(option.playlistName);
+    setSelectedPlaylistId(option.playlistId); // on récupère l’ID
+    setSelectedPlaylistName(value);           // le "value" = le nom
   };
 
 
