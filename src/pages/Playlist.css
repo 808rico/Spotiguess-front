@@ -35,3 +35,8 @@ h2{
   .anticon-audio {
     color: black; /* Couleur de l'icône, à changer selon vos préférences */
   }
+
+  .play-button-liked {
+    margin-top: 20px;
+    width: 150px;
+  }

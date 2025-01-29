@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
 //import { useMediaQuery } from 'react-responsive';
-import { Divider, message, Input, AutoComplete } from "antd";
-import { UnorderedListOutlined, RightOutlined, SwapOutlined } from '@ant-design/icons';
+import { Divider, message, Input, AutoComplete, Button } from "antd";
+import { UnorderedListOutlined, RightOutlined, SwapOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import './Playlist.css'
 import axios from "axios";
 import PlaylistSuggestion from "../components/suggestions/PlaylistSuggestion";
@@ -29,10 +29,11 @@ function Playlist() {
   spotifyApi.setAccessToken(accessToken);
   //const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
   const [inputValue, setInputValue] = useState('');
-  const [suggestionEnabled, setSuggestionEnabled] = useState(true);
   const [showPopupPay, setShowPopupPay] = useState(false);
   const [gameMode, setGameMode] = useState(null); // Default game mode
   const [showGameModePopup, setShowGameModePopup] = useState(false); // Popup state
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
+  const [selectedPlaylistName, setSelectedPlaylistName] = useState('');
 
   const handleInputChange = value => {
     setInputValue(value);
@@ -107,51 +108,45 @@ function Playlist() {
       });
   };
 
-  const onSelect = async (value, option) => {
-    console.log('onSelect', value);
-    setInputValue(option.playlistName);
-    setLoading(true); // Start the loader
-    setSuggestionEnabled(false); // Disable the suggestion button
+  const handleStartGame = async () => {
+    if (!selectedPlaylistId) {
+      message.warning('Please select a playlist first!');
+      return;
+    }
 
+    setLoading(true);
     try {
-      // Assurez-vous d'avoir l'access token disponible ici
-
-
-      // Envoyez l'ID de la playlist et l'access token à votre backend
       const response = await axios.post(`${urlServer}/playlist`, {
-        playlistId: value,
-        accessToken: accessToken // Inclure l'access token ici
+        playlistId: selectedPlaylistId,
+        accessToken: accessToken,
       });
 
-      const selectedTracks = response.data; // Supposons que la réponse contient directement les URIs sélectionnés
+      const selectedTracks = response.data;
 
       // Navigate to the game page
       navigate('/game', {
         state: {
           type: 'Playlist',
           iconName: 'UnorderedListOutlined',
-          input: option.playlistName, // Name of the playlist
-          songUris: selectedTracks // List of selected URIs
-        }
+          input: selectedPlaylistName,
+          songUris: selectedTracks,
+        },
       });
-
     } catch (error) {
-
-      console.log('Status code:', error.response.status); // Affiche le code de statut de l'erreur
-      if (error.response.status === 400) {
-        setShowPopupPay(true); // Afficher la popup pour le code 400
+      if (error?.response?.status === 400) {
+        setShowPopupPay(true);
+      } else {
+        message.error("Error: " + error.message);
       }
-      else {
-        message.error("Error:" + error.message);
-      }
-
-      setSuggestionEnabled(true)
     } finally {
       setLoading(false);
-      setSuggestionEnabled(true) // Stop the loader
     }
   };
 
+  const onSelect = (value, option) => {
+    setSelectedPlaylistId(value);
+    setSelectedPlaylistName(option.playlistName);
+  };
 
 
 
@@ -196,6 +191,17 @@ function Playlist() {
           </button>
         </div>
 
+        <Button
+          className="play-button-liked"
+          type="primary"
+          icon={<PlayCircleOutlined />}
+          onClick={handleStartGame}
+          size="large"
+          loading={loading}
+        >
+          Play
+        </Button>
+
         <PopUpGameMode
           isVisible={showGameModePopup}
           onClose={() => setShowGameModePopup(false)}
@@ -204,9 +210,9 @@ function Playlist() {
           accessToken={accessToken}
         />
 
-        
 
-        <PlaylistSuggestion enabled={suggestionEnabled} onSuggestionSelect={handleSuggestionSelect} />
+
+        <PlaylistSuggestion enabled={true} onSuggestionSelect={handleSuggestionSelect} />
 
         <PopUpPay isVisible={showPopupPay} onClose={() => setShowPopupPay(false)} />
 
