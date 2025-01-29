@@ -52,7 +52,7 @@ function PopUpGameMode({ isVisible, onClose, gameMode, setGameMode, accessToken 
       className="pop-up-game-mode"
       title={modalTitle}
       open={isVisible}
-      closable
+      closable={false}
       onCancel={onClose}
       footer={null}
     >
@@ -65,11 +65,11 @@ function PopUpGameMode({ isVisible, onClose, gameMode, setGameMode, accessToken 
           >
             <Radio value="auto" className="radio-button">
               <strong>Auto</strong>
-              <p className="description">It will go through the playlist automatically.</p>
+              <p className="description">It will play each song for 15s and go through the playlist automatically.</p>
             </Radio>
             <Radio value="manual" className="radio-button">
               <strong>Manual</strong>
-              <p className="description">Take full control of the game.</p>
+              <p className="description">Take full control of the game. Decide when to Play, Pause and Skip each track.</p>
             </Radio>
           </Radio.Group>
         </div>

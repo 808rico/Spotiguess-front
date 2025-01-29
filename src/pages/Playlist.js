@@ -49,15 +49,15 @@ function Playlist() {
     axios.get(`${urlServer}/settings/game-mode`, {
       params: { accessToken }
     })
-    .then((response) => {
-      if (response.data && response.data.gameType) {
-        setGameMode(response.data.gameType); // "auto" ou "manual"
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching game mode:", error);
-      message.error("Error fetching game mode");
-    });
+      .then((response) => {
+        if (response.data && response.data.gameType) {
+          setGameMode(response.data.gameType); // "auto" ou "manual"
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching game mode:", error);
+        message.error("Error fetching game mode");
+      });
 
   }, [accessToken]);
 
@@ -180,30 +180,32 @@ function Playlist() {
           </AutoComplete>
         </div>
 
-        
+
         {/* Current Game Mode Display + Button to Open Popup */}
         <div className="mt-6 text-white flex bg-slate-800 rounded-md p-2 justify-between items-center">
-          <p className="text-base font-medium  ml-5 justify-center">
-            <span >Current Game Mode:</span> <span className="font-bold text-green-600">{gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}
+          <p className="text-base font-light  ml-5 justify-center">
+            <span >Current Game Mode:</span> <span className="font-semibold text-green-600">{gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}
             </span>
           </p>
           <button
             onClick={() => setShowGameModePopup(true)}
             className=" bg-slate-900 px-4 py-1  hover:font-bold rounded-lg transition mr-5 "
           >
-            <SwapOutlined style={{ fontSize: '20px' }} />
+            <SwapOutlined style={{ fontSize: '20px', paddingRight: '5px' }} />
             Switch
           </button>
         </div>
 
-         <PopUpGameMode
+        <PopUpGameMode
           isVisible={showGameModePopup}
           onClose={() => setShowGameModePopup(false)}
           gameMode={gameMode}
           setGameMode={setGameMode}
           accessToken={accessToken}
         />
+
         
+
         <PlaylistSuggestion enabled={suggestionEnabled} onSuggestionSelect={handleSuggestionSelect} />
 
         <PopUpPay isVisible={showPopupPay} onClose={() => setShowPopupPay(false)} />
