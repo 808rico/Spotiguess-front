@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
-//import { useMediaQuery } from 'react-responsive';
 import { Divider, message, Input, AutoComplete, Button } from "antd";
-import { UnorderedListOutlined, RightOutlined, SwapOutlined, PlayCircleOutlined } from '@ant-design/icons';
-import './Playlist.css'
+import {
+  UnorderedListOutlined,
+  RightOutlined,
+  SwapOutlined,
+  PlayCircleOutlined,
+  CloseCircleOutlined,
+} from '@ant-design/icons';
 import axios from "axios";
-import PlaylistSuggestion from "../components/suggestions/PlaylistSuggestion";
 import Cookies from 'js-cookie';
 import PopUpPay from "../components/popUp/PopUpPay";
 import PopUpGameMode from "../components/popUp/PopUpGameMode";
+import PlaylistSuggestion from "../components/suggestions/PlaylistSuggestion";
+import './Playlist.css';
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
@@ -18,76 +23,53 @@ const spotifyApi = new SpotifyWebApi({
 
 const urlServer = process.env.REACT_APP_URL_SERVER;
 
-
-//const urlServer = 'http://localhost:3001'; // Ou 'https://spotiguess-server-4a46bc45d48c.herokuapp.com'
-
-
 function Playlist() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const accessToken = Cookies.get("spotifyAuthToken")
-  spotifyApi.setAccessToken(accessToken);
-  //const isDesktopOrLaptop = useMediaQuery({ minWidth: 700 });
+  const accessToken = Cookies.get("spotifyAuthToken");
   const [inputValue, setInputValue] = useState('');
+  const [options, setOptions] = useState([]);
   const [showPopupPay, setShowPopupPay] = useState(false);
-  const [gameMode, setGameMode] = useState(null); // Default game mode
-  const [showGameModePopup, setShowGameModePopup] = useState(false); // Popup state
+
+  const [gameMode, setGameMode] = useState(null);
+  const [showGameModePopup, setShowGameModePopup] = useState(false);
+
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
   const [selectedPlaylistName, setSelectedPlaylistName] = useState('');
-
-  const handleInputChange = value => {
-    setInputValue(value);
-    handleSearch(value);
-  };
-
+  const [selectedPlaylistImage, setSelectedPlaylistImage] = useState(null);
 
   useEffect(() => {
     if (!accessToken) return;
+    spotifyApi.setAccessToken(accessToken);
 
-    spotifyApi.setAccessToken(accessToken)
-
-    // 🔹 GET Game Mode au chargement
+    // Récupère le game mode au chargement
     axios.get(`${urlServer}/settings/game-mode`, {
       params: { accessToken }
     })
-      .then((response) => {
-        if (response.data && response.data.gameType) {
+      .then(response => {
+        if (response.data?.gameType) {
           setGameMode(response.data.gameType); // "auto" ou "manual"
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error fetching game mode:", error);
         message.error("Error fetching game mode");
       });
-
   }, [accessToken]);
 
-
-
-  const [options, setOptions] = useState([]);
-
-  const handleSuggestionSelect = (suggestion) => {
-    const value = { playlistName: suggestion.name };
-    setInputValue(value);
-    onSelect(suggestion.id, value);
-
-  };
-
-  const handleSearch = value => {
+  // Recherche dans l'API Spotify
+  const handleSearch = (value) => {
     if (!value) {
       setOptions([]);
       return;
     }
-
-    // Rechercher des artistes avec l'API Spotify
     spotifyApi.searchPlaylists(value, { limit: 4 })
       .then(data => {
-        // Formater les résultats de la recherche pour AutoComplete
-        console.log(data.body)
         const playlists = data.body.playlists.items;
         const formattedResults = playlists.map(playlist => ({
-          value: playlist.name,       // ← le champ affichera le nom
-          playlistId: playlist.id,    // ← on stocke l’ID ailleurs
+          value: playlist.name,  // Utilisé comme texte dans l'AutoComplete
+          playlistId: playlist.id,
+          playlistImage: playlist.images[0]?.url || 'default_image_url',
           label: (
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <img
@@ -100,7 +82,6 @@ function Playlist() {
             </div>
           )
         }));
-        setOptions([])
         setOptions(formattedResults);
       })
       .catch(err => {
@@ -108,22 +89,40 @@ function Playlist() {
       });
   };
 
+  const handleInputChange = (value) => {
+    setInputValue(value);
+    handleSearch(value);
+  };
+
+  // Sélection dans l'AutoComplete
+  const onSelect = (value, option) => {
+    setSelectedPlaylistId(option.playlistId);
+    setSelectedPlaylistName(value);
+    setSelectedPlaylistImage(option.playlistImage);
+    setInputValue(value);
+  };
+
+  // Clique sur la croix => on efface tout
+  const handleClearSelection = () => {
+    setSelectedPlaylistId(null);
+    setSelectedPlaylistName('');
+    setSelectedPlaylistImage(null);
+    setInputValue('');
+  };
+
+  // Lance le jeu
   const handleStartGame = async () => {
     if (!selectedPlaylistId) {
       message.warning('Please select a playlist first!');
       return;
     }
-
     setLoading(true);
     try {
       const response = await axios.post(`${urlServer}/playlist`, {
         playlistId: selectedPlaylistId,
-        accessToken: accessToken,
+        accessToken
       });
-
       const selectedTracks = response.data;
-
-      // Navigate to the game page
       navigate('/game', {
         state: {
           type: 'Playlist',
@@ -143,27 +142,19 @@ function Playlist() {
     }
   };
 
-  const onSelect = (value, option) => {
-    setSelectedPlaylistId(option.playlistId); // on récupère l’ID
-    setSelectedPlaylistName(value);           // le "value" = le nom
-  };
-
-
-
   return (
-
-
     <MainLayout>
-      <div style={{ background: '#000000', minHeight: 280, height: '100%' }}>
-        <h1 className="text-white text-3xl font-bold mb-2"><UnorderedListOutlined style={{ fontSize: '25px', marginRight: '10px' }} />Playlist</h1>
+      <div style={{ background: '#000', minHeight: 280, height: '100%' }}>
+        <h1 className="text-white text-3xl font-bold mb-2">
+          <UnorderedListOutlined style={{ fontSize: '25px', marginRight: '10px' }} />
+          Playlist
+        </h1>
+
         <Divider style={{ borderColor: 'white', margin: '12px 0' }} />
         <h2 className="text-white text-xl mb-6 font-medium">Search for a playlist.</h2>
 
-
-
         <div className="search-container" style={{ width: '100%' }}>
           <AutoComplete
-            //popupMatchSelectWidth={252}
             style={{ width: '100%' }}
             options={options}
             onSelect={onSelect}
@@ -171,26 +162,51 @@ function Playlist() {
             onChange={handleInputChange}
             value={inputValue}
           >
-            <Input.Search loading={loading} size="large" placeholder="Search for a playlist" enterButton />
+            <Input
+              size="large"
+              placeholder="Search for a playlist"
+              style={{ borderRadius: 10 }}
+              // image (prefix) si une playlist est sélectionnée
+              prefix={
+                selectedPlaylistId && selectedPlaylistImage ? (
+                  <img
+                    src={selectedPlaylistImage}
+                    alt="playlist"
+                    style={{ width: 24, height: 24, borderRadius: '50%', marginRight: 8 }}
+                  />
+                ) : null
+              }
+              // petite croix pour annuler la sélection
+              suffix={
+                selectedPlaylistId ? (
+                  <CloseCircleOutlined
+                    onClick={handleClearSelection}
+                    style={{ cursor: 'pointer', color: 'gray', marginRight: 10, fontSize: 18 }}
+                  />
+                ) : null
+              }
+            />
           </AutoComplete>
         </div>
 
-
-        {/* Current Game Mode Display + Button to Open Popup */}
+        {/* Current Game Mode Display + Switch Button */}
         <div className="mt-6 text-white flex bg-slate-800 rounded-md p-2 justify-between items-center">
-          <p className="text-base font-light  ml-5 justify-center">
-            <span >Current Game Mode:</span> <span className="font-semibold text-green-600">{gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}
+          <p className="text-base font-light ml-5">
+            <span>Current Game Mode: </span>
+            <span className="font-semibold text-green-600">
+              {gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}
             </span>
           </p>
           <button
             onClick={() => setShowGameModePopup(true)}
-            className=" bg-slate-900 px-4 py-1  hover:font-bold rounded-lg transition mr-5 "
+            className="bg-slate-900 px-4 py-1 hover:font-bold rounded-lg transition mr-5"
           >
             <SwapOutlined style={{ fontSize: '20px', paddingRight: '5px' }} />
             Switch
           </button>
         </div>
 
+        {/* Bouton Play */}
         <Button
           className="play-button-liked"
           type="primary"
@@ -198,8 +214,10 @@ function Playlist() {
           onClick={handleStartGame}
           size="large"
           loading={loading}
+          disabled={loading || !selectedPlaylistId}
+          
         >
-          Play
+          Start
         </Button>
 
         <PopUpGameMode
@@ -210,16 +228,18 @@ function Playlist() {
           accessToken={accessToken}
         />
 
+        <PlaylistSuggestion
+          enabled={true}
+          onSuggestionSelect={() => {} /* si vous utilisez encore ce composant */}
+        />
 
-
-        <PlaylistSuggestion enabled={true} onSuggestionSelect={handleSuggestionSelect} />
-
-        <PopUpPay isVisible={showPopupPay} onClose={() => setShowPopupPay(false)} />
-
+        <PopUpPay
+          isVisible={showPopupPay}
+          onClose={() => setShowPopupPay(false)}
+        />
       </div>
     </MainLayout>
   );
-};
+}
 
-
-export default Playlist
+export default Playlist;
