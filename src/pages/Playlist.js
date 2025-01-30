@@ -215,7 +215,7 @@ function Playlist() {
           size="large"
           loading={loading}
           disabled={loading || !selectedPlaylistId}
-          
+
         >
           Start
         </Button>
@@ -230,7 +230,14 @@ function Playlist() {
 
         <PlaylistSuggestion
           enabled={true}
-          onSuggestionSelect={() => {} /* si vous utilisez encore ce composant */}
+          onSuggestionSelect={(playlist) => {
+            setSelectedPlaylistId(playlist.id);
+            setSelectedPlaylistName(playlist.name);
+            const imageUrl = playlist.images?.[0]?.url || "default_image_url";
+            setSelectedPlaylistImage(imageUrl);
+
+            setInputValue(playlist.name);
+          }}
         />
 
         <PopUpPay
