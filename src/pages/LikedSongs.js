@@ -87,7 +87,7 @@ function LikedSongs() {
 
         {/* Affichage du Game Mode + bouton Switch */}
         <div className="mt-6 text-white flex bg-slate-800 rounded-md p-2 justify-between items-center">
-          <p className="text-base font-light ml-5">
+          <p className="text-base font-light ml-5 mr-2">
             <span>Current Game Mode: </span>
             <span className="font-semibold text-green-600">
               {gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}
