@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import SpotifyWebApi from 'spotify-web-api-node';
 import MainLayout from '../components/layout/MainLayout';
@@ -88,10 +88,9 @@ function Game() {
           message.error("Error user settings");
         });
     }
-  }, [urlServer, accessToken]);
+  }, [accessToken]);
 
   useEffect(() => {
-    console.log("GameType:", gameType);
     if (accessToken && songUris[currentSongIndex]) {
       spotifyApi.setAccessToken(accessToken);
 
@@ -137,19 +136,17 @@ function Game() {
   };
 
   // Next (MANUAL)
-  const handleNextTrack = () => {
+  const handleNextTrack = useCallback(() => {
     const nextIndex = currentSongIndex + 1;
     if (nextIndex < maxSongIndex && nextIndex < songUris.length) {
       setCurrentSongIndex(nextIndex);
       setIsPlaying(true);
     } else {
-      // Fin de la playlist
       setIsPlaylistFinished(true);
       setShowPopupFinish(true);
-      // Vérifie si on peut "rejouer" 10 de plus
       setIsReplayButtonVisible((songUris.length - maxSongIndex) >= 10);
     }
-  };
+  }, [currentSongIndex, maxSongIndex, songUris.length]);  
 
   // Rejouer
   const onReplay = () => {
@@ -276,7 +273,8 @@ function Game() {
     isGameStarted,
     isPlaylistFinished,
     currentSongIndex,
-    maxSongIndex
+    maxSongIndex,
+    handleNextTrack,
   ]);
 
   const cancelAutoClose = () => {
