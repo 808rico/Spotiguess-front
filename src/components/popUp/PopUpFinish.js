@@ -2,9 +2,9 @@ import React from 'react';
 import { Modal, Button } from 'antd';
 import MusicNote from '../../assets/MusicNote';
 import './PopUpFinish.css';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, HomeOutlined, ForwardOutlined } from '@ant-design/icons';
 
-function PopUpFinish({ isVisible, onClose, onReplay, onGoToHome, isReplayButtonVisible }) {
+function PopUpFinish({ isVisible, onClose, onReplay, onGoToHome, isReplayButtonVisible, isKeepPlayingLoading }) {
     return (
         <Modal
             className="pop-up-finish"
@@ -28,11 +28,12 @@ function PopUpFinish({ isVisible, onClose, onReplay, onGoToHome, isReplayButtonV
                     <p>What do you want to do next?</p>
                 </div>
                 {isReplayButtonVisible &&
-                    <Button autoFocus className="keep-playing-button" onClick={onReplay}>
+                    <Button autoFocus className="keep-playing-button" onClick={onReplay} icon={<ForwardOutlined />}
+                    loading={isKeepPlayingLoading}>
                         Keep playing
                     </Button>
                 }
-                <Button autoFocus className="main-menu-button" onClick={onGoToHome}>
+                <Button autoFocus className="main-menu-button" onClick={onGoToHome} icon={<HomeOutlined />}>
                     Main menu
                 </Button>
 

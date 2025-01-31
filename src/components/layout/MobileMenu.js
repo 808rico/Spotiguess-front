@@ -10,6 +10,7 @@ import {
   HeartOutlined,
   UnorderedListOutlined,
   UserOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
 
 
@@ -28,6 +29,7 @@ const MobileMenu = ({ menuOpen, toggleMenu}) => {
       case '/liked-songs': return ['3'];
       case '/playlist': return ['4'];
       case '/artist': return ['5'];
+      case '/setings': return ['6'];
       default: return [];
     }
   };
@@ -40,6 +42,7 @@ const MobileMenu = ({ menuOpen, toggleMenu}) => {
       case '3': navigate('/liked-songs'); break;
       case '4': navigate('/playlist'); break;
       case '5': navigate('/artist'); break;
+      case '6': navigate('/settings'); break;
       default: break;
     }
   };
@@ -74,6 +77,9 @@ const MobileMenu = ({ menuOpen, toggleMenu}) => {
         </Menu.Item>
         <Menu.Item key="5" icon={<UserOutlined />}>
           Artist
+        </Menu.Item>
+        <Menu.Item key="6" icon={<SettingOutlined />}>
+          Settings
         </Menu.Item>
       </Menu>
     </Drawer>

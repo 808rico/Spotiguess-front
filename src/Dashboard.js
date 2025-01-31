@@ -5,6 +5,7 @@ import LikedSongs from './pages/LikedSongs';
 import Playlist from './pages/Playlist';
 import Artist from './pages/Artist';
 import Game from './pages/Game';
+import Settings from './pages/Settings';
 
 function Dashboard() {
   console.log('dashboard')
@@ -23,6 +24,7 @@ function Dashboard() {
         <Route path="/playlist" element={<Playlist />} />
         <Route path="/" element={<Home />} />
         <Route path="/game" element={<Game />} />
+        <Route path="/settings" element={<Settings />} />
 
       </Routes>
     </BrowserRouter>
