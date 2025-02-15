@@ -59,7 +59,6 @@ function App() {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '100vh',
             color: 'white',
             textAlign: 'center',
           }}

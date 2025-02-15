@@ -8,7 +8,7 @@ import MobileMenu from './MobileMenu';
 
 const { Content } = Layout;
 
-const MainLayout = ({ children}) => {
+const MainLayout = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const isDesktopOrLaptop = useMediaQuery({ minWidth: 500 });
 
@@ -19,14 +19,14 @@ const MainLayout = ({ children}) => {
   return (
     <Layout>
       <Header toggleMenu={toggleMenu} />
-      <Layout>
+      <Layout style={{ background: '#000000' }}>
         {isDesktopOrLaptop ? (
           <DesktopMenu menuOpen={menuOpen} />
         ) : (
           <MobileMenu menuOpen={menuOpen} toggleMenu={toggleMenu} />
         )}
-        <Content style={{ backgroundColor: '#000000', minHeight: '100vh' }}>
-          <div style={{ background: '#000000', padding: 24, maxWidth: '800px', width: '100%', margin: '0 auto' }} >
+        <Content style={{ backgroundColor: '#000000', marginTop: '75px', paddingLeft: isDesktopOrLaptop ? '80px' : '0px'}}>
+          <div style={{ background: '#000000', padding: 24, maxWidth: '800px', width: '100%',margin: '0 auto' }} >
             {children}
           </div>
         </Content>

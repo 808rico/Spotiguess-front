@@ -49,7 +49,7 @@ function Settings() {
 
   return (
     <MainLayout>
-      <div className="bg-black min-h-screen py-8 px-4">
+      <div className="bg-black py-8 px-4">
         <h1 className="text-white text-3xl font-bold mb-6">Settings</h1>
 
         {/* Section : Game Mode */}

@@ -59,7 +59,7 @@ function Home() {
 
 
     <MainLayout>
-      <div className="bg-black min-h-screen p-6">
+      <div className="bg-black p-6">
         <div className="flex items-center gap-2 text-white mb-2">
           <FaHome size={28} className="text-white" /> {/* Icône Home en vert */}
           <h1 className="text-3xl font-bold">Home</h1>

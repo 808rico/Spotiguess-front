@@ -48,7 +48,7 @@ const DesktopMenu = ({ menuOpen }) => {
     <Sider 
     collapsible={false}
      collapsed={!menuOpen}
-     style={{ minHeight: '100vh', backgroundColor: '#111111' }}>
+     style={{ top:'75px',   backgroundColor: '#111111', position: 'fixed', minHeight:'100vh', zIndex:'999' }}>
       <Menu
         theme="dark"
         mode="inline"

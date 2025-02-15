@@ -291,7 +291,7 @@ function Game() {
 
   return (
     <MainLayout>
-      <div className="bg-black pt-6 min-h-screen flex flex-col items-center justify-start space-y-8">
+      <div className="bg-black pt-6 flex flex-col items-center justify-start space-y-8">
         {/* ÉCRAN DE DÉMARRAGE : même style qu'avant (si la partie n'est pas lancée) */}
         {!isGameStarted && (
           <div className="layoutWrapper">
