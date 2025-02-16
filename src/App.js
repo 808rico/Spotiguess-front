@@ -61,6 +61,8 @@ function App() {
             alignItems: 'center',
             color: 'white',
             textAlign: 'center',
+            padding: '20px',
+            height: '100vh',
           }}
         >
           <h1 className="text-2xl font-bold	mb-2">Welcome to Spotiguess</h1>
