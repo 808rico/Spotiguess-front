@@ -1,4 +1,4 @@
-// useAuth.js (exemple simplifié)
+// src/UseAuth.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -10,7 +10,23 @@ export default function useAuth(code) {
   const [refreshToken, setRefreshToken] = useState(null);
   const [expiresIn, setExpiresIn] = useState(null);
 
-  // 1) Obtenir un token initial depuis votre serveur
+  // Au montage, si on n'a pas de code,
+  // on tente de lire un éventuel token stocké
+  useEffect(() => {
+    if (!code) {
+      const storedAccessToken = localStorage.getItem('access_token');
+      const storedRefreshToken = localStorage.getItem('refresh_token');
+      const storedExpiresIn = localStorage.getItem('expires_in');
+
+      if (storedAccessToken && storedRefreshToken && storedExpiresIn) {
+        setAccessToken(storedAccessToken);
+        setRefreshToken(storedRefreshToken);
+        setExpiresIn(parseInt(storedExpiresIn, 10));
+      }
+    }
+  }, [code]);
+
+  // 1) Obtenir un token initial depuis votre serveur, si un code est présent
   useEffect(() => {
     if (!code) return;
     axios
@@ -21,11 +37,15 @@ export default function useAuth(code) {
         setRefreshToken(refreshToken);
         setExpiresIn(expiresIn);
 
-        // MISE À JOUR DU COOKIE ICI
+        // Stockage local pour persister la session
+        localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('refresh_token', refreshToken);
+        localStorage.setItem('expires_in', String(expiresIn));
+
+        // Optionnel: on met aussi l'access token en cookie
         Cookies.set('spotifyAuthToken', accessToken, {
-          // éventuellement quelques options
-          expires: 1, // 1 jour, par exemple
-          secure: true, // si vous êtes en https
+          expires: 1, 
+          secure: true, 
           sameSite: 'strict',
         });
 
@@ -37,7 +57,7 @@ export default function useAuth(code) {
       });
   }, [code]);
 
-  // 2) Rafraîchir le token
+  // 2) Rafraîchir le token automatiquement
   useEffect(() => {
     if (!refreshToken || !expiresIn) return;
     const interval = setInterval(() => {
@@ -48,7 +68,11 @@ export default function useAuth(code) {
           setAccessToken(accessToken);
           setExpiresIn(expiresIn);
 
-          // MISE À JOUR DU COOKIE ICI AUSSI
+          // MAJ localStorage
+          localStorage.setItem('access_token', accessToken);
+          localStorage.setItem('expires_in', String(expiresIn));
+
+          // MAJ Cookie
           Cookies.set('spotifyAuthToken', accessToken, {
             expires: 1,
             secure: true,
