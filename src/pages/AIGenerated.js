@@ -14,7 +14,6 @@ import './AIGenerated.css';
 import AISuggestion from "../components/suggestions/AiSuggestion";
 import PopUpPay from "../components/popUp/PopUpPay";
 import PopUpGameMode from "../components/popUp/PopUpGameMode";
-import Cookies from "js-cookie";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: '80256b057e324c5f952f3577ff843c29',
@@ -26,7 +25,7 @@ function AIGenerated() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const accessToken = Cookies.get("spotifyAuthToken");
+  const accessToken = localStorage.getItem('access_token');;
   spotifyApi.setAccessToken(accessToken);
 
   // Texte tapé par l'utilisateur (ou inséré via suggestion)

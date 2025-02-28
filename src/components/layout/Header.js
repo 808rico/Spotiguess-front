@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SpotifyWebApi from 'spotify-web-api-node';
 import { MenuOutlined } from '@ant-design/icons';
 import './Header.css'; // Assurez-vous de créer ce fichier pour les styles
-import Cookies from 'js-cookie';
+
 
 
 
@@ -16,7 +16,7 @@ function Header({ toggleMenu }) {
   const [profileImageUrl, setProfileImageUrl] = useState('');
 
   useEffect(() => {
-    const accessToken = Cookies.get("spotifyAuthToken")
+    const accessToken = localStorage.getItem('access_token');
     spotifyApi.setAccessToken(accessToken);
 
     spotifyApi.getMe()

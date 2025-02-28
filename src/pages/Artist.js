@@ -13,7 +13,7 @@ import {
 import './Artist.css'
 import axios from "axios";
 import ArtistSuggestion from "../components/suggestions/ArtistSuggestion";
-import Cookies from 'js-cookie';
+
 import PopUpPay from "../components/popUp/PopUpPay";
 import PopUpGameMode from "../components/popUp/PopUpGameMode";
 
@@ -26,7 +26,7 @@ const urlServer = process.env.REACT_APP_URL_SERVER;
 function Artist() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const accessToken = Cookies.get("spotifyAuthToken");
+  const accessToken = localStorage.getItem('access_token');;
 
   // État pour le Game Mode (auto ou manual) et la popup de changement
   const [gameMode, setGameMode] = useState(null);

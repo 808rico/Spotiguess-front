@@ -1,7 +1,7 @@
 // src/UseAuth.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+
 
 const urlServer = process.env.REACT_APP_URL_SERVER;
 
@@ -42,13 +42,6 @@ export default function useAuth(code) {
         localStorage.setItem('refresh_token', refreshToken);
         localStorage.setItem('expires_in', String(expiresIn));
 
-        // Optionnel: on met aussi l'access token en cookie
-        Cookies.set('spotifyAuthToken', accessToken, {
-          expires: 1, 
-          secure: true, 
-          sameSite: 'strict',
-        });
-
         // Nettoie l'URL (retire ?code=...)
         window.history.pushState({}, null, '/');
       })
@@ -72,12 +65,6 @@ export default function useAuth(code) {
           localStorage.setItem('access_token', accessToken);
           localStorage.setItem('expires_in', String(expiresIn));
 
-          // MAJ Cookie
-          Cookies.set('spotifyAuthToken', accessToken, {
-            expires: 1,
-            secure: true,
-            sameSite: 'strict',
-          });
         })
         .catch(() => {
           window.location = '/';
@@ -86,6 +73,35 @@ export default function useAuth(code) {
 
     return () => clearInterval(interval);
   }, [refreshToken, expiresIn]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      // Si l'onglet redevient visible, on tente un refresh
+      if (!document.hidden) {
+        if (refreshToken) {
+          // Tenter un refresh
+          axios
+            .post(`${urlServer}/refresh`, { refreshToken })
+            .then(res => {
+              setAccessToken(res.data.accessToken);
+              setExpiresIn(res.data.expiresIn);
+
+              localStorage.setItem("access_token", res.data.accessToken);
+              localStorage.setItem("expires_in", String(res.data.expiresIn));
+            })
+            .catch(() => {
+              window.location = "/";
+            });
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [refreshToken]);
+
 
   return accessToken;
 }

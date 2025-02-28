@@ -6,7 +6,7 @@ import './PopUpPay.css';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import gif_party1 from '../../assets/gif_party1.webp';
 import { loadStripe } from '@stripe/stripe-js';
-import Cookies from 'js-cookie';
+
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 const urlServer = process.env.REACT_APP_URL_SERVER;
@@ -16,7 +16,7 @@ const urlServer = process.env.REACT_APP_URL_SERVER;
 
 
 function PopUpPay({ isVisible, onClose }) {
-    const accessToken = Cookies.get("spotifyAuthToken");
+    const accessToken = localStorage.getItem('access_token');;
     
 
     const redirectToCheckout = async (priceId) => {

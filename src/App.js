@@ -1,7 +1,7 @@
 import './app.css'
 import React, { useEffect } from 'react';
 import { message } from 'antd';
-import Cookies from 'js-cookie';
+
 import SpotifyWebApi from 'spotify-web-api-node';
 
 import useAuth from './UseAuth';  // votre hook qui gère /login & /refresh
@@ -30,7 +30,9 @@ function App() {
         if (data.body.product !== 'premium') {
           message.error('You need a Premium Spotify account to use this app');
           // On supprime le cookie s’il existe
-          Cookies.remove('spotifyAuthToken');
+          
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
           // Puis on redirige vers la page de login
           window.location.href = '/';
         }

@@ -11,7 +11,7 @@ import {
   CloseCircleOutlined,
 } from '@ant-design/icons';
 import axios from "axios";
-import Cookies from 'js-cookie';
+
 import PopUpPay from "../components/popUp/PopUpPay";
 import PopUpGameMode from "../components/popUp/PopUpGameMode";
 import PlaylistSuggestion from "../components/suggestions/PlaylistSuggestion";
@@ -26,7 +26,7 @@ const urlServer = process.env.REACT_APP_URL_SERVER;
 function Playlist() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const accessToken = Cookies.get("spotifyAuthToken");
+  const accessToken = localStorage.getItem('access_token');;
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
   const [showPopupPay, setShowPopupPay] = useState(false);
