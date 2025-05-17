@@ -67,6 +67,9 @@ export default function useAuth(code) {
 
         })
         .catch(() => {
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+          localStorage.removeItem('expires_in');
           window.location = '/';
         });
     }, (expiresIn - 60) * 1000);
@@ -90,6 +93,9 @@ export default function useAuth(code) {
               localStorage.setItem("expires_in", String(res.data.expiresIn));
             })
             .catch(() => {
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('refresh_token');
+              localStorage.removeItem('expires_in');
               window.location = "/";
             });
         }
