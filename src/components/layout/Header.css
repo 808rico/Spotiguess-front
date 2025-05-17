@@ -4,37 +4,81 @@
   left: 0;            
   width: 100%;         
   z-index: 999;   
-    height: 75px;
-    width: 100%;
-    background-color: #111111; /* Choisissez la couleur de fond de votre choix */
-    display: flex;
-    justify-content: space-between; /* Aligner le contenu à droite */
-    align-items: center; /* Centrer verticalement le contenu */
-    padding-right: 20px; /* Espace à droite */
-  }
-  
-  .profile-picture {
-    width: 40px; /* Taille de la photo de profil */
-    height: 40px;
-    border-radius: 50%; /* Rendre la photo de profil arrondie */
-    object-fit: cover; /* Assurez-vous que la photo est bien cadrée */
-  }
-  
+  height: 75px;
+  background-color: #111111; 
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  padding-right: 20px; 
+}
 
-  .menu-icon {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: white;
-    font-size: 25px; /* Taille de l'icône */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 30px;
-  }
-  
-  .menu-icon svg {
-    width: 25px;
-    height: 25px;
-  }
-  
+/* Bouton menu (icône hamburger) */
+.menu-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 30px;
+}
+.menu-icon svg {
+  width: 25px;
+  height: 25px;
+}
+
+/* Conteneur de l'image de profil + bouton logout */
+.profile-container {
+  position: relative;
+  margin-right: 20px;
+}
+
+/* Image de profil */
+.profile-picture {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Zoom sur l'image au survol */
+.profile-picture:hover {
+  transform: scale(1.1);
+}
+
+/* Bouton logout (plus grand, minimaliste, avec ombre) */
+.logout-button {
+  position: absolute;
+  top: 50px; 
+  right: 0;
+  background-color: #222;   /* Fond sombre plus moderne */
+  color: #fff;
+  border: none;
+  padding: 8px 16px;        /* Plus de padding pour un look "grand" */
+  border-radius: 6px;       /* Légèrement arrondi */
+  cursor: pointer;
+  font-size: 18px;
+  font-weight:500;          /* Police plus grande */
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Ombre légère */
+  transition: background-color 0.2s ease-in-out,
+              transform 0.2s ease-in-out;
+}
+
+/* Icône rouge + plus grande */
+.logout-icon {
+  font-size: 24px;     /* Icône plus grande */
+  color: #ff4d4f;      /* Rouge (AntD style) */
+  margin-right: 8px;   
+}
+
+/* Au survol, on rend le bouton un peu plus clair et on le grandit légèrement */
+.logout-button:hover {
+  background-color: #444;
+  transform: scale(1.05);
+}

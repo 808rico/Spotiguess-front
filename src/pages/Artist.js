@@ -13,7 +13,7 @@ import {
 import './Artist.css'
 import axios from "axios";
 import ArtistSuggestion from "../components/suggestions/ArtistSuggestion";
-import Cookies from 'js-cookie';
+
 import PopUpPay from "../components/popUp/PopUpPay";
 import PopUpGameMode from "../components/popUp/PopUpGameMode";
 
@@ -26,7 +26,7 @@ const urlServer = process.env.REACT_APP_URL_SERVER;
 function Artist() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const accessToken = Cookies.get("spotifyAuthToken");
+  const accessToken = localStorage.getItem('access_token');;
 
   // État pour le Game Mode (auto ou manual) et la popup de changement
   const [gameMode, setGameMode] = useState(null);
@@ -227,7 +227,7 @@ function Artist() {
 
         {/* Affichage du Game Mode + bouton Switch */}
         <div className="mt-6 text-white flex bg-slate-800 rounded-md p-2 justify-between items-center">
-          <p className="text-base font-light ml-5 mr-2">
+          <p className="text-base font-light ml-5 mr-2 mt-0">
             <span>Current Game Mode: </span>
             <span className="font-semibold text-green-600">
               {gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}

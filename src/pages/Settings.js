@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import MainLayout from "../components/layout/MainLayout";
-import Cookies from "js-cookie";
 import axios from "axios";
 import { message } from 'antd';
 
@@ -10,7 +9,7 @@ function Settings() {
 
   // Récupérer le gameType au chargement
   useEffect(() => {
-    const accessToken = Cookies.get("spotifyAuthToken");
+    const accessToken = localStorage.getItem('access_token');;
     if (!accessToken) return; // Ne pas exécuter si l'utilisateur n'est pas connecté
 
     axios.get(`${urlServer}/settings/game-mode`, {
@@ -30,7 +29,7 @@ function Settings() {
   const handleManualGameToggle = () => {
     if (manualGame === null) return; // Éviter de toggler si non défini
 
-    const accessToken = Cookies.get("spotifyAuthToken");
+    const accessToken = localStorage.getItem('access_token');;
     setManualGame(!manualGame);
 
     axios.post(`${urlServer}/settings/game-mode`, {

@@ -11,7 +11,7 @@ import {
   CloseCircleOutlined,
 } from '@ant-design/icons';
 import axios from "axios";
-import Cookies from 'js-cookie';
+
 import PopUpPay from "../components/popUp/PopUpPay";
 import PopUpGameMode from "../components/popUp/PopUpGameMode";
 import PlaylistSuggestion from "../components/suggestions/PlaylistSuggestion";
@@ -26,7 +26,7 @@ const urlServer = process.env.REACT_APP_URL_SERVER;
 function Playlist() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const accessToken = Cookies.get("spotifyAuthToken");
+  const accessToken = localStorage.getItem('access_token');;
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
   const [showPopupPay, setShowPopupPay] = useState(false);
@@ -191,7 +191,7 @@ function Playlist() {
 
         {/* Current Game Mode Display + Switch Button */}
         <div className="mt-6 text-white flex bg-slate-800 rounded-md p-2 justify-between items-center">
-          <p className="text-base font-light ml-5 mr-2">
+          <p className="text-base font-light ml-5 mr-2 mt-0">
             <span>Current Game Mode: </span>
             <span className="font-semibold text-green-600">
               {gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}

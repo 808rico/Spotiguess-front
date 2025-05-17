@@ -6,7 +6,7 @@ import PopUpResult from '../components/popUp/PopUpResult';
 import PopUpFinish from '../components/popUp/PopUpFinish';
 import Equalizer from "../components/Equalizer";
 import Player from "../Player";
-import Cookies from 'js-cookie';
+
 import axios from 'axios';
 import PopUpPay from "../components/popUp/PopUpPay";
 
@@ -42,7 +42,7 @@ function Game() {
 
   // On suppose que vous passez iconName via location.state
   const { type, iconName, input, songUris } = location.state;
-  const accessToken = Cookies.get("spotifyAuthToken");
+  const accessToken = localStorage.getItem('access_token');;
 
   // Récupération de l'icône
   const Icon = iconMap[iconName];

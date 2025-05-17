@@ -7,7 +7,7 @@ import { PlayCircleOutlined, HeartOutlined, SwapOutlined } from '@ant-design/ico
 import './LikedSongs.css';
 import axios from "axios";
 import PopUpPay from "../components/popUp/PopUpPay";
-import Cookies from 'js-cookie';
+
 import PopUpGameMode from '../components/popUp/PopUpGameMode';
 
 const spotifyApi = new SpotifyWebApi({
@@ -19,7 +19,7 @@ const urlServer = process.env.REACT_APP_URL_SERVER;
 function LikedSongs() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const accessToken = Cookies.get("spotifyAuthToken");
+  const accessToken = localStorage.getItem('access_token');;
   const [showPopupPay, setShowPopupPay] = useState(false);
 
   // État pour le Game Mode (auto ou manual) et la popup de changement
@@ -87,7 +87,7 @@ function LikedSongs() {
 
         {/* Affichage du Game Mode + bouton Switch */}
         <div className="mt-6 text-white flex bg-slate-800 rounded-md p-2 justify-between items-center">
-          <p className="text-base font-light ml-5 mr-2">
+          <p className="text-base font-light ml-5 mr-2 mt-0">
             <span>Current Game Mode: </span>
             <span className="font-semibold text-green-600">
               {gameMode === "auto" ? "Auto" : gameMode === "manual" ? "Manual" : "loading..."}
