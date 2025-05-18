@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import SpotifyWebApi from 'spotify-web-api-node';
-import { MenuOutlined, LogoutOutlined } from '@ant-design/icons';
+import { MenuOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar } from 'antd';          // ⬅️  Ant Design Avatar
 import './Header.css';
 
 const spotifyApi = new SpotifyWebApi({
@@ -10,8 +11,6 @@ const spotifyApi = new SpotifyWebApi({
 function Header({ toggleMenu }) {
   const [profileImageUrl, setProfileImageUrl] = useState('');
   const [showLogout, setShowLogout] = useState(false);
-
-  // On garde une référence pour stocker le timer (pour clearTimeout si besoin)
   const hideTimeoutRef = useRef(null);
 
   useEffect(() => {
@@ -21,14 +20,14 @@ function Header({ toggleMenu }) {
     spotifyApi.setAccessToken(accessToken);
     spotifyApi
       .getMe()
-      .then((data) => {
-        if (data.body.images && data.body.images.length > 0) {
-          setProfileImageUrl(data.body.images[0].url);
+      .then(({ body }) => {
+        if (body.images?.length) {
+          setProfileImageUrl(body.images[0].url);
         }
       })
-      .catch((err) => {
-        console.error('An error occurred while fetching user data:', err);
-      });
+      .catch((err) =>
+        console.error('An error occurred while fetching user data:', err)
+      );
   }, []);
 
   const handleLogout = () => {
@@ -38,24 +37,13 @@ function Header({ toggleMenu }) {
     window.location = '/';
   };
 
-  // Quand la souris entre dans la zone .profile-container :
-  // - on annule le timer de disparition
-  // - on rend le bouton visible
   const handleMouseEnter = () => {
-    if (hideTimeoutRef.current) {
-      clearTimeout(hideTimeoutRef.current);
-      hideTimeoutRef.current = null;
-    }
+    if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
     setShowLogout(true);
   };
 
-  // Quand la souris quitte la zone .profile-container :
-  // - on déclenche un timer de 3s avant de masquer le bouton
-  // - si l’utilisateur revient avant la fin du timer, on annule
   const handleMouseLeave = () => {
-    hideTimeoutRef.current = setTimeout(() => {
-      setShowLogout(false);
-    }, 700);
+    hideTimeoutRef.current = setTimeout(() => setShowLogout(false), 700);
   };
 
   return (
@@ -64,18 +52,19 @@ function Header({ toggleMenu }) {
         <MenuOutlined />
       </button>
 
-      <div 
+      <div
         className="profile-container"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {profileImageUrl && (
-          <img
-            src={profileImageUrl}
-            alt="profil"
-            className="profile-picture"
-          />
-        )}
+        {/* Avatar automatically shows the UserOutlined icon
+            when `src` is empty or fails to load */}
+        <Avatar
+          src={profileImageUrl || null}      // null = “no image”
+          icon={<UserOutlined />}            // fallback icon
+          size={40}                          // tweak as needed
+          className="profile-picture"
+        />
 
         {showLogout && (
           <button className="logout-button" onClick={handleLogout}>
