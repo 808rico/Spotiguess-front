@@ -39,6 +39,7 @@ const iconMap = {
 function Game() {
   const location = useLocation();
   const navigate = useNavigate();
+  const playbackCheckTimerRef = useRef(null);
 
   // On suppose que vous passez iconName via location.state
   const { type, iconName, input, songUris } = location.state;
@@ -106,10 +107,37 @@ function Game() {
     }
   }, [currentSongIndex, accessToken, songUris]);
 
+  
+  const checkIfReallyPlaying = async () => {
+    try {
+      
+      const res = await spotifyApi.getMyCurrentPlaybackState();
+      if (!res.body || !res.body.is_playing) {
+        throw new Error('not_playing');
+      }
+
+
+    } catch (e) {
+      message.error(
+        "An error occurred. Please click Play again. On mobile, make sure your phone isn't on silent."
+      );
+      setIsPlaying(false);
+      setIsGameStarted(false);     // retour à l’écran d’accueil
+    }
+  };
+
+
   const handlePlayerStateChange = (state) => {
     if (state.status === 'READY') {
       setDeviceId(state.deviceId);
       setIsPlayerReady(true);
+    }
+    if (state.status === 'AUTOPLAY_FAILED') {
+      message.error(
+        "An error occurred. Please click Play again. On mobile, make sure your phone isn't on silent."
+      );
+      setIsPlaying(false);
+      setIsGameStarted(false);
     }
   };
 
@@ -120,6 +148,9 @@ function Game() {
     if (gameType === "manual") {
       setIsPlaying(true);
     }
+
+    // 1 s plus tard on vérifie que ça tourne vraiment
+    playbackCheckTimerRef.current = setTimeout(checkIfReallyPlaying, 10000);
   };
 
   // Play / Pause (MANUAL)
@@ -146,7 +177,7 @@ function Game() {
       setShowPopupFinish(true);
       setIsReplayButtonVisible((songUris.length - maxSongIndex) >= 10);
     }
-  }, [currentSongIndex, maxSongIndex, songUris.length]);  
+  }, [currentSongIndex, maxSongIndex, songUris.length]);
 
   // Rejouer
   const onReplay = () => {
@@ -176,16 +207,7 @@ function Game() {
         setIsKeepPlayingLoading(false);
       });
   };
-  // ---------------------------------------------------------
-  // AJOUT AUTO MODE : Gérer la lecture auto si gameType === "auto"
-  // ---------------------------------------------------------
-  // En haut de votre composant
 
-  // etc.
-
-  // ---------------------------------------------------------
-  // AJOUT AUTO MODE : Gérer la lecture auto si gameType === "auto"
-  // ---------------------------------------------------------
   useEffect(() => {
     // On veut déclencher toute la mécanique uniquement dans ces conditions
     if (
@@ -199,7 +221,7 @@ function Game() {
       let lastChanceTimer;
       let showResultTimer;
       //let hideResultTimer;
-      let popupCountdownInterval; 
+      let popupCountdownInterval;
 
       // Lancement de la lecture
       setIsPlaying(true);
@@ -238,15 +260,15 @@ function Game() {
           setIsPlaying(true);
 
           // On décrémente ce nouveau compteur chaque seconde
-        popupCountdownInterval = setInterval(() => {
-          setPopupCountdown((prev) => {
-            if (prev <= 1) {
-              clearInterval(popupCountdownInterval);
-              return 0; // ou “0” si tu préfères
-            }
-            return prev - 1;
-          });
-        }, 1000);
+          popupCountdownInterval = setInterval(() => {
+            setPopupCountdown((prev) => {
+              if (prev <= 1) {
+                clearInterval(popupCountdownInterval);
+                return 0; // ou “0” si tu préfères
+              }
+              return prev - 1;
+            });
+          }, 1000);
 
           hideResultTimerRef.current = setTimeout(() => {
             // 4) Au bout de 5s, on masque la popup et on passe au morceau suivant
@@ -276,6 +298,14 @@ function Game() {
     maxSongIndex,
     handleNextTrack,
   ]);
+
+  useEffect(() => {
+    return () => {
+      if (playbackCheckTimerRef.current) {
+        clearTimeout(playbackCheckTimerRef.current);
+      }
+    };
+  }, []);
 
   const cancelAutoClose = () => {
     if (hideResultTimerRef.current) {
@@ -429,7 +459,7 @@ function Game() {
             onClose={() => setShowPopupResult(false)}
             currentTrack={currentTrack}
             onNextTrack={handleNextTrack}
-            gameType={gameType}             
+            gameType={gameType}
             nextSongCountdown={popupCountdown}
             onCancelAutoClose={cancelAutoClose}
           />
