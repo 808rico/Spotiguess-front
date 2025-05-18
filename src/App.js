@@ -28,13 +28,15 @@ function App() {
       .getMe()
       .then(data => {
         if (data.body.product !== 'premium') {
-          message.error('You need a Premium Spotify account to use this app');
-          // On supprime le cookie s’il existe
-          
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          // Puis on redirige vers la page de login
-          window.location.href = '/';
+          message.error({
+            content: 'You need a Premium Spotify account to use this app',
+            duration: 3,          // secondes
+            onClose: () => {
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('refresh_token');
+              window.location.href = '/';
+            },
+          });
         }
       })
       .catch(err => {
